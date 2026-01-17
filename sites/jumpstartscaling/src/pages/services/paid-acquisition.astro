@@ -1,0 +1,146 @@
+---
+import ServiceLayout from '../../layouts/ServiceLayout.astro';
+import AtmosphereParticles from '../../components/3d/AtmosphereParticles';
+import GlassCard from '../../components/ui/GlassCard.astro';
+import GoldenBullets from '../../components/ui/GoldenBullets.astro';
+import ScalingSurvey from '../../components/ui/ScalingSurvey.astro';
+import DIYAISection from '../../components/content/DIYAISection.astro';
+import ServiceSynergy from '../../components/content/ServiceSynergy.astro';
+import ROASVisual from '../../components/visuals/ROASVisual.astro';
+---
+
+<ServiceLayout 
+  title="Paid Acquisition Engine | Jumpstart Scaling" 
+  description="Turn every dollar of ad spend into predictable revenue. We build, manage, and scale your paid acquisition campaigns across Google, Meta, and LinkedIn with scientific precision."
+  currentPath="/services/paid-acquisition"
+>
+  <!-- HERO SECTION -->
+  <section class="hero">
+    <div class="hero-3d"><AtmosphereParticles client:only="react" /></div>
+    <div class="container">
+      <h1>Stop Betting on Luck. <span class="accent">Engineer Predictable Revenue</span> with Paid Acquisition.</h1>
+      
+      <p class="subhead">
+        Turn ad spend into revenue. We build, manage, and scale campaigns across Google, Meta, and LinkedIn. Stop hoping for referrals and start controlling your growth.
+      </p>
+      
+      <a href="#survey" class="cta-button">Calculcate Your ROAS Potential</a>
+    </div>
+  </section>
+
+  <!-- PROBLEM DIAGNOSIS -->
+  <section>
+    <div class="container grid-2-bias">
+      <div>
+        <h2>The Referral Trap</h2>
+        <p>
+          Referrals are great until they stop. You cannot scale a business on hope. To <strong>engineer predictable revenue with paid acquisition</strong>, you need a system, not just a "boost post" button.
+        </p>
+        <p>
+          Most founders treat ads like a slot machine. They put a dollar in and hope for a jackpot. We treat ads like an investment portfolio. If you don't have a scientific method for testing creatives, audiences, and offers, you are just donating money to Mark Zuckerberg.
+        </p>
+        <GoldenBullets items={[
+          { icon: 'arrow', text: 'Unpredictable revenue makes hiring impossible' },
+          { icon: 'arrow', text: 'Competitors are buying the market while you wait' },
+          { icon: 'arrow', text: 'You are stuck playing defense instead of offense' }
+        ]} columns={1} />
+      </div>
+      <div>
+        <ROASVisual />
+        <p style="text-align: center; font-size: 0.9rem; color: #666;">
+          <em>The goal: $5 Revenue for every $1 Spend.</em>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- THE SOLUTION -->
+  <section>
+    <div class="container">
+      <h2>A Scientific Approach to Scaling</h2>
+      <p>
+        We don't guess. We use data to isolate your exact buyer persona. Our process involves rapid testing of 20+ angles per week to find the winning combination.
+      </p>
+      
+      <div class="grid-3">
+        <GlassCard title="Precision Targeting" description="We use first-party data to isolate your exact B2B buyer persona, bypassing reliance on third-party cookies." icon="🎯" />
+        <GlassCard title="Creative Testing" description="We test multiple ad angles per week. We kill the losers quickly and scale the winners aggressively." icon="🧪" />
+        <GlassCard title="Algorithmic Bidding" description="We utilize AI-driven bidding strategies to maximize your budget in real-time auctions across networks." icon="🤖" />
+      </div>
+    </div>
+  </section>
+
+  <!-- EDUCATIONAL DEEP DIVE (SEO CONTENT) -->
+  <section class="educational-section">
+    <div class="container">
+      <h2>The 3 Phases of Paid Scale</h2>
+      <p>
+        Scaling isn't linear. It happens in step-functions. Understanding where you are in this cycle is critical to avoiding wasted spend.
+      </p>
+
+      <div class="process-flow">
+        <div class="process-step">
+          <div class="step-number">1</div>
+          <div class="step-title">Alpha Phase (Testing)</div>
+          <p class="step-desc">
+            The goal here is not profit; it is data. We spend small amounts across many variables to find "Signal." We are looking for a Click-Through Rate (CTR) above 1% and a Cost Per Lead (CPL) within KPIs.
+          </p>
+        </div>
+        
+        <div class="process-step">
+          <div class="step-number">2</div>
+          <div class="step-title">Beta Phase (Validation)</div>
+          <p class="step-desc">
+            Once we find a winning angle, we double down. we introduce variations of the winning creative. We begin to optimize the landing page (CRO) to ensure the traffic converts.
+          </p>
+        </div>
+        
+        <div class="process-step">
+          <div class="step-number">3</div>
+          <div class="step-title">Scale Phase (Domination)</div>
+          <p class="step-desc">
+            The budget is uncapped. As long as the Return on Ad Spend (ROAS) stays above 3.0x, we spend as much as possible. We expand to new channels (YouTube, TikTok) using the proven winning angles.
+          </p>
+        </div>
+      </div>
+      
+      <p style="margin-top: 2rem; font-size: 0.9rem; color: #666;">
+        For more on how ad auctions work, see <a href="https://support.google.com/google-ads/answer/142918" target="_blank" rel="nofollow" style="color: #666; text-decoration: underline;">Google's official documentation</a> on the auction process.
+      </p>
+    </div>
+  </section>
+
+  <!-- DIY AI SECTION -->
+  <DIYAISection 
+    serviceName="Paid Ads Data Analysis"
+    useCase="analyzing your weekly ad reports to find trends"
+    prompt="You are a Senior Media Buyer. I will paste my weekly Google Ads data below (Campaign Name, Spend, Impressions, Clicks, conversions, CPA). I want you to analyze this data and tell me: 1) Which campaign has the highest ROAS? 2) Which campaign is wasting the most budget? 3) What specific action should I take next week (Kill, Scale, or Optimize)? output the answer in a bulleted list."
+  />
+
+  <!-- SERVICE SYNERGY -->
+  <ServiceSynergy />
+
+  <!-- CTA -->
+  <section id="survey">
+    <div class="container">
+      <ScalingSurvey />
+    </div>
+  </section>
+</ServiceLayout>
+
+<style>
+  .grid-2-bias {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+  @media (max-width: 768px) {
+    .grid-2-bias {
+      grid-template-columns: 1fr;
+    }
+  }
+  .educational-section {
+    background: rgba(255,255,255,0.02);
+  }
+</style>

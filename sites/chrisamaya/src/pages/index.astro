@@ -1,0 +1,113 @@
+
+import Layout from '../layouts/ArticleLayout.astro';
+import AtmosphereParticles from '../components/3d/AtmosphereParticles';
+import { motion } from 'framer-motion';
+
+// Content remains exactly as on chrisamaya.work
+const services = [
+  { title: "The Revenue Acquisition Engine", desc: "Paid Media & Ad Spend optimization." },
+  { title: "Compliance & Risk", desc: "Management and security protocols." },
+  { title: "Data Integrity", desc: "P&L Attribution and deep analytics." },
+  { title: "Automation & CRM", desc: "Full architecture for scale." }
+];
+
+const articleContent = {
+    title: "The One-Stop Architect | Chris Amaya",
+    description: "Stop hiring freelancers. Start building an empire. The 'Unicorn Developer' who builds full-stack applications, engineers private AI systems, and automates your entire backend.",
+    city: "Global",
+    serviceTier: "Consulting"
+};
+
+---
+
+<Layout content={articleContent}>
+  <main class="bg-black text-white relative overflow-hidden">
+    
+    <div class="fixed inset-0 z-0 pointer-events-none">
+      <AtmosphereParticles client:only="react" />
+    </div>
+
+    <div class="relative z-10 max-w-[900px] mx-auto px-6">
+      
+      <section class="min-h-[80vh] flex flex-col justify-center">
+        <span class="mono-label text-accent-primary mb-4 block">01 // SYSTEM_INIT</span>
+        
+        <h1 class="text-6xl md:text-8xl font-bold tracking-tighter leading-none mb-8">
+            CHRIS <br/> AMAYA
+        </h1>
+        
+        <p class="text-xl md:text-2xl text-gray-400 max-w-xl font-light leading-relaxed">
+          Building the <span class="text-accent-primary font-bold">Revenue Acquisition Engine</span> for high-stakes environments.
+        </p>
+      </section>
+
+      <section class="py-32">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+          {services.map((service, index) => (
+            <div class="group relative p-8 border border-white/10 bg-white/5 backdrop-blur-md hover:border-accent-primary transition-all duration-500">
+              <span class="text-xs font-mono text-accent-secondary">0{index + 2} // SERVICE</span>
+              <h3 class="text-2xl font-bold mt-4 mb-2">{service.title}</h3>
+              <p class="text-gray-400 font-light">{service.desc}</p>
+              
+              <div class="absolute bottom-0 left-0 w-0 h-[2px] bg-accent-primary group-hover:w-full transition-all duration-700"></div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="py-32 text-center">
+        <h2 class="text-4xl font-bold mb-8">Stop Wasting Profits.</h2>
+        <a href="#contact" class="inline-block px-12 py-4 border border-accent-primary text-accent-primary hover:bg-accent-primary hover:text-black transition-all duration-300 font-mono tracking-widest uppercase">
+          Initialize Connection
+        </a>
+      </section>
+
+    </div>
+  </main>
+</Layout>
+
+<style is:global>
+  :root {
+    --bg-dark: #050505;
+    --accent-primary: #00FF94;
+    --accent-secondary: #00B8FF;
+  }
+  
+  .mono-label {
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.2em;
+    font-size: 0.75rem;
+  }
+  
+  .text-accent-primary {
+      color: var(--accent-primary);
+  }
+  
+  .text-accent-secondary {
+      color: var(--accent-secondary);
+  }
+  
+  .border-accent-primary {
+      border-color: var(--accent-primary);
+  }
+  
+  .bg-accent-primary {
+      background-color: var(--accent-primary);
+  }
+  
+  .hover\:bg-accent-primary:hover {
+      background-color: var(--accent-primary);
+  }
+  
+  .hover\:text-black:hover {
+      color: #000;
+  }
+  
+  .hover\:border-accent-primary:hover {
+      border-color: var(--accent-primary);
+  }
+
+  h1, h2, h3 {
+    font-family: 'Inter', sans-serif;
+  }
+</style>

@@ -1,0 +1,199 @@
+---
+import { ViewTransitions } from 'astro:transitions';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  publishDate?: string;
+}
+
+const { 
+  title, 
+  description = "Professional developer insights and technical writing",
+  image,
+  publishDate
+} = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth bg-white">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>{title} | Chris Amaya</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#3B82F6" />
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <ViewTransitions />
+  </head>
+  
+  <body class="bg-white text-gray-900 antialiased relative selection:bg-blue-100 selection:text-blue-900">
+    
+    <!-- Reading Progress Bar -->
+    <div id="progress-bar" class="fixed top-0 left-0 h-1 bg-gradient-to-r from-blue-400 via-blue-600 to-indigo-600 z-[100] w-0 transition-all duration-100 ease-out"></div>
+
+    <!-- Technical Dot Grid Background -->
+    <div class="fixed inset-0 z-0 pointer-events-none" style="background-image: radial-gradient(#e5e7eb 1px, transparent 1px); background-size: 24px 24px; opacity: 0.6;"></div>
+
+    <!-- Clean Header -->
+    <header class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-gray-200/80 shadow-sm supports-[backdrop-filter]:bg-white/60">
+      <nav class="max-w-5xl mx-auto px-6 py-4 flex justify-between items-center">
+        
+        <a href="/" class="font-bold text-xl group flex items-center gap-2 font-mono tracking-tight">
+          <span class="text-gray-900 group-hover:text-blue-600 transition-colors">Chris Amaya</span>
+          <span class="text-blue-600 animate-pulse">_</span>
+        </a>
+
+        <a href="/" class="hidden md:inline-flex items-center gap-2 border border-gray-200 text-gray-600 px-5 py-2 rounded-lg font-medium text-sm hover:border-blue-600 hover:text-blue-600 transition-all duration-300 bg-white/50">
+          <span>←</span> Back to Portfolio
+        </a>
+      </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="pt-32 pb-20 px-6 relative z-10">
+      <article class="prose prose-lg prose-slate mx-auto max-w-3xl">
+        
+        <!-- Article Header -->
+        <div class="mb-12 pb-8 border-b border-gray-100">
+          <div class="flex gap-2 mb-4">
+            <span class="px-3 py-1 bg-blue-50 text-blue-700 text-xs font-bold uppercase tracking-wider rounded-full">Technical Guide</span>
+          </div>
+          <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 leading-[1.1] mb-6 tracking-tight">
+            {title}
+          </h1>
+          {description && (
+            <p class="text-xl text-gray-500 font-normal leading-relaxed">
+              {description}
+            </p>
+          )}
+        </div>
+
+        <!-- Article Content -->
+        <div class="text-gray-800">
+          <style is:global>
+            /* TYPOGRAPHY */
+            .prose h2 {
+              font-size: 1.8rem;
+              font-weight: 700;
+              margin-top: 3.5rem;
+              margin-bottom: 1rem;
+              color: #111827;
+              letter-spacing: -0.02em;
+            }
+            
+            .prose h3 {
+              font-size: 1.4rem;
+              font-weight: 600;
+              margin-top: 2.5rem;
+              margin-bottom: 0.75rem;
+              color: #2563EB;
+              display: flex;
+              align-items: center;
+              gap: 0.5rem;
+            }
+            
+            /* Add a hash to H3s for "Documentation" feel */
+            .prose h3::before {
+              content: '#';
+              color: #93C5FD;
+              font-weight: 400;
+            }
+            
+            .prose p {
+              margin-bottom: 1.75rem;
+              color: #374151;
+              line-height: 1.8;
+            }
+            
+            /* LINK STYLING */
+            .prose a {
+              color: #2563EB;
+              text-decoration: none;
+              border-bottom: 1px solid rgba(37, 99, 235, 0.3);
+              transition: all 0.2s;
+              font-weight: 500;
+            }
+            
+            .prose a:hover {
+              background-color: rgba(37, 99, 235, 0.05);
+              border-bottom-color: #2563EB;
+              color: #1E40AF;
+            }
+
+            /* IDE-STYLE CODE BLOCKS */
+            .prose pre {
+              background-color: #1E293B !important;
+              border-radius: 0.75rem;
+              border: 1px solid #334155;
+              box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+              margin: 2rem 0;
+            }
+
+            .prose code {
+              font-family: 'JetBrains Mono', 'Fira Code', monospace;
+              font-size: 0.9em;
+            }
+            
+            /* Inline Code */
+            .prose :not(pre) > code {
+              background: #F1F5F9;
+              color: #0F172A;
+              padding: 0.2em 0.4em;
+              border-radius: 4px;
+              border: 1px solid #E2E8F0;
+              font-weight: 600;
+            }
+            
+            /* BLOCKQUOTES - The "Note" style */
+            .prose blockquote {
+              border-left: 4px solid #3B82F6;
+              background: #EFF6FF;
+              padding: 1.5rem;
+              font-style: normal;
+              color: #1E3A8A;
+              border-radius: 0.5rem;
+              margin: 2rem 0;
+            }
+          </style>
+          <slot />
+        </div>
+        
+      </article>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-gray-200 py-12 bg-white relative z-10">
+      <div class="max-w-4xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
+        <p class="text-gray-900 font-bold tracking-tight">
+          Chris Amaya <span class="text-blue-600">_</span>
+        </p>
+        <p class="text-gray-500 text-sm">
+          © {new Date().getFullYear()} Open Source & Portfolio.
+        </p>
+      </div>
+    </footer>
+
+    <!-- Progress Bar Script -->
+    <script>
+      // Reading Progress Logic
+      const progressBar = document.getElementById('progress-bar');
+      
+      window.addEventListener('scroll', () => {
+        const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+        const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrollPercentage = (scrollTop / scrollHeight) * 100;
+        
+        if(progressBar) {
+          progressBar.style.width = scrollPercentage + '%';
+        }
+      });
+    </script>
+  </body>
+</html>

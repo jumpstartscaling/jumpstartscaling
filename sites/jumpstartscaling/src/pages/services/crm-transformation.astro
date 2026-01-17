@@ -1,0 +1,89 @@
+---
+import ServiceLayout from '../../layouts/ServiceLayout.astro';
+import AtmosphereParticles from '../../components/3d/AtmosphereParticles';
+import GlassCard from '../../components/ui/GlassCard.astro';
+import GoldenBullets from '../../components/ui/GoldenBullets.astro';
+import ScalingSurvey from '../../components/ui/ScalingSurvey.astro';
+import DIYAISection from '../../components/content/DIYAISection.astro';
+import ServiceSynergy from '../../components/content/ServiceSynergy.astro';
+import LTVCalculator from '../../components/calculators/LTVCalculator';
+---
+
+<ServiceLayout 
+  title="CRM Transformation - Automate Follow-up | Jumpstart Scaling" 
+  description="Stop letting leads slip through the cracks. We build automated CRM systems (HubSpot/GoHighLevel) that nurture leads into booked appointments while you sleep."
+  currentPath="/services/crm-transformation"
+>
+  <section class="hero">
+    <div class="hero-3d"><AtmosphereParticles client:only="react" /></div>
+    <div class="container">
+      <h1>The Money is in the <span class="accent">Follow-Up</span>.</h1>
+      
+      <p class="subhead">
+        70% of sales are lost because you didn't call back fast enough. We build automated CRM machines that text, email, and nurture your leads instantly—so you never miss an opportunity.
+      </p>
+      
+      <a href="#survey" class="cta-button">Fix My Pipeline</a>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <h2>Why Retention Beats Acquisition</h2>
+      <p>It costs 5x more to get a new customer than to keep an old one.</p>
+      <LTVCalculator client:only="react" />
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <h2>You Are bleeding Revenue</h2>
+      <p>
+        If a lead submits a form and you don't call them in 5 minutes, your chance of closing them drops by 400%. Can you call every lead in 5 minutes, 24/7? No. But our robots can.
+      </p>
+      
+      <GoldenBullets items={[
+        { icon: 'arrow', text: 'Speed to Lead is the #1 predictor of conversion.' },
+        { icon: 'arrow', text: 'Manual follow-up is inconsistent and unscalable.' },
+        { icon: 'arrow', text: 'A messy Pipeline confuses your sales team.' }
+      ]} columns={1} />
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <h2>The Automated Sales Lab</h2>
+      <div class="grid-3">
+        <GlassCard 
+          title="Instant SMS Response"
+          description="Within 30 seconds of a form fill, the lead gets a personalized text starting a conversation."
+          icon="💬"
+        />
+        <GlassCard 
+          title="Pipeline Velocity"
+          description="Automated drag-and-drop pipelines that move leads from 'New' to 'Called' to 'Booked' automatically."
+          icon="🚀"
+        />
+        <GlassCard 
+          title="Reactivation Campaigns"
+          description="We take your old list of dead leads and blast them with a '9-word email' offer. Usually generates 5-10 sales instantly."
+          icon="🧟"
+        />
+      </div>
+    </div>
+  </section>
+
+  <DIYAISection 
+    serviceName="Email Nurture"
+    useCase="writing a 5-day email sequence"
+    prompt="Write a 5-day email nurture sequence for a B2B SaaS product. The goal is to get them to book a demo. Email 1: Value delivery. Email 2: Problem agitation. Email 3: Case Study. Email 4: Logic/Features. Email 5: Urgency/Last Chance. Keep each email under 150 words and use a conversational tone."
+  />
+
+  <ServiceSynergy />
+
+  <section id="survey">
+    <div class="container">
+      <ScalingSurvey webhookUrl="https://api.jumpstartscaling.com/webhook/survey" />
+    </div>
+  </section>
+</ServiceLayout>

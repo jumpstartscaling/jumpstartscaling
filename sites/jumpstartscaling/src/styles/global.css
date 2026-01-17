@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+
+    /* The "Premium" Gold Gradient for text */
+    .text-gold-gradient {
+        background: linear-gradient(to right, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        color: transparent;
+    }
+
+    /* Solid Gold for borders/lines */
+    .border-gold {
+        border-color: #D4AF37;
+    }
+
+    .bg-gold {
+        background-color: #D4AF37;
+    }
+
+    /* Cyberpunk Glow Effects */
+    .glow-gold {
+        box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+    }
+
+    .glow-gold-strong {
+        box-shadow: 0 0 40px rgba(212, 175, 55, 0.8);
+    }
+}
+
+/* GLOBAL OVERRIDES: No Grey, Only Black/White/Gold */
+body {
+    background-color: #000000;
+    color: #FFFFFF;
+}
+
+/* Scrollbar customization (Gold Thumb) */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #000000;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #D4AF37;
+    border-radius: 5px;
+}
+
+/* Selection color */
+::selection {
+    background: #D4AF37;
+    color: #000000;
+}
+
+::-moz-selection {
+    background: #D4AF37;
+    color: #000000;
+}
+
+/* Cyberpunk grid background (optional subtle effect) */
+.cyber-grid {
+    background-image:
+        linear-gradient(rgba(212, 175, 55, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(212, 175, 55, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+}

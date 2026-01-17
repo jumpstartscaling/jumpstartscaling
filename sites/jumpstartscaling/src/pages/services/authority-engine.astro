@@ -1,0 +1,80 @@
+---
+import ServiceLayout from '../../layouts/ServiceLayout.astro';
+import AtmosphereParticles from '../../components/3d/AtmosphereParticles';
+import GlassCard from '../../components/ui/GlassCard.astro';
+import GoldenBullets from '../../components/ui/GoldenBullets.astro';
+import ScalingSurvey from '../../components/ui/ScalingSurvey.astro';
+import DIYAISection from '../../components/content/DIYAISection.astro';
+import ServiceSynergy from '../../components/content/ServiceSynergy.astro';
+---
+
+<ServiceLayout 
+  title="Authority Engine - Content Marketing | Jumpstart Scaling" 
+  description="Become the market leader. We turn your expertise into a content engine that builds authority, trust, and inbound leads on autopilot."
+  currentPath="/services/authority-engine"
+>
+  <section class="hero">
+    <div class="hero-3d"><AtmosphereParticles client:only="react" /></div>
+    <div class="container">
+      <h1>Don't Be a Vendor. Be the <span class="accent">Prize</span>.</h1>
+      
+      <p class="subhead">
+        Vendors compete on price. Authorities compete on value. We turn your founder's expertise into a content engine that floods the market with trust, making sales effortless.
+      </p>
+      
+      <a href="#survey" class="cta-button">Build My Brand</a>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <h2>The "Omnipresence" Strategy</h2>
+      <p>
+        Your customers process 100,000 words a day. To cut through the noise, you don't need "more" content. You need "better" content, distributed everywhere.
+      </p>
+      
+      <GoldenBullets items={[
+        { icon: 'arrow', text: '7 Hours: The amount of content a prospect consumes before buying.' },
+        { icon: 'arrow', text: 'Trust is the new currency of the internet.' },
+        { icon: 'arrow', text: 'If they don\'t see you, they don\'t trust you.' }
+      ]} columns={1} />
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <h2>The Content Waterfall</h2>
+      <div class="grid-3">
+        <GlassCard 
+          title="Video First"
+          description="We record one long-form video (Podcast/Interview) that serves as the 'Source Code' for all other content."
+          icon="🎥"
+        />
+        <GlassCard 
+          title="Micro-Assets"
+          description="We slice that video into 10 TikToks, 5 LinkedIn posts, 3 Twitter threads, and 1 Blog post."
+          icon="✂️"
+        />
+        <GlassCard 
+          title="Distribution"
+          description="We use automation to blast this content across all channels simultaneously."
+          icon="📡"
+        />
+      </div>
+    </div>
+  </section>
+
+  <DIYAISection 
+    serviceName="Content Repurposing"
+    useCase="turning one video transcript into 5 LinkedIn posts"
+    prompt="I am pasting a transcript of a YouTube video below. I want you to extract 3 distinct 'golden nuggets' or insights from this text and turn each one into a viral-style LinkedIn post. Use short sentences, line breaks for readability, and a strong hook at the start of each."
+  />
+
+  <ServiceSynergy />
+
+  <section id="survey">
+    <div class="container">
+      <ScalingSurvey webhookUrl="https://api.jumpstartscaling.com/webhook/survey" />
+    </div>
+  </section>
+</ServiceLayout>

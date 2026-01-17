@@ -1,0 +1,85 @@
+---
+import ServiceLayout from '../../layouts/ServiceLayout.astro';
+import AtmosphereParticles from '../../components/3d/AtmosphereParticles';
+import GlassCard from '../../components/ui/GlassCard.astro';
+import GoldenBullets from '../../components/ui/GoldenBullets.astro';
+import ScalingSurvey from '../../components/ui/ScalingSurvey.astro';
+import DIYAISection from '../../components/content/DIYAISection.astro';
+import ServiceSynergy from '../../components/content/ServiceSynergy.astro';
+import ROASCalculator from '../../components/calculators/ROASCalculator';
+---
+
+<ServiceLayout 
+  title="Data Attribution & Tracking Fixes | Jumpstart Scaling" 
+  description="Fix your tracking. iOS14 broke your pixel. We implement server-side tracking (CAPI) and attribution modeling so you know exactly which ad makes money."
+  currentPath="/services/data-attribution"
+>
+  <section class="hero">
+    <div class="hero-3d"><AtmosphereParticles client:only="react" /></div>
+    <div class="container">
+      <h1>You Are Flying <span class="accent">Blind</span>.</h1>
+      
+      <p class="subhead">
+        Google Analytics is lying to you. Facebook Pixel is blocked by Apple. If you can't track it, you can't scale it. We implement server-side tracking (CAPI) that restores your 20/20 vision.
+      </p>
+      
+      <a href="#survey" class="cta-button">Audit My Tracking</a>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <h2>The Cost of Bad Data</h2>
+      <p>Bad attribution leads to cutting winning ads and scaling losers.</p>
+      <ROASCalculator client:only="react" />
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <h2>The iOS14 Apocalypse</h2>
+      <GoldenBullets items={[
+        { icon: 'arrow', text: 'Browser pixels are blocked by Safari, Firefox, and AdBlockers.' },
+        { icon: 'arrow', text: 'Client-side data is 30% inaccurate.' },
+        { icon: 'arrow', text: 'You need Offline Conversion Tracking (OCT) to feed data back to ads.' }
+      ]} columns={1} />
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <h2>The Triple-Layer Tracking Stack</h2>
+      <div class="grid-3">
+        <GlassCard 
+          title="Server-Side CAPI"
+          description="We send purchase data directly from your server to Facebook/Google, bypassing the browser entirely."
+          icon="🖥️"
+        />
+        <GlassCard 
+          title="UTM Taxonomy"
+          description="A rigid naming convention for every link you ever share, ensuring neat folders in your analytics."
+          icon="🏷️"
+        />
+        <GlassCard 
+          title="Attribution Modeling"
+          description="Moving beyond 'Last Click' to understand the full customer journey from first touch to sale."
+          icon="📈"
+        />
+      </div>
+    </div>
+  </section>
+
+  <DIYAISection 
+    serviceName="Data Parsing"
+    useCase="cleaning up messy CSV data"
+    prompt="I have a CSV export of customer data but the phone numbers are all different formats. Write a Python script to clean standard US phone numbers into +1 (XXX) XXX-XXXX format and remove any duplicates based on email address."
+  />
+
+  <ServiceSynergy />
+
+  <section id="survey">
+    <div class="container">
+      <ScalingSurvey webhookUrl="https://api.jumpstartscaling.com/webhook/survey" />
+    </div>
+  </section>
+</ServiceLayout>

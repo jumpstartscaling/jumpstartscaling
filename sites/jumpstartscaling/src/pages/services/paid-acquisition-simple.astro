@@ -1,0 +1,73 @@
+---
+import ServiceLayout from '../../layouts/ServiceLayout.astro';
+import GlassCard from '../../components/ui/GlassCard.astro';
+import GoldenBullets from '../../components/ui/GoldenBullets.astro';
+import ScalingSurvey from '../../components/ui/ScalingSurvey.astro';
+import AtmosphereParticles from '../../components/3d/AtmosphereParticles';
+---
+
+<ServiceLayout 
+  title="Funnel Architecture - Convert 40%+ of Cold Traffic | Jumpstart Scaling" 
+  description="Build frictionless lead capture systems that convert 40%+ of cold traffic into qualified booked appointments."
+  currentPath="/services/paid-acquisition-simple"
+>
+  <section class="hero">
+    <div class="hero-3d"><AtmosphereParticles client:only="react" /></div>
+    <div class="container">
+      <h1>Traffic is Vanity. Conversions are Sanity. <span class="accent">Build a Funnel That Actually Sells.</span></h1>
+      <p class="subhead">We design frictionless lead capture systems that convert 40%+ of cold traffic into qualified booked appointments. Stop paying for clicks that don't convert.</p>
+      <a href="#survey" class="cta-button">Audit My Funnel</a>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <h2>Your Website is Leaking Money</h2>
+      <p>Most websites are digital brochures. They look nice, but they don't do anything. You are losing 90% of your potential leads because you don't have a structured path for them to follow.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <h2>The "Perfect Path" Framework</h2>
+      <div class="process-flow">
+        <div class="process-step"><div class="step-number">1</div><div class="step-title">The Hook</div><p class="step-desc">Ads that stop the scroll and agitate the pain</p></div>
+        <div class="process-step"><div class="step-number">2</div><div class="step-title">The Bridge</div><p class="step-desc">Landing pages that build instant trust and authority</p></div>
+        <div class="process-step"><div class="step-number">3</div><div class="step-title">The Offer</div><p class="step-desc">Irresistible VSLs that pre-sell the prospect</p></div>
+        <div class="process-step"><div class="step-number">4</div><div class="step-title">The Close</div><p class="step-desc">Automated booking sequences that fill your calendar</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <h2>The High Cost of Friction</h2>
+      <p style="color: #C9A961; font-size: 1.25rem; margin-bottom: 2rem;">Every extra click costs you 50% of your revenue</p>
+      <div class="grid-2">
+        <GlassCard title="The Friction Tax" description="Every extra click in your funnel costs you 50% of your potential revenue." accentColor="red" />
+        <GlassCard title="The Speed Win" description="Reducing funnel steps from 4 to 2 increases conversion rates by 210%." accentColor="green" />
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <h2>The "Pre-Suasion" Landing Page</h2>
+      <GoldenBullets items={[
+        { icon: 'lightning', text: 'The Hook: Headlines that stop the scroll instantly' },
+        { icon: 'lightning', text: 'The Bridge: Copy that builds trust before asking for the sale' },
+        { icon: 'lightning', text: 'The Mechanism: Explaining why your solution works' },
+        { icon: 'lightning', text: 'The Risk Reversal: Guarantees that remove buyer fear' }
+      ]} columns={2} />
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <h2>Wake Up to Applications, Not Just Leads</h2>
+      <p>Stop chasing people who aren't interested. A properly built funnel filters out the noise. You'll only talk to prospects who know your price, understand your value, and are ready to buy.</p>
+    </div>
+  </section>
+
+  <section id="survey"><div class="container"><ScalingSurvey /></div></section>
+</ServiceLayout>

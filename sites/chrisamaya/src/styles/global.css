@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+
+    /* Blue gradient for text */
+    .text-blue-gradient {
+        background: linear-gradient(to right, #1E40AF, #3B82F6, #60A5FA);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        color: transparent;
+    }
+
+    /* Solid Blue for accents */
+    .border-blue-primary {
+        border-color: #3B82F6;
+    }
+
+    .bg-blue-primary {
+        background-color: #3B82F6;
+    }
+
+    /* Blue Glow Effects */
+    .glow-blue {
+        box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+    }
+
+    .glow-blue-strong {
+        box-shadow: 0 0 40px rgba(59, 130, 246, 0.6);
+    }
+}
+
+/* GLOBAL: White background, Blue accents */
+body {
+    background-color: #FFFFFF;
+    color: #1F2937;
+}
+
+/* Scrollbar customization (Blue Thumb) */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #F3F4F6;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #3B82F6;
+    border-radius: 5px;
+}
+
+/* Selection color */
+::selection {
+    background: #3B82F6;
+    color: #FFFFFF;
+}
+
+::-moz-selection {
+    background: #3B82F6;
+    color: #FFFFFF;
+}
+
+/* Subtle grid background for hero sections */
+.tech-grid-bg {
+    background-image:
+        linear-gradient(rgba(59, 130, 246, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(59, 130, 246, 0.05) 1px, transparent 1px);
+    background-size: 50px 50px;
+}

@@ -1,0 +1,36 @@
+{
+  "name": "chrisamaya",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev --port 8101 --host",
+    "build": "astro build",
+    "preview": "astro preview --port 8101 --host",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/react": "^4.4.2",
+    "@formkit/auto-animate": "^0.9.0",
+    "@react-three/cannon": "^6.6.0",
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.5.0",
+    "@rive-app/react-canvas": "^4.25.3",
+    "@splinetool/react-spline": "^4.1.0",
+    "@studio-freight/lenis": "^1.0.42",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@types/three": "^0.182.0",
+    "astro": "^5.16.8",
+    "canvas-confetti": "^1.9.4",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.25.0",
+    "lucide-react": "^0.562.0",
+    "maath": "^0.10.8",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "react-rough-notation": "^1.0.8",
+    "recharts": "^3.6.0",
+    "tailwind-merge": "^3.4.0",
+    "three": "^0.182.0"
+  }
+}

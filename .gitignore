@@ -1,0 +1,23 @@
+node_modules
+dist
+.env
+.DS_Store
+.astro
+npm-debug.log
+yarn-error.log
+coverage
+.vscode
+
+# Large files and build artifacts
+*.tar.gz
+*.zip
+.next/
+**/node_modules/
+.payload/
+*.log
+
+# Old files
+universe/
+payload-v2/
+docs/
+migrations/

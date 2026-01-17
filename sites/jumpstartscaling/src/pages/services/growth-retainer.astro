@@ -1,0 +1,80 @@
+---
+import ServiceLayout from '../../layouts/ServiceLayout.astro';
+import AtmosphereParticles from '../../components/3d/AtmosphereParticles';
+import GlassCard from '../../components/ui/GlassCard.astro';
+import GoldenBullets from '../../components/ui/GoldenBullets.astro';
+import ScalingSurvey from '../../components/ui/ScalingSurvey.astro';
+import DIYAISection from '../../components/content/DIYAISection.astro';
+import ServiceSynergy from '../../components/content/ServiceSynergy.astro';
+---
+
+<ServiceLayout 
+  title="Growth Retainer - Fractional CMO | Jumpstart Scaling" 
+  description="Your Fractional CMO team. We take full ownership of your growth stack, from ads to funnel to CRM, for one flat monthly fee."
+  currentPath="/services/growth-retainer"
+>
+  <section class="hero">
+    <div class="hero-3d"><AtmosphereParticles client:only="react" /></div>
+    <div class="container">
+      <h1>Your Entire Growth Team. <span class="accent">One Invoice</span>.</h1>
+      
+      <p class="subhead">
+        Stop managing 5 different agencies. We are your Fractional CMO, Ad Buyer, Funnel Builder, and Automation Engineer—all in one.
+      </p>
+      
+      <a href="#survey" class="cta-button">Partner With Us</a>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <h2>The "Agency Chaos" Problems</h2>
+      <p>
+        The ad agency blames the funnel. The funnel guy blames the offer. The sales team blames the leads. When updated disparate vendors, no one takes ownership.
+      </p>
+      
+      <GoldenBullets items={[
+        { icon: 'arrow', text: 'You are wasting 20 hours a week managing freelancers.' },
+        { icon: 'arrow', text: 'Misaligned incentives kill performance.' },
+        { icon: 'arrow', text: 'You need a holistic partner, not a task-doer.' }
+      ]} columns={1} />
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <h2>The Jumpstart Ecosystem</h2>
+      <div class="grid-3">
+        <GlassCard 
+          title="Strategy First"
+          description="We don't just run ads. We design the offer, the pricing model, and the unit economics before spending a dime."
+          icon="👑"
+        />
+        <GlassCard 
+          title="Full Stack Execution"
+          description="We handle the copy, the design, the code, the ads, and the CRM. Total accountability."
+          icon="⚔️"
+        />
+        <GlassCard 
+          title="Weekly War Room"
+          description="We meet with you weekly to review the numbers, optimize the plan, and remove bottlenecks."
+          icon="🗺️"
+        />
+      </div>
+    </div>
+  </section>
+
+  <DIYAISection 
+    serviceName="Strategic Planning"
+    useCase="creating a quarterly growth roadmap"
+    prompt="Act as a Fortune 500 CSO (Chief Strategy Officer). I run a [Industry] business doing $[Revenue]/year. I want to double my revenue in the next 90 days. Please outline a 'Shock and Awe' growth campaign that utilizes Paid Ads, Cold Outreach, and Content Marketing. Give me a week-by-week execution plan."
+  />
+
+  <ServiceSynergy />
+
+  <section id="survey">
+    <div class="container">
+      <ScalingSurvey webhookUrl="https://api.jumpstartscaling.com/webhook/survey" />
+    </div>
+  </section>
+</ServiceLayout>

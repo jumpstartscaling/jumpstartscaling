@@ -1,0 +1,122 @@
+/* Fallback styles for Service/Article pages if Tailwind build fails or FOUC occurs */
+
+body {
+    background-color: #000;
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+/* Typography Defaults */
+h1 {
+    font-size: 3rem;
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+}
+
+h2 {
+    font-size: 2.25rem;
+    font-weight: 800;
+    margin-top: 3rem;
+    margin-bottom: 1.5rem;
+    color: #fff;
+}
+
+h3 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #fff;
+}
+
+p {
+    font-size: 1.125rem;
+    line-height: 1.75;
+    color: #cbd5e1;
+    margin-bottom: 1.5rem;
+}
+
+/* Utility-like classes used in the pages */
+.text-gold {
+    color: #D4AF37;
+}
+
+.text-xs {
+    font-size: 0.75rem;
+}
+
+.uppercase {
+    text-transform: uppercase;
+}
+
+.font-mono {
+    font-family: monospace;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.mb-8 {
+    margin-bottom: 2rem;
+}
+
+.py-20 {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+}
+
+.grid {
+    display: grid;
+}
+
+.gap-8 {
+    gap: 2rem;
+}
+
+.grid-cols-1 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+@media (min-width: 768px) {
+    .md\:grid-cols-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .text-6xl {
+        font-size: 3.75rem;
+    }
+
+    .text-8xl {
+        font-size: 6rem;
+    }
+}
+
+.text-5xl {
+    font-size: 3rem;
+}
+
+.font-black {
+    font-weight: 900;
+}
+
+.tracking-widest {
+    letter-spacing: 0.1em;
+}
+
+/* Article specific */
+.prose strong {
+    color: #fff;
+    font-weight: 700;
+}
+
+.accent {
+    color: #D4AF37;
+}

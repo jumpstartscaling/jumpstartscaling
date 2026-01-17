@@ -1,0 +1,125 @@
+---
+import ServiceLayout from '../../layouts/ServiceLayout.astro';
+import AtmosphereParticles from '../../components/3d/AtmosphereParticles';
+import GlassCard from '../../components/ui/GlassCard.astro';
+import GoldenBullets from '../../components/ui/GoldenBullets.astro';
+import ScalingSurvey from '../../components/ui/ScalingSurvey.astro';
+import DIYAISection from '../../components/content/DIYAISection.astro';
+import ServiceSynergy from '../../components/content/ServiceSynergy.astro';
+import FunnelCalculator from '../../components/calculators/FunnelCalculator';
+---
+
+<ServiceLayout 
+  title="Funnel Architecture - Convert Cold Traffic | Jumpstart Scaling"
+  description="Stop losing 98% of your traffic. We build high-converting funnel architectures that turn cold clicks into qualified leads and sales."
+  currentPath="/services/funnel-architecture"
+>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-3d"><AtmosphereParticles client:only="react" /></div>
+    <div class="container">
+      <h1>Don't Pour Water into a <span class="accent">Leaky Bucket</span>.</h1>
+      
+      <p class="subhead">
+        Paid ads are expensive. If your landing page doesn't convert, you are lighting money on fire. We build frictionless lead capture systems that convert 40%+ of cold traffic.
+      </p>
+      
+      <a href="#survey" class="cta-button">Audit My Funnel</a>
+    </div>
+  </section>
+
+  <!-- CALCULATOR SECTION -->
+  <section>
+    <div class="container">
+      <h2>The Mathematics of Optimization</h2>
+      <p>See how increasing your conversion rate by just 1% can double your profit.</p>
+      <FunnelCalculator client:only="react" />
+    </div>
+  </section>
+
+  <!-- PROBLEM -->
+  <section>
+    <div class="container">
+      <h2>Why Generic Websites Fail</h2>
+      
+      <p>
+        Most websites are "brochures." They have too many links, no clear call to action, and slow load times. A <strong>Funnel</strong> has one job: To get the contact information of your dream client.
+      </p>
+      
+      <GoldenBullets items={[
+        { icon: 'arrow', text: '53% of mobile users leave if a site takes >3 seconds to load.' },
+        { icon: 'arrow', text: 'Generic "Contact Us" forms have a 1% conversion rate.' },
+        { icon: 'arrow', text: 'Without a specialized funnel, your ad spend is wasted.' }
+      ]} columns={1} />
+    </div>
+  </section>
+
+  <!-- SOLUTION -->
+  <section>
+    <div class="container">
+      <h2>The "Frictionless" Framework</h2>
+      
+      <div class="grid-3">
+        <GlassCard 
+          title="Speed Optimization"
+          description="We build on Astro.js, ensuring your pages load instantly (Sub-1s). Google loves speed, and so do your customers."
+          icon="⚡"
+        />
+        
+        <GlassCard 
+          title="Psychological Triggers"
+          description="We use urgency, scarcity, and social proof to ethically compel the user to take action now, not later."
+          icon="🧠"
+        />
+        
+        <GlassCard 
+          title="Mobile-First Design"
+          description="80% of ad traffic is mobile. We design for the thumb zone first, ensuring a seamless experience on phones."
+          icon="📱"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- EDUCATIONAL -->
+  <section class="educational-section">
+    <div class="container">
+      <h2>Anatomy of a High-Converting Funnel</h2>
+      <p>We don't just "guess." We follow a proven structural architecure.</p>
+      
+      <div class="process-flow">
+        <div class="process-step">
+          <div class="step-number">1</div>
+          <div class="step-title">The Hook</div>
+          <p class="step-desc">A headline that calls out the specific pain point of the avatar.</p>
+        </div>
+        <div class="process-step">
+          <div class="step-number">2</div>
+          <div class="step-title">The Value</div>
+          <p class="step-desc">A Lead Magnet (PDF, Video, Audit) that solves a small part of the problem for free.</p>
+        </div>
+        <div class="process-step">
+          <div class="step-number">3</div>
+          <div class="step-title">The Bridge</div>
+          <p class="step-desc">A Thank You page that builds authority and invites them to a call.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DIY AI -->
+  <DIYAISection 
+    serviceName="Landing Page Copy"
+    useCase="rewriting your headline to improve conversion"
+    prompt="You are a Direct Response Copywriter trained by David Ogilvy. I am selling [Product/Service] to [Target Audience]. My current headline is '[Insert Headline]'. Please give me 10 variations of this headline that focus on: 1) Fear of Loss 2) High Gain 3) Curiosity. Make them punchy and under 15 words."
+  />
+
+  <ServiceSynergy />
+
+  <section id="survey">
+    <div class="container">
+      <ScalingSurvey webhookUrl="https://api.jumpstartscaling.com/webhook/survey" />
+    </div>
+  </section>
+</ServiceLayout>
+

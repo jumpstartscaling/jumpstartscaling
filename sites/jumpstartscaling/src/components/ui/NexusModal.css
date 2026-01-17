@@ -1,0 +1,257 @@
+/* Base Overlay */
+.nav-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+/* The Command Center Card */
+.nexus-card {
+    width: 100%;
+    max-width: 900px;
+    height: 600px;
+    max-height: 90vh;
+    background: #09090b;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow:
+        0 0 0 1px rgba(0, 0, 0, 0.5),
+        0 20px 50px -10px rgba(0, 0, 0, 0.8),
+        0 0 40px rgba(201, 169, 97, 0.1);
+    border-radius: 16px;
+    display: flex;
+    overflow: hidden;
+    position: relative;
+    /* Inner Glow */
+    background-image:
+        radial-gradient(circle at top right, rgba(255, 255, 255, 0.03) 0%, transparent 40%),
+        radial-gradient(circle at bottom left, rgba(201, 169, 97, 0.03) 0%, transparent 40%);
+}
+
+/* Sidebar (Left) */
+.nexus-sidebar {
+    width: 240px;
+    background: rgba(0, 0, 0, 0.3);
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+}
+
+.nexus-logo {
+    font-family: 'Inter', sans-serif;
+    font-weight: 800;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    color: #fff;
+    margin-bottom: 2rem;
+    opacity: 0.5;
+}
+
+.nexus-tabs {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.nexus-tab {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    background: transparent;
+    border: none;
+    color: #888;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+}
+
+.nexus-tab:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+}
+
+.nexus-tab.active {
+    background: rgba(201, 169, 97, 0.1);
+    color: #C9A961;
+}
+
+/* Content Area (Right) */
+.nexus-content {
+    flex: 1;
+    padding: 2rem;
+    overflow-y: auto;
+    position: relative;
+}
+
+.nexus-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.nexus-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.02em;
+}
+
+.close-btn-nexus {
+    background: none;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.close-btn-nexus:hover {
+    color: #fff;
+}
+
+/* Grid Layouts for Content */
+.protocol-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+}
+
+.protocol-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 1.25rem;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.protocol-card:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(201, 169, 97, 0.3);
+    transform: translateY(-2px);
+}
+
+.p-icon {
+    color: #666;
+    transition: color 0.2s;
+}
+
+.protocol-card:hover .p-icon {
+    color: #C9A961;
+}
+
+.p-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.p-title {
+    color: #eee;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.p-desc {
+    color: #666;
+    font-size: 0.8rem;
+    margin-top: 2px;
+}
+
+/* Start Mission Button (Header) - Keep styling consistent */
+.start-mission-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.2rem;
+    background: transparent;
+    border: 1px solid rgba(201, 169, 97, 0.4);
+    color: #C9A961;
+    font-weight: 600;
+    font-size: 0.85rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Inter', monospace;
+}
+
+.start-mission-btn:hover {
+    background: rgba(201, 169, 97, 0.1);
+    border-color: #C9A961;
+    color: #FFD700;
+}
+
+/* Mobile Adaptation */
+@media (max-width: 768px) {
+    .nexus-card {
+        flex-direction: column;
+        height: 80vh;
+        margin-top: auto;
+        /* Bottom sheet effect if desired, or centered */
+        border-radius: 16px 16px 0 0;
+        /* Sheet style */
+        margin-bottom: 0;
+        max-height: 85vh;
+    }
+
+    .nav-modal-overlay {
+        align-items: flex-end;
+        /* Bottom alignment */
+        padding: 0;
+    }
+
+    .nexus-sidebar {
+        width: 100%;
+        flex-direction: row;
+        padding: 1rem;
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        overflow-x: auto;
+        /* Scrollable tabs */
+        height: auto;
+        flex-shrink: 0;
+        align-items: center;
+    }
+
+    .nexus-logo {
+        display: none;
+        /* Hide logo to save space */
+    }
+
+    .nexus-tabs {
+        flex-direction: row;
+        width: 100%;
+    }
+
+    .nexus-tab {
+        white-space: nowrap;
+        padding: 0.5rem 0.75rem;
+        font-size: 0.8rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.02);
+    }
+
+    .nexus-content {
+        padding: 1.5rem;
+    }
+
+    .protocol-grid {
+        grid-template-columns: 1fr;
+    }
+}

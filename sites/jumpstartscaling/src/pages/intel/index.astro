@@ -1,0 +1,91 @@
+---
+import ServiceLayout from '../../layouts/ServiceLayout.astro';
+import AtmosphereParticles from '../../components/3d/AtmosphereParticles';
+import GlassCard from '../../components/ui/GlassCard.astro';
+import GoldenBullets from '../../components/ui/GoldenBullets.astro';
+
+const articles = [
+  {
+    title: "$50k+ Market Domination Strategy",
+    slug: "market-domination-strategy",
+    desc: "Why scaling a $50k+ monthly ad spend requires a fundamentally different architecture than a startup budget. Focus: SF / VC-Backed Growth.",
+    tier: "Elite Tier",
+    icon: "🚀"
+  },
+  {
+    title: "Enterprise CRM Automation",
+    slug: "crm-automation-growth",
+    desc: "Transforming your database from a passive Rolodex into a predatory revenue engine using Custom Snapshots and Lead Routing.",
+    tier: "Infrastructure",
+    icon: "⚙️"
+  }
+];
+---
+
+<ServiceLayout 
+  title="The Growth Intelligence | Jumpstart Scaling" 
+  description="The technical playbook for high-volume revenue engineering. No fluff. Just math, models, and market dominance strategies."
+  currentPath="/intel"
+>
+  <section class="hero min-h-[60vh]">
+    <div class="hero-3d"><AtmosphereParticles client:only="react" /></div>
+    <div class="container text-center">
+      <span class="text-gold font-mono uppercase tracking-widest text-sm mb-4 block">The Knowledge Base</span>
+      <h1 class="text-6xl md:text-8xl font-black mb-6">GROWTH <span class="accent">INTEL</span></h1>
+      
+      <p class="subhead max-w-3xl mx-auto">
+        This is not a blog. This is a technical playbook for Revenue Operations. 
+        <br>Strategies for <span class="text-white">Market Domination</span>, <span class="text-white">Ad Arbitrage</span>, and <span class="text-white">System Architecture</span>.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {articles.map(article => (
+          <a href={`/intel/${article.slug}`} class="block group">
+            <div class="h-full bg-white/[0.03] border border-white/10 rounded-xl p-8 transition-all duration-300 hover:border-gold/50 hover:bg-white/[0.05] hover:-translate-y-2">
+              <div class="flex justify-between items-start mb-6">
+                <span class="text-4xl">{article.icon}</span>
+                <span class="font-mono text-xs text-gold border border-gold/30 px-3 py-1 rounded-full uppercase">
+                  {article.tier}
+                </span>
+              </div>
+              
+              <h3 class="text-2xl font-bold text-white mb-4 group-hover:text-gold transition-colors">
+                {article.title}
+              </h3>
+              
+              <p class="text-gray-400 leading-relaxed mb-6">
+                {article.desc}
+              </p>
+              
+              <div class="flex items-center text-sm font-bold text-white group-hover:text-gold uppercase tracking-wider">
+                Access Protocol <span class="ml-2">→</span>
+              </div>
+            </div>
+          </a>
+        ))}
+        
+        {/* Coming Soon Card */}
+        <div class="h-full bg-black/40 border border-white/5 rounded-xl p-8 flex flex-col justify-center items-center text-center opacity-60">
+          <span class="text-3xl mb-4">🔒</span>
+          <h3 class="text-xl font-bold text-gray-500 mb-2">Omnipresence Protocol</h3>
+          <p class="text-gray-600 text-sm">Classified. Releasing Q2 2026.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-20 border-t border-white/10">
+    <div class="container">
+      <h2 class="text-3xl font-bold mb-12">The <span class="accent">Core Doctrine</span></h2>
+      <GoldenBullets items={[
+        { icon: 'crosshair', text: 'Math is the only truth. If you cannot track it, do not spend it.' },
+        { icon: 'crosshair', text: 'Speed is the ultimate leverage. Automate everything that does not require empathy.' },
+        { icon: 'crosshair', text: 'Ownership is security. Build assets, do not just rent traffic.' }
+      ]} columns={1} />
+    </div>
+  </section>
+</ServiceLayout>

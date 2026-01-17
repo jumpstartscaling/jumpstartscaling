@@ -1,0 +1,164 @@
+---
+import AtmosphereParticles from '../components/3d/AtmosphereParticles';
+import Navigation from '../components/ui/Navigation.astro';
+import Clarity from '../components/analytics/Clarity.astro';
+import TechStackOrbit from '../components/visuals/TechStackOrbit.astro';
+import GrowthChart from '../components/visuals/GrowthChart.astro';
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jumpstart Scaling - Predictable Revenue Systems</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"></noscript>
+  
+  <style>
+    :root {
+      --gold: #C9A961;
+      --gold-light: #FFD700;
+      --bg: #000;
+      --text: #fff;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    
+    .container { 
+      max-width: 1400px; 
+      margin: 0 auto; 
+      padding: 0 2rem; 
+      width: 100%; 
+    }
+    
+    .hero {
+      min-height: 80vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      padding: 4rem 0;
+    }
+    
+    .gold-text {
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    /* Grid Utilities */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .grid-services {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 2.5rem;
+    }
+
+    /* Cards */
+    .card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(201, 169, 97, 0.2);
+      border-radius: 16px;
+      padding: 3rem;
+      transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+
+    .card:hover {
+      border-color: var(--gold);
+      transform: translateY(-5px);
+    }
+
+    @media (max-width: 768px) {
+      .grid-2, .grid-services { grid-template-columns: 1fr; }
+      h1 { font-size: 2.5rem !important; }
+    }
+  </style>
+</head>
+<body>
+  <Navigation currentPath="/" />
+  <Clarity />
+
+  <section class="hero">
+    <div style="position: absolute; inset: 0; opacity: 0.15; pointer-events: none;">
+      <AtmosphereParticles client:only="react" />
+    </div>
+    <div class="container">
+      <h1 style="font-size: 5rem; font-weight: 900; line-height: 1.1; margin-bottom: 2rem;">
+        Stop Guessing.<br>
+        Start <span class="gold-text">Scaling.</span>
+      </h1>
+      <p style="font-size: 1.5rem; color: #C9A961; max-width: 800px; margin: 0 auto;">
+        Predictable revenue systems for businesses doing $1M-$10M ARR
+      </p>
+    </div>
+  </section>
+
+  <section style="background: #000; padding: 6rem 0;">
+    <div class="container">
+      <div class="grid-2">
+        <div>
+          <h2 style="font-size: 2.5rem; font-weight: 900; margin-bottom: 1rem;">The Ecosystem</h2>
+          <p style="color: #ccc; margin-bottom: 2rem;">We supercharge your stack.</p>
+          <TechStackOrbit />
+        </div>
+        <div>
+          <h2 style="font-size: 2.5rem; font-weight: 900; margin-bottom: 1rem;">The Result</h2>
+          <p style="color: #ccc; margin-bottom: 2rem;">Exponential velocity.</p>
+          <GrowthChart />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding: 6rem 0; background: rgba(255,255,255,0.02);">
+    <div class="container">
+      <h2 style="text-align: center; font-size: 3rem; font-weight: 900; margin-bottom: 4rem;">How We Scale</h2>
+      <div class="grid-services">
+        <div class="card">
+          <h3 style="font-size: 1.5rem; color: #FFD700; margin-bottom: 1rem;">Paid Acquisition</h3>
+          <p style="color: #ccc; margin-bottom: 1.5rem;">Scientific testing across Google, Meta, and LinkedIn.</p>
+          <a href="/services/paid-acquisition" style="color: #C9A961; text-decoration: none; font-weight: 700;">Explore &rarr;</a>
+        </div>
+        <div class="card">
+          <h3 style="font-size: 1.5rem; color: #FFD700; margin-bottom: 1rem;">Funnel Architecture</h3>
+          <p style="color: #ccc; margin-bottom: 1.5rem;">Convert cold traffic into booked calls.</p>
+          <a href="/services/funnel-architecture" style="color: #C9A961; text-decoration: none; font-weight: 700;">Explore &rarr;</a>
+        </div>
+        <div class="card">
+          <h3 style="font-size: 1.5rem; color: #FFD700; margin-bottom: 1rem;">CRM Automations</h3>
+          <p style="color: #ccc; margin-bottom: 1.5rem;">Nurture leads 24/7 with intelligent pipelines.</p>
+          <a href="/services/crm-transformation" style="color: #C9A961; text-decoration: none; font-weight: 700;">Explore &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding: 8rem 0; text-align: center;">
+    <div class="container">
+      <a href="/services/paid-acquisition#survey" style="display: inline-block; padding: 1.5rem 4rem; background: linear-gradient(135deg, #C9A961, #FFD700); color: #000; text-decoration: none; font-weight: 800; border-radius: 8px;">
+        GET YOUR BLUEPRINT
+      </a>
+    </div>
+  </section>
+
+</body>
+</html>
