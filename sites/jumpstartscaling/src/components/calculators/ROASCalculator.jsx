@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import './ROASCalculator.css';
 
 const ROASCalculator = () => {
     const [spend, setSpend] = useState(5000);
@@ -81,54 +82,6 @@ const ROASCalculator = () => {
                     </div>
                 </div>
             </div>
-
-            <style jsx>{`
-        .roas-calculator-card {
-          background: rgba(255,255,255,0.03);
-          border: 1px solid rgba(255,255,255,0.1);
-          border-radius: 12px;
-          padding: 2rem;
-          margin: 3rem 0;
-          font-family: 'Inter', sans-serif;
-        }
-        .calc-header h3 { color: #C9A961; margin-bottom: 0.5rem; }
-        .calc-header p { color: #888; font-size: 0.9rem; margin-bottom: 2rem; }
-        
-        .calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
-        @media (max-width: 768px) { .calc-grid { grid-template-columns: 1fr; } }
-
-        .input-group { margin-bottom: 1.5rem; }
-        .input-group label { display: block; color: #ccc; margin-bottom: 0.5rem; font-size: 0.9rem; font-weight: 600; }
-        
-        input[type=range] {
-          width: 100%;
-          accent-color: #C9A961;
-          background: #333;
-          height: 6px;
-          border-radius: 3px;
-        }
-
-        .result-item {
-          background: rgba(0,0,0,0.3);
-          border: 1px solid rgba(255,255,255,0.05);
-          padding: 1.5rem;
-          border-radius: 8px;
-          margin-bottom: 1rem;
-          text-align: center;
-        }
-        
-        .result-item.highlight {
-          background: rgba(201, 169, 97, 0.1);
-          border-color: #C9A961;
-        }
-
-        .result-item span { display: block; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; color: #888; margin-bottom: 0.5rem; }
-        .result-value { font-size: 2rem; font-weight: 900; color: #fff; }
-        .gold { color: #FFD700; }
-        .green { color: #4ade80; }
-        .yellow { color: #facc15; }
-        .red { color: #f87171; }
-      `}</style>
         </div>
     );
 };

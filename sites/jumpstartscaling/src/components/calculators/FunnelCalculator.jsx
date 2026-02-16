@@ -34,20 +34,28 @@ const FunnelCalculator = () => {
             <div className="calc-flex">
                 <div className="inputs-col">
                     <div className="input-row">
-                        <label>Monthly Traffic</label>
-                        <input type="number" value={traffic} onChange={(e) => setTraffic(Number(e.target.value))} />
+                        <label>
+                            Monthly Traffic
+                            <input type="number" value={traffic} onChange={(e) => setTraffic(Number(e.target.value))} />
+                        </label>
                     </div>
                     <div className="input-row">
-                        <label>Landing Page Conv. Rate (%)</label>
-                        <input type="number" step="0.5" value={optinRate} onChange={(e) => setOptinRate(Number(e.target.value))} />
+                        <label>
+                            Landing Page Conv. Rate (%)
+                            <input type="number" step="0.5" value={optinRate} onChange={(e) => setOptinRate(Number(e.target.value))} />
+                        </label>
                     </div>
                     <div className="input-row">
-                        <label>Sales Close Rate (%)</label>
-                        <input type="number" step="1" value={closeRate} onChange={(e) => setCloseRate(Number(e.target.value))} />
+                        <label>
+                            Sales Close Rate (%)
+                            <input type="number" step="1" value={closeRate} onChange={(e) => setCloseRate(Number(e.target.value))} />
+                        </label>
                     </div>
                     <div className="input-row">
-                        <label>Offer Price ($)</label>
-                        <input type="number" value={ticketPrice} onChange={(e) => setTicketPrice(Number(e.target.value))} />
+                        <label>
+                            Offer Price ($)
+                            <input type="number" value={ticketPrice} onChange={(e) => setTicketPrice(Number(e.target.value))} />
+                        </label>
                     </div>
                 </div>
 
@@ -90,7 +98,7 @@ const FunnelCalculator = () => {
         
         .inputs-col { flex: 1; }
         .input-row { margin-bottom: 1rem; }
-        .input-row label { display: block; font-size: 0.85rem; color: #888; margin-bottom: 0.5rem; }
+        .input-row label { display: block; font-size: 0.85rem; color: #aaa; font-weight: 500; }
         .input-row input { 
           width: 100%; padding: 0.75rem; background: #111; 
           border: 1px solid #333; color: #fff; border-radius: 4px;

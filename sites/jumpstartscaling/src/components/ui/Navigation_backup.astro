@@ -1,363 +1,85 @@
 ---
-// Mobile-friendly navigation component
-interface Props {
-  currentPath?: string;
-}
-
+// src/components/ui/Navigation.astro - Updated for reliable dropdown + polish
+interface Props { currentPath?: string }
 const { currentPath = '/' } = Astro.props;
-import QuickNav from './QuickNav.astro';
+
+const services = [
+  { name: 'Paid Acquisition', slug: '/services/paid-acquisition' },
+  { name: 'Funnel Architecture', slug: '/services/funnel-architecture' },
+  { name: 'CRM Transformation', slug: '/services/crm-transformation' },
+  { name: 'Data Attribution', slug: '/services/data-attribution' },
+  { name: 'Authority Engine', slug: '/services/authority-engine' },
+  { name: 'Growth Retainer', slug: '/services/growth-retainer' }
+];
 ---
 
-<nav class="main-nav">
-  <div class="nav-container">
-    <a href="/" class="nav-logo">JUMPSTART SCALING</a>
-    
-    <button class="mobile-menu-toggle" aria-label="Toggle menu" id="menu-toggle">
-      <span class="hamburger"></span>
-    </button>
-    
-    <div class="nav-menu" id="nav-menu">
-      <a href="/" class={currentPath === '/' ? 'nav-link active' : 'nav-link'}>Home</a>
-      
-      <div class="nav-dropdown">
-        <button class="nav-link dropdown-trigger">
-          Services
-          <span class="dropdown-arrow">▼</span>
+<nav class="fixed top-0 left-0 right-0 z-40 transition-all duration-300" id="main-nav">
+  <div class="container max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+    <!-- Logo -->
+    <a href="/" class="flex items-center gap-4 text-2xl md:text-3xl font-black" aria-label="Jumpstart Scaling Home">
+      <svg width="48" height="48" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="32" height="32" rx="8" fill="url(#lg)" />
+        <path d="M10 22V14l6-4 6 4v8l-6 4-6-4z" stroke="#050505" stroke-width="2" fill="none" />
+        <circle cx="16" cy="16" r="3" fill="#050505" />
+        <defs>
+          <linearGradient id="lg" x1="0" y1="0" x2="32" y2="32">
+            <stop stop-color="#C9A961" />
+            <stop offset="1" stop-color="#FFE5A0" />
+          </linearGradient>
+        </defs>
+      </svg>
+      <span class="hidden md:block">Jumpstart Scaling</span>
+    </a>
+
+    <!-- Desktop Nav -->
+    <ul class="hidden lg:flex items-center gap-10 font-medium text-lg">
+      <li class="relative group">
+        <button class="flex items-center gap-2 hover:text-accent transition">
+          Services <span class="transition group-hover:rotate-180 text-xl">▾</span>
         </button>
-        <div class="dropdown-menu">
-          <a href="/services/paid-acquisition" class={currentPath === '/services/paid-acquisition' ? 'dropdown-link active' : 'dropdown-link'}>
-            Paid Acquisition
-          </a>
-          <a href="/services/funnel-architecture" class={currentPath === '/services/funnel-architecture' ? 'dropdown-link active' : 'dropdown-link'}>
-            Funnel Architecture
-          </a>
-          <a href="/services/crm-transformation" class={currentPath === '/services/crm-transformation' ? 'dropdown-link active' : 'dropdown-link'}>
-            CRM Transformation
-          </a>
-          <a href="/services/data-attribution" class={currentPath === '/services/data-attribution' ? 'dropdown-link active' : 'dropdown-link'}>
-            Data & Attribution
-          </a>
-          <a href="/services/authority-engine" class={currentPath === '/services/authority-engine' ? 'dropdown-link active' : 'dropdown-link'}>
-            Authority Engine
-          </a>
-          <a href="/services/growth-retainer" class={currentPath === '/services/growth-retainer' ? 'dropdown-link active' : 'dropdown-link'}>
-            Full Growth Retainer
-          </a>
-        </div>
-      </div>
-      
-      <a href="/#survey" class="nav-link cta-link">Get Blueprint</a>
+        <ul class="absolute top-full left-1/2 -translate-x-1/2 mt-6 w-72 bg-[#0A0A0A] border border-white/10 rounded-3xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible pointer-events-none group-hover:pointer-events-auto transition-all duration-400 p-8 z-50 before:absolute before:-top-6 before:left-0 before:w-full before:h-6 before:bg-transparent">
+          {services.map(s => (
+            <li class="mb-4 last:mb-0">
+              <a href={s.slug} class={`block py-3 px-6 rounded-xl hover:bg-accent/10 hover:text-accent transition ${currentPath === s.slug ? 'text-accent bg-accent/10' : ''}`}>
+                {s.name}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </li>
+      <li><a href="/intel" class={`hover:text-accent transition ${currentPath.startsWith('/intel') ? 'text-accent' : ''}`}>Intel</a></li>
+      <li><a href="/about" class={`hover:text-accent transition ${currentPath === '/about' ? 'text-accent' : ''}`}>About</a></li>
+      <li><a href="/audit" class="px-10 py-4 bg-accent text-black font-bold text-lg rounded-2xl hover:scale-105 hover:shadow-2xl transition">Free Audit</a></li>
+    </ul>
+
+    <!-- Mobile Toggle -->
+    <input type="checkbox" id="mob-toggle" class="hidden peer" />
+    <label for="mob-toggle" class="lg:hidden cursor-pointer z-[60] flex flex-col gap-2">
+      <span class="w-10 h-1.5 bg-white transition peer-checked:rotate-45 peer-checked:translate-y-3.5"></span>
+      <span class="w-10 h-1.5 bg-white transition peer-checked:opacity-0"></span>
+      <span class="w-10 h-1.5 bg-white transition peer-checked:-rotate-45 peer-checked:-translate-y-3.5"></span>
+    </label>
+
+    <!-- Mobile Drawer -->
+    <div class="fixed inset-0 bg-[#050505]/98 backdrop-blur-2xl -translate-x-full peer-checked:translate-x-0 transition-transform duration-500 flex items-center justify-center lg:hidden z-50">
+      <ul class="space-y-10 text-center text-4xl font-bold">
+        <li><a href="/" class="hover:text-accent transition">Home</a></li>
+        {services.map(s => (
+          <li><a href={s.slug} class="block hover:text-accent transition">{s.name}</a></li>
+        ))}
+        <li><a href="/intel" class="block hover:text-accent transition">Intel</a></li>
+        <li><a href="/about" class="block hover:text-accent transition">About</a></li>
+        <li><a href="/audit" class="block px-16 py-8 bg-accent text-black rounded-3xl hover:scale-105 transition text-3xl">Free Audit</a></li>
+      </ul>
     </div>
-  </div>
   </div>
 </nav>
 
-<QuickNav />
-
 <style>
-  .main-nav {
-    position: sticky;
-    top: 0;
-    background: rgba(0, 0, 0, 0.95);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(201, 169, 97, 0.2);
-    padding: 1rem 0;
-    z-index: 1000;
-  }
-  
-  .nav-container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .nav-logo {
-    font-size: 1.5rem;
-    font-weight: 900;
-    background: linear-gradient(135deg, #C9A961, #FFD700);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-decoration: none;
-    letter-spacing: 1px;
-    transition: all 0.3s;
-  }
-  
-  .nav-logo:hover {
-    transform: scale(1.05);
-  }
-  
-  .mobile-menu-toggle {
-    display: none;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0.5rem;
-  }
-  
-  .hamburger {
-    display: block;
-    width: 25px;
-    height: 2px;
-    background: #C9A961;
-    position: relative;
-    transition: all 0.3s;
-  }
-  
-  .hamburger::before,
-  .hamburger::after {
-    content: '';
-    position: absolute;
-    width: 25px;
-    height: 2px;
-    background: #C9A961;
-    transition: all 0.3s;
-  }
-  
-  .hamburger::before {
-    top: -8px;
-  }
-  
-  .hamburger::after {
-    top: 8px;
-  }
-  
-  .mobile-menu-toggle.active .hamburger {
-    background: transparent;
-  }
-  
-  .mobile-menu-toggle.active .hamburger::before {
-    transform: rotate(45deg);
-    top: 0;
-  }
-  
-  .mobile-menu-toggle.active .hamburger::after {
-    transform: rotate(-45deg);
-    top: 0;
-  }
-  
-  .nav-menu {
-    display: none; /* Navigation removed - using contextual CTAs instead */
-  }
-  
-  .nav-link {
-    color: #ddd;
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 1rem;
-    transition: all 0.2s;
-    padding: 0.5rem 0;
-    border-bottom: 2px solid transparent;
-  }
-  
-  .nav-link:hover {
-    color: #FFD700;
-    border-bottom-color: #C9A961;
-  }
-  
-  .nav-link.active {
-    color: #FFD700;
-    border-bottom-color: #C9A961;
-  }
-  
-  .cta-link {
-    background: linear-gradient(135deg, #C9A961, #FFD700);
-    color: #000 !important;
-    padding: 0.75rem 1.5rem !important;
-    border-radius: 6px;
-    font-weight: 700;
-    border: none !important;
-  }
-  
-  .cta-link:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(201, 169, 97, 0.4);
-  }
-  
-  /* Dropdown */
-  .nav-dropdown {
-    position: relative;
-  }
-  
-  .dropdown-trigger {
-    background: none;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  
-  .dropdown-arrow {
-    font-size: 0.75rem;
-    transition: transform 0.3s;
-  }
-  
-  .nav-dropdown:hover .dropdown-arrow {
-    transform: rotate(180deg);
-  }
-  
-  .dropdown-menu {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background: rgba(0, 0, 0, 0.98);
-    border: 1px solid rgba(201, 169, 97, 0.2);
-    border-radius: 8px;
-    padding: 0.5rem 0;
-    min-width: 220px;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-10px);
-    transition: all 0.3s;
-    backdrop-filter: blur(10px);
-  }
-  
-  .nav-dropdown:hover .dropdown-menu {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-  }
-  
-  .dropdown-link {
-    display: block;
-    padding: 0.75rem 1.5rem;
-    color: #ddd;
-    text-decoration: none;
-    transition: all 0.2s;
-    font-size: 0.95rem;
-  }
-  
-  .dropdown-link:hover {
-    background: rgba(201, 169, 97, 0.1);
-    color: #FFD700;
-  }
-  
-  .dropdown-link.active {
-    background: rgba(201, 169, 97, 0.2);
-    color: #FFD700;
-  }
-  
-  /* Mobile Styles */
-  @media (max-width: 768px) {
-    .mobile-menu-toggle {
-      display: none; /* Hide hamburger menu on mobile */
-    }
-    
-    .nav-menu {
-      display: none; /* Hide entire menu on mobile */
-    }
-    
-    .nav-menu.active {
-      right: 0;
-    }
-    
-    .nav-link {
-      width: 100%;
-      padding: 1rem 2rem;
-      border-bottom: none;
-      border-left: 3px solid transparent;
-    }
-    
-    .nav-link:hover,
-    .nav-link.active {
-      border-bottom-color: transparent;
-      border-left-color: #C9A961;
-      background: rgba(201, 169, 97, 0.05);
-    }
-    
-    .cta-link {
-      margin: 1rem 2rem;
-      width: calc(100% - 4rem);
-      text-align: center;
-    }
-    
-    .nav-dropdown {
-      width: 100%;
-    }
-    
-    .dropdown-trigger {
-      width: 100%;
-      padding: 1rem 2rem;
-      justify-content: space-between;
-      text-align: left;
-    }
-    
-    .dropdown-menu {
-      position: static;
-      opacity: 1;
-      visibility: visible;
-      transform: none;
-      background: rgba(201, 169, 97, 0.05);
-      border: none;
-      border-radius: 0;
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.3s;
-    }
-    
-    .nav-dropdown.active .dropdown-menu {
-      max-height: 500px;
-    }
-    
-    .nav-dropdown.active .dropdown-arrow {
-      transform: rotate(180deg);
-    }
-    
-    .dropdown-link {
-      padding-left: 3rem;
-    }
+  nav.nav-scrolled {
+    backdrop-filter: blur(20px);
+    background: rgba(5, 5, 5, 0.9);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.5rem;
   }
 </style>
-
-<script>
-  // Mobile menu toggle
-  const menuToggle = document.getElementById('menu-toggle');
-  const navMenu = document.getElementById('nav-menu');
-  
-  menuToggle?.addEventListener('click', () => {
-    menuToggle.classList.toggle('active');
-    navMenu?.classList.toggle('active');
-  });
-  
-  // Mobile dropdown toggle
-  const dropdownTriggers = document.querySelectorAll('.dropdown-trigger');
-  
-  dropdownTriggers.forEach(trigger => {
-    trigger.addEventListener('click', (e) => {
-      if (window.innerWidth <= 768) {
-        e.preventDefault();
-        const dropdown = trigger.closest('.nav-dropdown');
-        dropdown?.classList.toggle('active');
-      }
-    });
-  });
-  
-  // Close menu when clicking outside on mobile
-  document.addEventListener('click', (e) => {
-    const target = e.target as HTMLElement;
-    if (window.innerWidth <= 768) {
-      if (!target.closest('.main-nav')) {
-        menuToggle?.classList.remove('active');
-        navMenu?.classList.remove('active');
-      }
-    }
-  });
-  
-  // Close menu when clicking a link (but NOT a dropdown trigger)
-  const navLinks = document.querySelectorAll('a.nav-link, .dropdown-link'); // Only select <a> tags or dropdown links
-  navLinks.forEach(link => {
-    link.addEventListener('click', () => {
-      if (window.innerWidth <= 768) {
-        // Double check it's not a dropdown trigger just in case
-        if (!link.classList.contains('dropdown-trigger')) {
-          menuToggle?.classList.remove('active');
-          navMenu?.classList.remove('active');
-        }
-      }
-    });
-  });
-</script>

@@ -1,53 +1,60 @@
-import { Canvas, useFrame } from "@react-three/fiber";
-import { Points, PointMaterial } from "@react-three/drei";
-import { useState, useRef } from "react";
-import * as random from "maath/random/dist/maath-random.esm";
+import React from 'react';
 
-function ParticleField(props) {
-    const ref = useRef();
-
-    // Generate robust sphere positions using maath
-    const [sphere] = useState(() => {
-        // Generate 3000 points on a sphere of radius 1.5
-        // Using float32array directly ensures typed array compatibility
-        const data = random.inSphere(new Float32Array(3000 * 3), { radius: 1.5 });
-
-        // Safety check for NaN values to prevent Three.js bounding sphere errors
-        for (let i = 0; i < data.length; i++) {
-            if (isNaN(data[i])) data[i] = 0;
-        }
-        return data;
-    });
-
-    useFrame((state, delta) => {
-        if (ref.current) {
-            ref.current.rotation.x -= delta / 15;
-            ref.current.rotation.y -= delta / 20;
-        }
-    });
-
+// Replaces heavy 3D canvas with performant CSS Holographic Grid
+const AtmosphereParticles = () => {
     return (
-        <group rotation={[0, 0, Math.PI / 4]}>
-            <Points ref={ref} positions={sphere} stride={3} frustumCulled={false} {...props}>
-                <PointMaterial
-                    transparent
-                    color="#6366f1"
-                    size={0.003}
-                    sizeAttenuation={true}
-                    depthWrite={false}
-                    blending={2} // AdditiveBlending
-                />
-            </Points>
-        </group>
-    );
-}
+        <div className="fixed inset-0 z-[-1] pointer-events-none bg-black overflow-hidden">
+            {/* Holographic Grid Overlay */}
+            <div style={{
+                position: 'absolute',
+                inset: 0,
+                backgroundImage: `
+                    linear-gradient(rgba(201, 169, 97, 0.05) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(201, 169, 97, 0.05) 1px, transparent 1px)
+                `,
+                backgroundSize: '50px 50px',
+                maskImage: 'radial-gradient(circle at 50% 50%, black 30%, transparent 80%)',
+                WebkitMaskImage: 'radial-gradient(circle at 50% 50%, black 30%, transparent 80%)',
+                opacity: 0.6
+            }} />
 
-export default function AtmosphereParticles() {
-    return (
-        <div className="fixed inset-0 z-[-1] pointer-events-none opacity-60">
-            <Canvas camera={{ position: [0, 0, 1] }} dpr={[1, 2]} gl={{ antialias: false }}>
-                <ParticleField />
-            </Canvas>
+            {/* Ambient Gold Glow */}
+            <div style={{
+                position: 'absolute',
+                top: '0',
+                left: '50%',
+                transform: 'translate(-50%, -20%)',
+                width: '80vw',
+                height: '80vw',
+                background: 'radial-gradient(circle, rgba(201, 169, 97, 0.08) 0%, transparent 70%)',
+                filter: 'blur(80px)',
+                opacity: 0.8
+            }} />
+
+            {/* Floating Dust Particles (CSS Animation) */}
+            <div className="dust-particles" />
+            <style>{`
+                .dust-particles {
+                    position: absolute; inset: 0;
+                    background-image: radial-gradient(#fff 1px, transparent 1px);
+                    background-size: 50px 50px;
+                    opacity: 0.1;
+                    animation: float 20s linear infinite;
+                }
+                @keyframes float {
+                    0% { transform: translateY(0); }
+                    100% { transform: translateY(-50px); }
+                }
+                /* Reduced intensity on mobile */
+                @media (max-width: 768px) {
+                    .dust-particles {
+                        opacity: 0.05;
+                        background-size: 80px 80px; /* Fewer particles */
+                    }
+                }
+            `}</style>
         </div>
     );
-}
+};
+
+export default AtmosphereParticles;

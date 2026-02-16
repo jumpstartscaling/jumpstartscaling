@@ -55,7 +55,13 @@ const services = [
   .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 2rem;
+    padding: 0 1.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      padding: 0 1rem;
+    }
   }
 
   .mono-label {
@@ -81,25 +87,39 @@ const services = [
 
   .synergy-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     gap: 2rem;
   }
 
   .synergy-card {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(15, 15, 15, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(201, 169, 97, 0.2);
     padding: 2rem;
-    border-radius: 8px;
+    border-radius: 12px;
     text-decoration: none;
     transition: all 0.3s ease;
     display: flex;
     flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  }
+
+  .synergy-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(201, 169, 97, 0.5), transparent);
+    opacity: 0.5;
   }
 
   .synergy-card:hover {
     transform: translateY(-5px);
     border-color: #C9A961;
-    background: rgba(201, 169, 97, 0.05);
+    background: rgba(20, 20, 20, 0.8);
+    box-shadow: 0 10px 30px rgba(201, 169, 97, 0.15);
   }
 
   .icon {

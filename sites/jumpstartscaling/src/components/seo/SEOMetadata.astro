@@ -5,6 +5,9 @@ interface Props {
   image?: string;
   type?: 'website' | 'article';
   publishDate?: string;
+  author?: string;
+  keywords?: string[];
+  canonical?: string;
 }
 
 const { 
@@ -12,10 +15,15 @@ const {
   description, 
   image = "/og-default.jpg",
   type = "website",
-  publishDate
+  publishDate,
+  author = "Jumpstart Scaling",
+  keywords = [],
+  canonical
 } = Astro.props;
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://jumpstartscaling.com');
+const canonicalURL = canonical 
+  ? new URL(canonical, Astro.site || 'https://jumpstartscaling.com')
+  : new URL(Astro.url.pathname, Astro.site || 'https://jumpstartscaling.com');
 const socialImageURL = new URL(image, Astro.url);
 const siteName = "Jumpstart Scaling";
 ---
@@ -29,7 +37,13 @@ const siteName = "Jumpstart Scaling";
 <title>{title} | {siteName}</title>
 <meta name="title" content={`${title} | ${siteName}`} />
 <meta name="description" content={description} />
+{keywords.length > 0 && <meta name="keywords" content={keywords.join(', ')} />}
+{author && <meta name="author" content={author} />}
 <link rel="canonical" href={canonicalURL} />
+
+<!-- Robots and Indexing -->
+<meta name="robots" content="index, follow" />
+<meta name="googlebot" content="index, follow" />
 
 <meta property="og:type" content={type} />
 <meta property="og:url" content={canonicalURL} />
@@ -43,6 +57,7 @@ const siteName = "Jumpstart Scaling";
 <meta property="twitter:title" content={title} />
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={socialImageURL} />
+<meta name="twitter:creator" content="@jumpstartscale" />
 
 {publishDate && (
   <meta property="article:published_time" content={publishDate} />
