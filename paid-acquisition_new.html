@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algorithmic Paid Acquisition | Scale Meta, Google & TikTok Ads</title>
+    <meta name="description"
+        content="We utilize scientific media buying protocols (3:2:2) and server-side attribution to scale ad spend profitably. Stop guessing. Start engineering revenue.">
+    <meta name="keywords"
+        content="Facebook Ads Agency, Media Buying, Creative Strategy, TikTok Ads, Google Ads Scaling, Hyros Attribution">
+
+    <!-- 1. FONTS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+
+    <!-- 2. ICONS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- 3. TAILWIND -->
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+
+    <!-- 4. ALPINE JS -->
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
+
+    <!-- 5. ALPINE COMPONENT LOGIC -->
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('nav', () => ({
+                mobileOpen: false,
+                scrolled: false,
+                solutionsOpen: false,
+                init() {
+                    window.addEventListener('scroll', () => {
+                        this.scrolled = window.scrollY > 50;
+                    });
+                }
+            }));
+        });
+    </script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            DEFAULT: '#C9A961',
+                            light: '#FFE5A0',
+                            dim: 'rgba(201, 169, 97, 0.1)',
+                            dark: '#8a733e'
+                        },
+                        dark: {
+                            900: '#050505',
+                            800: '#0A0A0A',
+                            700: '#111111',
+                            600: '#1a1a1a'
+                        }
+                    },
+                    fontFamily: {
+                        mono: ['JetBrains Mono', 'monospace'],
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    typography: (theme) => ({
+                        DEFAULT: {
+                            css: {
+                                color: theme('colors.gray.400'),
+                                strong: { color: '#fff' },
+                                h1: { color: '#fff' },
+                                h2: { color: '#fff' },
+                                h3: { color: '#fff' },
+                                code: { color: theme('colors.gold.DEFAULT') },
+                            },
+                        },
+                    }),
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #050505;
+            color: #e5e5e5;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, #C9A961 0%, #FFE5A0 50%, #C9A961 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% auto;
+            animation: shine 5s linear infinite;
+        }
+
+        @keyframes shine {
+            to {
+                background-position: 200% center;
+            }
+        }
+    </style>
+</head>
+
+<body class="antialiased selection:bg-gold selection:text-black overflow-x-hidden" x-data="nav">
+
+    <!-- NAVIGATION -->
+    <nav :class="{ 'bg-dark-900/95 backdrop-blur-md border-b border-white/5': scrolled, 'bg-transparent border-transparent': !scrolled }"
+        class="fixed top-0 w-full z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 h-24 flex justify-between items-center">
+
+            <a href="/" class="flex items-center gap-3 group relative z-50">
+                <div
+                    class="w-10 h-10 bg-gradient-to-br from-gold to-gold-dark rounded flex items-center justify-center font-black text-black text-sm shadow-[0_0_15px_rgba(201,169,97,0.4)]">
+                    JS</div>
+                <div class="flex flex-col">
+                    <span
+                        class="text-xl font-black tracking-tighter text-white group-hover:text-gold transition-colors leading-none">JUMPSTART</span>
+                    <span class="text-xs font-mono text-gold tracking-widest">SCALING</span>
+                </div>
+            </a>
+
+            <div class="hidden lg:flex items-center gap-8">
+                <!-- Solutions Dropdown -->
+                <div class="relative" @mouseenter="solutionsOpen = true" @mouseleave="solutionsOpen = false">
+                    <button class="flex items-center gap-2 text-sm font-medium text-white py-2">
+                        Solutions <i class="fa-solid fa-chevron-down text-xs text-gold/50"></i>
+                    </button>
+                    <div x-show="solutionsOpen"
+                        class="absolute top-full -left-4 w-64 bg-dark-800 border border-white/10 rounded-xl shadow-2xl p-2"
+                        x-transition:enter="transition ease-out duration-200 opacity-0 translate-y-2"
+                        x-transition:leave="transition ease-in duration-150 opacity-0 translate-y-2">
+                        <a href="/services/paid-acquisition.html"
+                            class="block p-3 bg-white/5 rounded-lg group border-l-2 border-gold">
+                            <div class="text-white font-bold text-sm mb-1 group-hover:text-gold">Paid Acquisition</div>
+                            <div class="text-xs text-gray-500">Current Page</div>
+                        </a>
+                        <!-- Add other services here if needed, linking to them -->
+                    </div>
+                </div>
+
+                <a href="/#protocols"
+                    class="text-sm font-medium text-gray-300 hover:text-white transition-colors">Protocols</a>
+                <a href="/#audit"
+                    class="flex items-center gap-2 px-5 py-2.5 bg-gold/10 text-gold border border-gold/20 rounded-lg hover:bg-gold hover:text-black transition-all font-semibold text-sm">
+                    <i class="fa-solid fa-bolt"></i> Get Growth Audit
+                </a>
+            </div>
+
+            <!-- Mobile Toggle -->
+            <button @click="mobileOpen = !mobileOpen" class="lg:hidden text-white text-2xl relative z-50">
+                <i :class="mobileOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars'"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Menu Overlay -->
+        <div x-show="mobileOpen"
+            class="fixed inset-0 bg-dark-900 z-40 flex flex-col items-center justify-center space-y-8"
+            x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-10"
+            x-transition:enter-end="opacity-100 translate-y-0">
+            <a href="/" class="text-2xl font-bold text-white">Home</a>
+            <a href="/#audit" class="px-8 py-4 bg-gold text-black font-bold rounded text-xl">Start Audit</a>
+        </div>
+    </nav>
+
+    <main>
+        <!-- HERO SECTION -->
+        <section class="relative pt-40 pb-20 overflow-hidden bg-dark-900">
+            <div class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 z-0">
+            </div>
+            <div
+                class="absolute top-0 right-0 w-[500px] h-[500px] bg-gold/5 rounded-full blur-[100px] pointer-events-none z-0">
+            </div>
+
+            <div class="max-w-6xl mx-auto px-6 relative z-10">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <div class="inline-flex items-center gap-2 mb-6">
+                            <span class="w-2 h-2 rounded-full bg-gold animate-pulse"></span>
+                            <span class="text-gold font-mono text-xs tracking-widest uppercase">Protocol 01:
+                                Acquisition</span>
+                        </div>
+                        <h1 class="text-5xl md:text-7xl font-black text-white leading-[0.9] mb-6">
+                            ALGORITHMIC <br>
+                            <span class="text-gradient">MEDIA BUYING.</span>
+                        </h1>
+                        <p class="text-xl text-gray-400 leading-relaxed mb-8">
+                            Stop treating ads like gambling. We use broad-match targeting, server-side attribution, and
+                            high-velocity creative testing (3:2:2) to force the algorithm to find your most profitable
+                            customers.
+                        </p>
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <a href="/#audit"
+                                class="px-8 py-4 bg-gold text-black font-bold rounded-lg hover:bg-gold-light transition-all text-center">
+                                Audit My Ad Account
+                            </a>
+                            <div
+                                class="px-8 py-4 border border-white/10 rounded-lg flex items-center justify-center gap-3 text-gray-400">
+                                <i class="fa-solid fa-check text-gold"></i> $10M+ Managed Spend
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Code Visual -->
+                    <div class="bg-dark-800 border border-white/10 rounded-xl p-6 shadow-2xl relative group">
+                        <div
+                            class="absolute -inset-1 bg-gradient-to-r from-gold/20 to-transparent rounded-xl blur opacity-20 group-hover:opacity-40 transition duration-500">
+                        </div>
+                        <div
+                            class="relative bg-dark-900 rounded-lg p-4 font-mono text-xs text-gray-400 leading-loose overflow-hidden">
+                            <div class="flex gap-2 mb-4 border-b border-white/5 pb-2">
+                                <span class="w-3 h-3 rounded-full bg-red-500"></span>
+                                <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+                                <span class="w-3 h-3 rounded-full bg-green-500"></span>
+                            </div>
+                            <p><span class="text-purple-400">import</span> { Meta, TikTok, Google } <span
+                                    class="text-purple-400">from</span> 'scaling-engine';</p>
+                            <p><br></p>
+                            <p><span class="text-blue-400">const</span> <span class="text-yellow-200">strategy</span> =
+                                {</p>
+                            <p class="pl-4">structure: <span class="text-green-400">'CBO_Broad_Match'</span>,</p>
+                            <p class="pl-4">creative_velocity: <span class="text-orange-400">30</span>, <span
+                                    class="text-gray-600">// variations/week</span></p>
+                            <p class="pl-4">bid_strategy: <span class="text-green-400">'Cost_Cap_Scaling'</span>,</p>
+                            <p class="pl-4">attribution: <span class="text-green-400">'Hyros_Server_Side'</span></p>
+                            <p>};</p>
+                            <p><br></p>
+                            <p><span class="text-blue-400">function</span> <span
+                                    class="text-yellow-200">optimizeSpend</span>() {</p>
+                            <p class="pl-4"><span class="text-purple-400">if</span> (MER > 3.5) {</p>
+                            <p class="pl-8">spend.scale(<span class="text-orange-400">1.20</span>); <span
+                                    class="text-gray-600">// Increase 20%</span></p>
+                            <p class="pl-4">} <span class="text-purple-400">else</span> {</p>
+                            <p class="pl-8">creative.rotate(); <span class="text-gray-600">// Kill losers</span></p>
+                            <p class="pl-4">}</p>
+                            <p>}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- THE PROBLEM: ROAS IS DEAD -->
+        <section class="py-24 bg-dark-800 border-y border-white/5">
+            <div class="max-w-4xl mx-auto px-6 text-center">
+                <span class="text-red-500 font-mono text-xs tracking-widest uppercase mb-2 block">Warning: Outdated
+                    Metric</span>
+                <h2 class="text-3xl md:text-5xl font-bold text-white mb-8">Why "ROAS" is Killing Your Scale</h2>
+                <div class="prose prose-invert prose-lg mx-auto text-gray-400 leading-relaxed">
+                    <p>
+                        Most agencies are obsessed with <strong>ROAS (Return on Ad Spend)</strong> reported inside
+                        Facebook Ads Manager.
+                        But since iOS14, Facebook creates data based on "probabilistic modeling" (guessing).
+                    </p>
+                    <p>
+                        If you optimize for ROAS, you are optimizing for the algorithm's guess, not your bank account.
+                        You end up turning off ads that are actually generating profit, and scaling ads that are just
+                        retargeting your existing customers.
+                    </p>
+                    <div class="my-8 p-6 bg-dark-900 border border-gold/20 rounded-xl">
+                        <h4 class="text-gold font-bold text-lg mb-2">Our Metric: MER (Marketing Efficiency Ratio)</h4>
+                        <p class="text-sm">
+                            Total Revenue ÷ Total Ad Spend. This is the only number that matters. It tells us the true
+                            health of the ecosystem. We optimize for <strong>Contribution Margin Dollars</strong>,
+                            ensuring every dollar spent actually prints profit.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- THE METHODOLOGY GRID -->
+        <section class="py-24 bg-dark-900">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="mb-16">
+                    <span class="text-gold font-mono text-xs tracking-widest uppercase">The Methodology</span>
+                    <h2 class="text-4xl font-bold text-white mt-2">The 3-Phase Scaling Engine</h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Phase 1 -->
+                    <div
+                        class="p-8 bg-dark-800 border border-white/10 rounded-2xl relative overflow-hidden group hover:border-gold/50 transition-colors">
+                        <div
+                            class="text-8xl font-black text-white/5 absolute -top-4 -right-4 group-hover:text-gold/10 transition-colors">
+                            01</div>
+                        <h3 class="text-2xl font-bold text-white mb-4 relative z-10">The Creative Sandbox</h3>
+                        <p class="text-gray-400 text-sm mb-6 relative z-10">
+                            We don't launch "Ads." We launch "Tests." Using the <strong>3:2:2 Method</strong> (3
+                            Creatives, 2 Primary Texts, 2 Headlines), we rapidly iterate to find the winning
+                            combination.
+                        </p>
+                        <ul class="space-y-2 text-sm text-gray-500 relative z-10">
+                            <li><i class="fa-solid fa-flask text-gold mr-2"></i> Dynamic Creative Tests (DCT)</li>
+                            <li><i class="fa-solid fa-flask text-gold mr-2"></i> Hook Rate Optimization</li>
+                            <li><i class="fa-solid fa-flask text-gold mr-2"></i> Hold Rate Analysis</li>
+                        </ul>
+                    </div>
+
+                    <!-- Phase 2 -->
+                    <div
+                        class="p-8 bg-dark-800 border border-white/10 rounded-2xl relative overflow-hidden group hover:border-gold/50 transition-colors">
+                        <div
+                            class="text-8xl font-black text-white/5 absolute -top-4 -right-4 group-hover:text-gold/10 transition-colors">
+                            02</div>
+                        <h3 class="text-2xl font-bold text-white mb-4 relative z-10">Signal Resilience</h3>
+                        <p class="text-gray-400 text-sm mb-6 relative z-10">
+                            We fix the data leak. By implementing <strong>Conversion API (CAPI)</strong> and server-side
+                            tracking (Hyros/Triple Whale), we feed high-quality data back to the ad platforms.
+                        </p>
+                        <ul class="space-y-2 text-sm text-gray-500 relative z-10">
+                            <li><i class="fa-solid fa-server text-gold mr-2"></i> Server-Side Tracking</li>
+                            <li><i class="fa-solid fa-server text-gold mr-2"></i> Offline Event Sets</li>
+                            <li><i class="fa-solid fa-server text-gold mr-2"></i> Advanced Matching</li>
+                        </ul>
+                    </div>
+
+                    <!-- Phase 3 -->
+                    <div
+                        class="p-8 bg-dark-800 border border-white/10 rounded-2xl relative overflow-hidden group hover:border-gold/50 transition-colors">
+                        <div
+                            class="text-8xl font-black text-white/5 absolute -top-4 -right-4 group-hover:text-gold/10 transition-colors">
+                            03</div>
+                        <h3 class="text-2xl font-bold text-white mb-4 relative z-10">Horizontal Scale</h3>
+                        <p class="text-gray-400 text-sm mb-6 relative z-10">
+                            Once a winner is found in the Sandbox, we move it to the <strong>Scaling Campaign</strong>.
+                            We use Cost Caps to force the platform to spend only when it can achieve your target CPA.
+                        </p>
+                        <ul class="space-y-2 text-sm text-gray-500 relative z-10">
+                            <li><i class="fa-solid fa-chart-line text-gold mr-2"></i> Cost Cap Bidding</li>
+                            <li><i class="fa-solid fa-chart-line text-gold mr-2"></i> Cross-Platform Mirroring</li>
+                            <li><i class="fa-solid fa-chart-line text-gold mr-2"></i> Budget Surfing</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PLATFORM SPECIFIC PROTOCOLS -->
+        <section class="py-24 bg-dark-900 border-t border-white/5">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="mb-20 text-center">
+                    <span class="text-gold font-mono text-xs tracking-widest uppercase">Platform Ecosystem</span>
+                    <h2 class="text-4xl font-bold text-white mt-2">Channel-Specific Engineering</h2>
+                    <p class="text-gray-400 mt-4 max-w-2xl mx-auto">Every platform requires a different mathematical
+                        approach. We don't just "run ads." We build platform-native funnels.</p>
+                </div>
+
+                <!-- META (FACEBOOK/INSTAGRAM) -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-32 border-b border-white/5 pb-20">
+                    <div class="order-2 lg:order-1">
+                        <div class="flex items-center gap-3 mb-6">
+                            <i class="fa-brands fa-meta text-4xl text-blue-500"></i>
+                            <h3 class="text-3xl font-bold text-white">Meta: The Discovery Engine</h3>
+                        </div>
+                        <p class="text-gray-400 mb-6 leading-relaxed">
+                            Meta is no longer an "interest" targeting platform. It is a machine learning beast that
+                            needs <strong>Broad Targeting</strong> to function.
+                        </p>
+                        <p class="text-gray-400 mb-8 leading-relaxed">
+                            We use the <strong>Creative Sandbox</strong> method. We launch 3 new creatives, 2 headlines,
+                            and 2 primary texts every 48 hours. The algorithm finds the winner. We then move the winner
+                            to a CBO (Campaign Budget Optimization) campaign to scale.
+                        </p>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="p-4 bg-white/5 rounded-lg border border-white/10">
+                                <span class="block text-gold font-bold text-xl mb-1">Broad</span>
+                                <span class="text-xs text-gray-500">Audience Setting</span>
+                            </div>
+                            <div class="p-4 bg-white/5 rounded-lg border border-white/10">
+                                <span class="block text-gold font-bold text-xl mb-1">CBO</span>
+                                <span class="text-xs text-gray-500">Scaling Structure</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="order-1 lg:order-2 bg-dark-800 rounded-2xl border border-white/10 p-2 transform rotate-1 hover:rotate-0 transition-transform duration-500">
+                        <!-- Mock Ad Visual -->
+                        <div
+                            class="bg-black rounded-xl p-6 aspect-video flex items-center justify-center relative overflow-hidden">
+                            <div class="absolute inset-0 bg-gradient-to-br from-blue-900/20 to-transparent"></div>
+                            <div class="text-center">
+                                <div class="text-6xl mb-4">🧪</div>
+                                <div class="font-mono text-sm text-gray-400">Testing: Variant_A vs Variant_B</div>
+                                <div class="mt-4 flex justify-center gap-2">
+                                    <span class="w-20 h-2 bg-green-500 rounded animate-pulse"></span>
+                                    <span class="w-10 h-2 bg-red-500/30 rounded"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- GOOGLE ADS -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-32 border-b border-white/5 pb-20">
+                    <div
+                        class="order-1 bg-dark-800 rounded-2xl border border-white/10 p-2 transform -rotate-1 hover:rotate-0 transition-transform duration-500">
+                        <!-- Mock Search Visual -->
+                        <div
+                            class="bg-black rounded-xl p-8 aspect-video flex flex-col justify-center relative overflow-hidden">
+                            <div class="w-full h-8 bg-white/10 rounded mb-4 animate-pulse"></div>
+                            <div class="w-2/3 h-4 bg-white/5 rounded mb-2"></div>
+                            <div class="w-1/2 h-4 bg-white/5 rounded mb-8"></div>
+
+                            <div class="flex gap-4">
+                                <div class="w-1/3 h-24 bg-white/5 rounded border border-white/10"></div>
+                                <div class="w-1/3 h-24 bg-white/5 rounded border border-white/10"></div>
+                                <div class="w-1/3 h-24 bg-white/5 rounded border border-white/10"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="order-2">
+                        <div class="flex items-center gap-3 mb-6">
+                            <i class="fa-brands fa-google text-4xl text-white"></i>
+                            <h3 class="text-3xl font-bold text-white">Google: Intent Capture</h3>
+                        </div>
+                        <p class="text-gray-400 mb-6 leading-relaxed">
+                            Google is about capturing demand that already exists. Most brands burn budget on "Broad
+                            Match" keywords that bring in junk traffic.
+                        </p>
+                        <p class="text-gray-400 mb-8 leading-relaxed">
+                            We build <strong>Single Keyword Ad Groups (SKAGs)</strong> for control, combined with
+                            <strong>Performance Max (PMax)</strong> campaigns for scale. We relentlessly audit search
+                            terms to add negative keywords, ensuring you only pay for high-intent clicks.
+                        </p>
+                        <ul class="space-y-3 text-sm text-gray-400">
+                            <li class="flex items-center gap-3"><i class="fa-solid fa-check text-gold"></i> Feed
+                                Optimization for Shopping</li>
+                            <li class="flex items-center gap-3"><i class="fa-solid fa-check text-gold"></i> Brand
+                                Protection Campaigns</li>
+                            <li class="flex items-center gap-3"><i class="fa-solid fa-check text-gold"></i> YouTube
+                                Shorts Placements</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- TIKTOK ADS -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-32 border-b border-white/5 pb-20">
+                    <div class="order-2 lg:order-1">
+                        <div class="flex items-center gap-3 mb-6">
+                            <i class="fa-brands fa-tiktok text-4xl text-pink-500"></i>
+                            <h3 class="text-3xl font-bold text-white">TikTok: Viral Velocity</h3>
+                        </div>
+                        <p class="text-gray-400 mb-6 leading-relaxed">
+                            TikTok is not "Social Media," it is "Entertainment." If your ad looks like an ad, you lose.
+                        </p>
+                        <p class="text-gray-400 mb-8 leading-relaxed">
+                            We focus on <strong>Spark Ads</strong>—boosting organic content from creators rather than
+                            running ads from a brand profile. This increases trust and lowers CPMs. We script "UGC
+                            Hooks" that stop the scroll in the first 1.5 seconds.
+                        </p>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="p-4 bg-white/5 rounded-lg border border-white/10">
+                                <span class="block text-gold font-bold text-xl mb-1">Spark Ads</span>
+                                <span class="text-xs text-gray-500">Format Strategy</span>
+                            </div>
+                            <div class="p-4 bg-white/5 rounded-lg border border-white/10">
+                                <span class="block text-gold font-bold text-xl mb-1">TTCC</span>
+                                <span class="text-xs text-gray-500">Creative Center</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="order-1 lg:order-2 flex justify-center">
+                        <!-- Mock TikTok Phone -->
+                        <div
+                            class="w-64 h-[450px] bg-black border-4 border-gray-800 rounded-[3rem] p-2 relative shadow-2xl transform rotate-3 hover:rotate-0 transition-all duration-500">
+                            <div
+                                class="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-6 bg-gray-800 rounded-b-xl z-10">
+                            </div>
+                            <div
+                                class="w-full h-full bg-gray-900 rounded-[2.5rem] relative overflow-hidden flex items-center justify-center">
+                                <i class="fa-solid fa-play text-4xl text-white/50"></i>
+                                <!-- UI Elements -->
+                                <div class="absolute bottom-16 left-4 right-16 text-white text-xs space-y-2">
+                                    <div class="w-24 h-2 bg-white/50 rounded"></div>
+                                    <div class="w-32 h-2 bg-white/30 rounded"></div>
+                                </div>
+                                <div class="absolute bottom-16 right-2 flex flex-col gap-4 text-white text-xl">
+                                    <i class="fa-solid fa-heart"></i>
+                                    <i class="fa-solid fa-comment"></i>
+                                    <i class="fa-solid fa-share"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LINKEDIN ADS -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                    <div
+                        class="order-1 bg-dark-800 rounded-2xl border border-white/10 p-2 transform -rotate-1 hover:rotate-0 transition-transform duration-500">
+                        <!-- Mock ABM Visual -->
+                        <div
+                            class="bg-black rounded-xl p-8 aspect-video flex flex-col justify-center relative overflow-hidden text-center">
+                            <div
+                                class="w-16 h-16 bg-blue-600 rounded-full mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold">
+                                in</div>
+                            <div class="text-white font-mono text-sm mb-2">TARGETING MATCH</div>
+                            <div class="text-gold font-bold text-xl">CEO @ SaaS > $10M ARR</div>
+                        </div>
+                    </div>
+                    <div class="order-2">
+                        <div class="flex items-center gap-3 mb-6">
+                            <i class="fa-brands fa-linkedin text-4xl text-blue-600"></i>
+                            <h3 class="text-3xl font-bold text-white">LinkedIn: Precision ABM</h3>
+                        </div>
+                        <p class="text-gray-400 mb-6 leading-relaxed">
+                            For B2B SaaS and Agencies, LinkedIn is the sniper rifle. We don't target "audiences," we
+                            target <strong>Accounts</strong>.
+                        </p>
+                        <p class="text-gray-400 mb-8 leading-relaxed">
+                            We upload your dream client list (Account Based Marketing) and serve content directly to the
+                            C-Suite. We utilize <strong>Thought Leader Ads</strong> to promote your founder's profile,
+                            building trust before asking for the demo.
+                        </p>
+                        <ul class="space-y-3 text-sm text-gray-400">
+                            <li class="flex items-center gap-3"><i class="fa-solid fa-check text-gold"></i> Uploaded
+                                Company Lists (ABM)</li>
+                            <li class="flex items-center gap-3"><i class="fa-solid fa-check text-gold"></i> Thought
+                                Leader Ads</li>
+                            <li class="flex items-center gap-3"><i class="fa-solid fa-check text-gold"></i> Conversation
+                                Ads</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- TECH STACK -->
+        <section class="py-20 border-t border-white/5 bg-black">
+            <div class="max-w-7xl mx-auto px-6 text-center">
+                <p class="text-sm font-mono text-gray-500 mb-10 uppercase tracking-widest">Our Buying Infrastructure</p>
+                <div
+                    class="flex flex-wrap justify-center gap-12 md:gap-20 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
+                    <div class="flex items-center gap-2 text-white"><i class="fa-brands fa-meta text-3xl"></i> <span
+                            class="font-bold">Ads Manager</span></div>
+                    <div class="flex items-center gap-2 text-white"><i class="fa-brands fa-tiktok text-3xl"></i> <span
+                            class="font-bold">TikTok Ads</span></div>
+                    <div class="flex items-center gap-2 text-white"><i class="fa-brands fa-google text-3xl"></i> <span
+                            class="font-bold">Google Ads</span></div>
+                    <div class="flex items-center gap-2 text-white"><i class="fa-solid fa-database text-3xl"></i> <span
+                            class="font-bold">BigQuery</span></div>
+                    <div class="flex items-center gap-2 text-white"><i class="fa-solid fa-robot text-3xl"></i> <span
+                            class="font-bold">Madgicx</span></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section class="py-24 bg-dark-900 border-t border-white/5">
+            <div class="max-w-3xl mx-auto px-6">
+                <h2 class="text-3xl font-bold text-white mb-12 text-center">Acquisition FAQs</h2>
+                <div class="space-y-4" x-data="{ active: null }">
+                    <!-- FAQ 1 -->
+                    <div class="bg-white/5 rounded-lg border border-white/5 transition-all duration-300">
+                        <button @click="active = active === 1 ? null : 1"
+                            class="flex items-center justify-between w-full p-6 font-medium text-white text-left">
+                            <span>How much ad spend do we need to start?</span>
+                            <i :class="active === 1 ? 'rotate-180' : ''"
+                                class="fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
+                        </button>
+                        <div x-show="active === 1" x-collapse
+                            class="px-6 pb-6 text-gray-400 leading-relaxed text-sm border-t border-white/5 pt-4">
+                            We recommend a minimum of <strong>$5,000/month</strong> in ad spend. Below this threshold,
+                            the algorithms do not receive enough data (conversion events) to optimize effectively. Our
+                            system works best for brands spending between $20k and $200k/month.
+                        </div>
+                    </div>
+
+                    <!-- FAQ 2 -->
+                    <div class="bg-white/5 rounded-lg border border-white/5 transition-all duration-300">
+                        <button @click="active = active === 2 ? null : 2"
+                            class="flex items-center justify-between w-full p-6 font-medium text-white text-left">
+                            <span>Do you create the ad creatives?</span>
+                            <i :class="active === 2 ? 'rotate-180' : ''"
+                                class="fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
+                        </button>
+                        <div x-show="active === 2" x-collapse
+                            class="px-6 pb-6 text-gray-400 leading-relaxed text-sm border-t border-white/5 pt-4">
+                            Yes. This is mandatory. We cannot separate media buying from creative. Our team scripts,
+                            edits, and iterates on Static Images, UGC (User Generated Content), and Founder VSLs. We
+                            produce 10-20 net new assets per month for your account.
+                        </div>
+                    </div>
+
+                    <!-- FAQ 3 -->
+                    <div class="bg-white/5 rounded-lg border border-white/5 transition-all duration-300">
+                        <button @click="active = active === 3 ? null : 3"
+                            class="flex items-center justify-between w-full p-6 font-medium text-white text-left">
+                            <span>What about iOS14 / Tracking issues?</span>
+                            <i :class="active === 3 ? 'rotate-180' : ''"
+                                class="fa-solid fa-chevron-down text-xs transition-transform duration-300"></i>
+                        </button>
+                        <div x-show="active === 3" x-collapse
+                            class="px-6 pb-6 text-gray-400 leading-relaxed text-sm border-t border-white/5 pt-4">
+                            We solve this during Onboarding (Sprint Zero). We implement server-side tracking via CAPI
+                            and often utilize 3rd party attribution tools like Hyros or Triple Whale to ensure we have a
+                            "Source of Truth" independent of Facebook's reporting.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="py-24 bg-gradient-to-br from-dark-800 to-black text-center px-6">
+            <div class="max-w-3xl mx-auto">
+                <h2 class="text-4xl md:text-5xl font-black text-white mb-6">Ready to scale past $1M?</h2>
+                <p class="text-gray-400 mb-10 text-lg">We will audit your ad account, check your pixel health, and show
+                    you exactly where you are bleeding money.</p>
+                <a href="index.html#audit"
+                    class="inline-block px-10 py-5 bg-gold text-black font-bold rounded-xl hover:bg-gold-light transition-all shadow-lg shadow-gold/20 transform hover:-translate-y-1">
+                    Initialize Growth Audit
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="py-12 border-t border-white/10 bg-black text-center">
+        <div class="max-w-7xl mx-auto px-6">
+            <a href="index.html" class="text-xl font-black tracking-tighter text-white">JUMPSTART <span
+                    class="text-gold">SCALING</span></a>
+            <p class="text-gray-700 text-xs mt-4">© 2026 Jumpstart Scaling. All rights reserved.</p>
+        </div>
+    </footer>
+
+</body>
+
+</html>

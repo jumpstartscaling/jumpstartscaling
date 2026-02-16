@@ -1,0 +1,224 @@
+---
+// Service Visual Components - Pure CSS/SVG Art
+---
+
+<!-- Paid Ads Dashboard Visual -->
+<div class="visual-container" id="ads-visual">
+    <div class="metric-card glass-card">
+        <div class="metric-label">ROAS</div>
+        <div class="metric-value">4.2x</div>
+        <div class="metric-trend text-[#00FF94]">↑ 180%</div>
+    </div>
+    <div class="metric-card glass-card">
+        <div class="metric-label">CTR</div>
+        <div class="metric-value">8.4%</div>
+        <div class="metric-trend text-[#00FF94]">↑ 45%</div>
+    </div>
+    <svg class="growth-chart" viewBox="0 0 200 100">
+        <path d="M10,90 Q50,70 100,40 T190,10" fill="none" stroke="var(--accent)" stroke-width="3"/>
+        <circle cx="190" cy="10" r="4" fill="var(--accent-glow)"/>
+    </svg>
+</div>
+
+<!-- Funnel Visual -->
+<div class="funnel-visual" id="funnel-visual">
+    <div class="funnel-stage" style="width: 100%; background: var(--gradient-accent);">
+        <span class="text-black">1000 Visitors</span>
+    </div>
+    <div class="funnel-stage opacity-80" style="width: 60%; background: var(--gradient-accent);">
+        <span class="text-black/80">250 Leads (25%)</span>
+    </div>
+    <div class="funnel-stage opacity-60" style="width: 30%; background: var(--gradient-accent);">
+        <span class="text-black/60">80 Customers (8%)</span>
+    </div>
+</div>
+
+<!-- CRM Automation Flow -->
+<div class="flow-visual" id="crm-visual">
+    <div class="flow-node glass-card border-[var(--accent-dim)]">📧 Lead</div>
+    <div class="flow-arrow text-[var(--accent)]">→</div>
+    <div class="flow-node glass-card border-[var(--accent-dim)]">🤖 Auto-Enrich</div>
+    <div class="flow-arrow text-[var(--accent)]">→</div>
+    <div class="flow-node glass-card border-[var(--accent-dim)]">📱 SMS</div>
+    <div class="flow-arrow text-[var(--accent)]">→</div>
+    <div class="flow-node glass-card bg-[var(--accent-neon)] text-black">✅ CRM</div>
+</div>
+
+<!-- Analytics Graph -->
+<div class="chart-visual" id="analytics-visual">
+    <svg viewBox="0 0 300 150">
+        <defs>
+            <linearGradient id="luxe-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style="stop-color:var(--accent);stop-opacity:1" />
+                <stop offset="100%" style="stop-color:var(--accent-glow);stop-opacity:1" />
+            </linearGradient>
+        </defs>
+        <path d="M10,140 L50,120 L100,90 L150,60 L200,40 L290,10" 
+              fill="none" stroke="url(#luxe-grad)" stroke-width="4"/>
+        <circle cx="290" cy="10" r="6" fill="var(--accent-glow)"/>
+        <text x="250" y="145" fill="var(--accent)" font-size="14" font-weight="bold">ROI: +420%</text>
+    </svg>
+</div>
+
+<!-- Content Grid -->
+<div class="content-grid-visual" id="content-visual">
+    <div class="content-card glass-card">📝</div>
+    <div class="content-card glass-card">🎥</div>
+    <div class="content-card glass-card">📊</div>
+    <div class="content-card glass-card">💬</div>
+</div>
+
+<!-- Team Hub -->
+<div class="team-hub-visual" id="team-visual">
+    <div class="hub-center glass-card border-[var(--accent)]">🚀</div>
+    <div class="hub-member glass-card border-[var(--accent-dim)]" style="top: 0; left: 50%;">👨‍💼</div>
+    <div class="hub-member glass-card border-[var(--accent-dim)]" style="top: 50%; right: 0;">👩‍💻</div>
+    <div class="hub-member glass-card border-[var(--accent-dim)]" style="bottom: 0; left: 50%;">👨‍🎨</div>
+    <div class="hub-member glass-card border-[var(--accent-dim)]" style="top: 50%; left: 0;">👩‍📊</div>
+</div>
+
+<style>
+    .visual-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        padding: 2rem;
+    }
+    
+    .metric-card {
+        padding: 1.5rem;
+        text-align: center;
+        border-radius: 1.5rem !important;
+    }
+    
+    .metric-label {
+        font-size: 0.8rem;
+        font-family: var(--font-mono);
+        color: var(--text-secondary);
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+    }
+    
+    .metric-value {
+        font-size: 2.25rem;
+        font-weight: 900;
+        color: var(--accent);
+    }
+    
+    .growth-chart {
+        grid-column: 1 / -1;
+        height: 100px;
+        margin-top: 1rem;
+    }
+    
+    .funnel-visual {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 2rem;
+    }
+    
+    .funnel-stage {
+        padding: 1rem;
+        border-radius: 8px;
+        text-align: center;
+        font-weight: 600;
+        color: white;
+        transition: all 0.3s ease;
+    }
+    
+    .funnel-stage:hover {
+        transform: scale(1.05);
+    }
+    
+    .flow-visual {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        padding: 2rem;
+        flex-wrap: wrap;
+    }
+    
+    .flow-node {
+        padding: 1rem 1.5rem;
+        border-radius: 1rem !important;
+        font-size: 1.1rem;
+        font-weight: 600;
+    }
+    
+    .flow-arrow {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+    
+    .chart-visual {
+        padding: 2rem;
+    }
+    
+    .chart-visual svg {
+        width: 100%;
+        height: auto;
+    }
+    
+    .content-grid-visual {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        padding: 2rem;
+    }
+    
+    .content-card {
+        aspect-ratio: 1;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        transition: transform 0.3s ease;
+    }
+    
+    .content-card:hover {
+        transform: scale(1.1) rotate(5deg);
+    }
+    
+    .team-hub-visual {
+        position: relative;
+        width: 100%;
+        height: 300px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .hub-center {
+        width: 80px;
+        height: 80px;
+        border-radius: 50% !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5rem;
+        box-shadow: 0 0 40px var(--accent-dim);
+        animation: pulse 2s infinite;
+    }
+    
+    .hub-member {
+        position: absolute;
+        width: 60px;
+        height: 60px;
+        border-radius: 50% !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        transform: translate(-50%, -50%);
+    }
+    
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+    }
+</style>

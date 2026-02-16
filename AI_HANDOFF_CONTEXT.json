@@ -1,0 +1,82 @@
+{
+    "project": "Valhalla (God Mode)",
+    "version": "1.0.0",
+    "type": "Standalone Node.js System (Astro SSR adapter)",
+    "repo": "gatekeeper/mini.git",
+    "critical_architecture": {
+        "philosophy": "Headless Parasite. Bypasses Directus CMS API. Connects directly to Postgres.",
+        "shim_layer": {
+            "path": "src/lib/directus/client.ts",
+            "function": "Translates Directus SDK methods (readItems, createItem) to raw SQL using 'pg' pool.",
+            "reason": "Allows Admin UI React components to run without the Directus backend."
+        },
+        "control_plane": {
+            "path": "src/lib/system/SystemController.ts",
+            "features": [
+                "Global Standby Toggle",
+                "Resource Monitoring (pidusage)"
+            ],
+            "api": "/api/god/system/control"
+        },
+        "batch_engine": {
+            "path": "src/lib/queue/BatchProcessor.ts",
+            "capacity": "100k items/job",
+            "dependency": "Redis (BullMQ logic)",
+            "logic": "Chunks -> Concurrent Execution -> Standby Check -> Latency throttle"
+        },
+        "ui_layer": {
+            "proxy": "/api/god/proxy.ts (Routes client requests to server Shim)",
+            "dashboard": "src/pages/admin (Ported from frontend repo)",
+            "controls": "src/components/admin/SystemControl.tsx (Push Button to toggle engine)"
+        }
+    },
+    "deployment_config": {
+        "method": "Docker Compose (REQUIRED)",
+        "reason": "Must load Redis service and apply ulimits override.",
+        "limits": {
+            "ram": "16GB (Node --max-old-space-size=16384)",
+            "file_descriptors": "65536 (ulimits: nofile)",
+            "threads": "128 (UV_THREADPOOL_SIZE)"
+        },
+        "ports": {
+            "app": 4321,
+            "redis": 6379
+        },
+        "env_vars": [
+            "DATABASE_URL",
+            "GOD_MODE_TOKEN",
+            "REDIS_URL"
+        ]
+    },
+    "known_risks": {
+        "oom": "Node GC can lag at >12GB usage during 50k+ batch inserts. Use 'Deactivate Engine' button if Monitor > 90%.",
+        "shim_gaps": "Shim supports basic CRUD. Complex deep-nested filtering might fail. Verify SQL translation in 'client.ts'.",
+        "binary_mismatch": "Do NOT push node_modules. Deploy builds from source to ensure Linux binaries."
+    },
+    "libraries": {
+        "core": [
+            "astro",
+            "react",
+            "tailwindcss",
+            "pg",
+            "ioredis"
+        ],
+        "monitoring": [
+            "pidusage"
+        ],
+        "ui": [
+            "lucide-react",
+            "recharts",
+            "shadcn/ui"
+        ]
+    },
+    "sprint_summary": {
+        "actions": [
+            "Migrated Engines to standalone Repo",
+            "Impl. Database Supercharger (Insane Mode)",
+            "Ported full Admin UI & Nav",
+            "Optimized Docker for 100k scale",
+            "Built Resource Monitor & Kill Switch"
+        ]
+    }
+}

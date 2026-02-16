@@ -1,113 +1,133 @@
+---
+// sites/chrisamaya/src/pages/index.astro
+// Standalone homepage for chrisamaya.work
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/ui/Hero.astro';
+import CTA from '../components/ui/CTA.astro';
+import FunnelCalculator from '../components/calculators/FunnelCalculator.jsx';
+import ScalingSurvey from '../components/interactivity/ScalingSurvey.tsx';
 
-import Layout from '../layouts/ArticleLayout.astro';
-import AtmosphereParticles from '../components/3d/AtmosphereParticles';
-import { motion } from 'framer-motion';
-
-// Content remains exactly as on chrisamaya.work
-const services = [
-  { title: "The Revenue Acquisition Engine", desc: "Paid Media & Ad Spend optimization." },
-  { title: "Compliance & Risk", desc: "Management and security protocols." },
-  { title: "Data Integrity", desc: "P&L Attribution and deep analytics." },
-  { title: "Automation & CRM", desc: "Full architecture for scale." }
-];
-
-const articleContent = {
-    title: "The One-Stop Architect | Chris Amaya",
-    description: "Stop hiring freelancers. Start building an empire. The 'Unicorn Developer' who builds full-stack applications, engineers private AI systems, and automates your entire backend.",
-    city: "Global",
-    serviceTier: "Consulting"
-};
-
+// Replicating the "Architect" content but as the MAIN index page for this site
 ---
 
-<Layout content={articleContent}>
-  <main class="bg-black text-white relative overflow-hidden">
-    
-    <div class="fixed inset-0 z-0 pointer-events-none">
-      <AtmosphereParticles client:only="react" />
-    </div>
+<BaseLayout
+  title="The One-Stop Architect | Chris Amaya"
+  description="Stop hiring freelancers. Start building an empire. The 'Unicorn Developer' who builds full-stack applications, engineers private AI systems, and automates your entire backend."
+  palette="emerald"
+  fluid={true}
+>
+  <style>
+    .architect-section {
+      background-color: #050505;
+      color: #fff;
+    }
+    .text-architect {
+        color: #00FF94;
+    }
+    .border-architect {
+        border-color: rgba(0,255,148,0.3);
+    }
+    .bg-architect-dim {
+        background-color: rgba(0,255,148,0.05);
+    }
+    .card-custom {
+        background-color: #0F0F0F;
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 1rem;
+        padding: 2rem;
+        transition: border-color 0.3s ease;
+    }
+    .card-custom:hover {
+        border-color: rgba(0,255,148,0.5);
+    }
+    .font-mono {
+        font-family: 'JetBrains Mono', monospace;
+    }
+  </style>
 
-    <div class="relative z-10 max-w-[900px] mx-auto px-6">
-      
-      <section class="min-h-[80vh] flex flex-col justify-center">
-        <span class="mono-label text-accent-primary mb-4 block">01 // SYSTEM_INIT</span>
+  <!-- HERO -->
+  <section class="min-h-screen flex items-center justify-center relative overflow-hidden pt-20">
+    <div class="container mx-auto px-6 relative z-10 text-center">
+        <span class="inline-block font-mono text-sm uppercase tracking-[0.2em] mb-6 px-4 py-2 rounded border border-architect bg-architect-dim text-architect">
+            THE ONE-STOP ARCHITECT
+        </span>
         
-        <h1 class="text-6xl md:text-8xl font-bold tracking-tighter leading-none mb-8">
-            CHRIS <br/> AMAYA
+        <h1 class="text-5xl md:text-7xl font-black text-white mb-8 leading-tight">
+            STOP GLUING YOUR BUSINESS <br class="hidden md:block" />
+            TOGETHER WITH <span class="bg-clip-text text-transparent bg-gradient-to-r from-[#00FF94] to-[#00B8FF]">ZAPIER AND HOPE.</span>
         </h1>
-        
-        <p class="text-xl md:text-2xl text-gray-400 max-w-xl font-light leading-relaxed">
-          Building the <span class="text-accent-primary font-bold">Revenue Acquisition Engine</span> for high-stakes environments.
+
+        <p class="text-xl md:text-2xl text-white/70 max-w-4xl mx-auto mb-12">
+            I am the "Unicorn" Developer you've been looking for. I build full-stack applications, engineer private AI systems, and automate your entire backend—so you can stop playing CTO and start being the CEO.
         </p>
-      </section>
 
-      <section class="py-32">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-          {services.map((service, index) => (
-            <div class="group relative p-8 border border-white/10 bg-white/5 backdrop-blur-md hover:border-accent-primary transition-all duration-500">
-              <span class="text-xs font-mono text-accent-secondary">0{index + 2} // SERVICE</span>
-              <h3 class="text-2xl font-bold mt-4 mb-2">{service.title}</h3>
-              <p class="text-gray-400 font-light">{service.desc}</p>
-              
-              <div class="absolute bottom-0 left-0 w-0 h-[2px] bg-accent-primary group-hover:w-full transition-all duration-700"></div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section class="py-32 text-center">
-        <h2 class="text-4xl font-bold mb-8">Stop Wasting Profits.</h2>
-        <a href="#contact" class="inline-block px-12 py-4 border border-accent-primary text-accent-primary hover:bg-accent-primary hover:text-black transition-all duration-300 font-mono tracking-widest uppercase">
-          Initialize Connection
-        </a>
-      </section>
-
+        <CTA label="Book Consultation" href="#contact" />
+        
+        <p class="font-mono text-xs text-white/50 mt-8">
+            WARNING: THIS IS A TECHNICAL STRATEGY SESSION. NOT A SALES CALL.
+        </p>
     </div>
-  </main>
-</Layout>
+  </section>
 
-<style is:global>
-  :root {
-    --bg-dark: #050505;
-    --accent-primary: #00FF94;
-    --accent-secondary: #00B8FF;
-  }
-  
-  .mono-label {
-    font-family: 'JetBrains Mono', monospace;
-    letter-spacing: 0.2em;
-    font-size: 0.75rem;
-  }
-  
-  .text-accent-primary {
-      color: var(--accent-primary);
-  }
-  
-  .text-accent-secondary {
-      color: var(--accent-secondary);
-  }
-  
-  .border-accent-primary {
-      border-color: var(--accent-primary);
-  }
-  
-  .bg-accent-primary {
-      background-color: var(--accent-primary);
-  }
-  
-  .hover\:bg-accent-primary:hover {
-      background-color: var(--accent-primary);
-  }
-  
-  .hover\:text-black:hover {
-      color: #000;
-  }
-  
-  .hover\:border-accent-primary:hover {
-      border-color: var(--accent-primary);
-  }
+  <!-- DIAGNOSIS -->
+  <section id="about" class="py-24 bg-[#08080A]">
+    <div class="container mx-auto px-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div>
+                <span class="font-mono text-xs uppercase font-bold text-architect tracking-[0.2em] mb-4 block">THE DIAGNOSIS</span>
+                <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">The "Frankenstein" Problem</h2>
+                <p class="text-lg text-white/70 mb-8">
+                    You have product-market fit. You have revenue. But your backend is a tangled mess of disconnected tools that break every time an API updates.
+                </p>
 
-  h1, h2, h3 {
-    font-family: 'Inter', sans-serif;
-  }
-</style>
+                <div class="bg-red-900/10 border border-red-500/20 rounded-lg p-6 mb-8">
+                    <h4 class="text-red-500 font-bold mb-2">⚠ SYSTEM CRITICAL</h4>
+                    <p class="text-red-400/80 text-sm">
+                        Your business is fragile. You are one "Zapier Error" away from losing leads.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="card-custom p-0 overflow-hidden border-architect/50 shadow-[0_0_30px_rgba(0,255,148,0.1)]">
+                 <div class="aspect-video bg-black rounded flex items-center justify-center relative">
+                    <video 
+                        autoplay 
+                        loop 
+                        muted 
+                        playsinline 
+                        class="w-full h-full object-cover"
+                        poster="/assets/videos/zombiebabyzaiper-poster.jpg" 
+                    >
+                        <source src="/assets/videos/zombiebabyzaiper.mp4" type="video/mp4">
+                    </video>
+                    <!-- Overlay for "FIG 1.0" label if desired, or remove -->
+                    <div class="absolute bottom-4 right-4 bg-black/80 backdrop-blur px-3 py-1 rounded border border-white/10">
+                        <p class="font-mono text-[10px] text-[#00FF94] tracking-widest">FIG 1.0: FRAGMENTATION VISUALIZED</p>
+                    </div>
+                 </div>
+            </div>
+        </div>
+    </div>
+  </section>
+
+  <!-- CALCULATOR (Sub page brought to homepage for context) -->
+  <section id="projects" class="py-24">
+      <div class="container mx-auto px-6">
+          <h2 class="text-3xl font-bold text-center mb-12 text-white">Engineering Resources</h2>
+          <div class="max-w-4xl mx-auto glass-panel p-8 rounded-2xl border border-white/10">
+               <FunnelCalculator client:visible />
+          </div>
+      </div>
+  </section>
+
+  <!-- SURVEY -->
+  <section id="contact" class="py-24 bg-black">
+      <div class="container mx-auto px-6">
+          <div class="max-w-3xl mx-auto">
+              <h2 class="text-3xl font-bold text-center mb-12 text-white">Let's Build It Right.</h2>
+              <ScalingSurvey client:visible />
+          </div>
+      </div>
+  </section>
+
+</BaseLayout>

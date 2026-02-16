@@ -1,0 +1,635 @@
+---
+const title = 'Jumpstart Scaling - Break Through The 7-Figure Ceiling';
+const description = 'The proven methodology that helped 500+ founders automate operations, reclaim 20 hours a week, and build a valuation-ready asset in 90 days.';
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{title}</title>
+    <meta name="description" content={description}>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #FF6B35;
+            --primary-dark: #E85A2A;
+            --secondary: #4ECDC4;
+            --dark: #0a0a0a;
+            --dark-2: #1a1a1a;
+            --dark-3: #2a2a2a;
+            --text: #ffffff;
+            --text-muted: #a0a0a0;
+            --accent: #FFD93D;
+        }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--dark);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+        
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+        }
+        .hero::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(255, 107, 53, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(78, 205, 196, 0.1) 0%, transparent 50%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+        @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 0.8; } }
+        .eyebrow {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white; padding: 0.75rem 1.5rem; border-radius: 50px;
+            font-size: 0.85rem; font-weight: 700; letter-spacing: 1px;
+            text-transform: uppercase; margin-bottom: 2rem;
+            animation: slideDown 0.6s ease-out;
+        }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        h1 {
+            font-size: clamp(2rem, 6vw, 4.5rem); font-weight: 900; line-height: 1.1; margin-bottom: 1.5rem; position: relative; z-index: 1;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+        .highlight {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .subtitle {
+            font-size: clamp(1.1rem, 2.5vw, 1.5rem); color: var(--text-muted); margin-bottom: 3rem; max-width: 800px;
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .cta-primary {
+            display: inline-block; background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white; padding: 1.25rem 3rem; font-size: 1.2rem; font-weight: 700; border-radius: 12px;
+            text-decoration: none; transition: all 0.3s ease; box-shadow: 0 10px 40px rgba(255, 107, 53, 0.3);
+            animation: fadeInUp 0.8s ease-out 0.6s both; border: none; cursor: pointer;
+        }
+        .cta-primary:hover { transform: translateY(-3px); box-shadow: 0 15px 50px rgba(255, 107, 53, 0.5); }
+        .cta-subtext {
+            display: block; margin-top: 1rem; font-size: 0.9rem; color: var(--text-muted);
+            animation: fadeInUp 0.8s ease-out 0.8s both;
+        }
+
+        /* Letter Section */
+        .letter { background: var(--dark-2); padding: 6rem 0; position: relative; }
+        .letter-content { max-width: 800px; margin: 0 auto; font-size: 1.1rem; line-height: 1.8; }
+        .letter-content h2 { font-size: 2.5rem; margin-bottom: 2rem; color: var(--primary); }
+        .letter-content p { margin-bottom: 1.5rem; color: #d0d0d0; }
+        .letter-content strong { color: var(--accent); font-weight: 700; }
+
+        /* Pillars Section */
+        .pillars { padding: 6rem 0; background: var(--dark); }
+        .section-title { text-align: center; font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 900; margin-bottom: 1rem; }
+        .section-subtitle { text-align: center; font-size: 1.3rem; color: var(--text-muted); margin-bottom: 4rem; }
+        .pillars-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2.5rem; margin-top: 4rem; }
+        .pillar-card {
+            background: linear-gradient(135deg, var(--dark-2) 0%, var(--dark-3) 100%);
+            border: 1px solid rgba(255, 107, 53, 0.2); border-radius: 20px; padding: 3rem;
+            transition: all 0.4s ease; position: relative; overflow: hidden;
+        }
+        .pillar-card:hover { transform: translateY(-10px); border-color: var(--primary); box-shadow: 0 20px 60px rgba(255, 107, 53, 0.2); }
+        .pillar-number { font-size: 4rem; font-weight: 900; background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1; margin-bottom: 1rem; }
+        .pillar-card h3 { font-size: 1.8rem; margin-bottom: 1rem; color: white; }
+        .pillar-card p { color: var(--text-muted); margin-bottom: 1.5rem; }
+        .pillar-outcome { background: rgba(255, 107, 53, 0.1); padding: 1rem; border-radius: 8px; border-left: 3px solid var(--primary); margin-top: 1.5rem; }
+
+        /* Services Section */
+        .services { padding: 6rem 0; background: var(--dark-2); }
+        .service-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 2rem; margin-top: 3rem; }
+        .service-card {
+            background: var(--dark-3); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 16px;
+            padding: 2rem; transition: all 0.3s ease; display: flex; flex-direction: column;
+        }
+        .service-card:hover { border-color: var(--secondary); transform: translateY(-5px); background: #222; }
+        .service-title { font-size: 1.3rem; font-weight: 700; color: white; margin-bottom: 0.5rem; min-height: 3rem; }
+        .service-price { color: var(--primary); font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; }
+        .service-desc { color: var(--text-muted); margin-bottom: 1.5rem; font-size: 0.95rem; }
+        .service-list { list-style: none; margin-top: auto; }
+        .service-list li { margin-bottom: 0.5rem; color: #d0d0d0; font-size: 0.9rem; display: flex; align-items: start; }
+        .service-list li:before { content: "✔"; color: var(--secondary); margin-right: 8px; }
+
+        /* Testimonials */
+        .testimonials { background: var(--dark); padding: 6rem 0; }
+        .testimonial-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 3rem; }
+        .testimonial { background: var(--dark-3); padding: 2.5rem; border-radius: 16px; border: 1px solid rgba(78, 205, 196, 0.2); transition: all 0.3s ease; }
+        .testimonial:hover { border-color: var(--secondary); transform: translateY(-5px); }
+        .testimonial-text { font-size: 1.1rem; font-style: italic; margin-bottom: 1.5rem; color: #d0d0d0; }
+        .testimonial-author { font-weight: 700; color: var(--secondary); }
+
+        /* Survey */
+        .survey { background: linear-gradient(135deg, var(--dark) 0%, var(--dark-2) 100%); padding: 6rem 0; }
+        .form-container { max-width: 800px; margin: 0 auto; background: var(--dark-2); padding: 3rem; border-radius: 20px; border: 1px solid rgba(255, 107, 53, 0.3); }
+        .form-step { display: none; }
+        .form-step.active { display: block; animation: fadeInUp 0.5s ease-out; }
+        .form-group { margin-bottom: 2rem; }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 0.75rem; color: var(--text); font-size: 1.1rem; }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: 1rem; background: var(--dark-3); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px; color: white; font-size: 1rem; font-family: inherit; transition: all 0.3s ease;
+        }
+        .form-group input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1); }
+        .radio-group { display: flex; flex-direction: column; gap: 1rem; }
+        .radio-option {
+            background: var(--dark-3); padding: 1.25rem; border-radius: 8px; border: 2px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 1rem;
+        }
+        .radio-option:hover { border-color: var(--primary); background: rgba(255, 107, 53, 0.05); }
+        .radio-option input[type="radio"], .radio-option input[type="checkbox"] { width: auto; accent-color: var(--primary); }
+        .form-buttons { display: flex; gap: 1rem; margin-top: 2rem; }
+        .btn { padding: 1rem 2rem; font-size: 1rem; font-weight: 600; border-radius: 8px; border: none; cursor: pointer; transition: all 0.3s ease; flex: 1; }
+        .btn-next { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; }
+        .btn-next:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3); }
+        .btn-prev { background: var(--dark-3); color: white; border: 1px solid rgba(255, 255, 255, 0.2); }
+        .btn-prev:hover { background: var(--dark); }
+        .progress-bar { height: 4px; background: var(--dark-3); border-radius: 2px; margin-bottom: 2rem; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); transition: width 0.3s ease; }
+        .success-message { display: none; text-align: center; padding: 3rem; }
+        .success-message.active { display: block; animation: fadeInUp 0.5s ease-out; }
+        
+        /* Footer */
+        footer { background: var(--dark); padding: 3rem 0; text-align: center; border-top: 1px solid rgba(255, 255, 255, 0.1); }
+        .trust-badges { display: flex; justify-content: center; gap: 2rem; margin: 2rem 0; flex-wrap: wrap; }
+        .badge { padding: 0.5rem 1.5rem; background: var(--dark-2); border-radius: 8px; font-weight: 600; color: var(--text-muted); }
+
+        @media (max-width: 768px) {
+            .pillars-grid, .testimonial-grid, .service-grid { grid-template-columns: 1fr; }
+            .form-buttons { flex-direction: column; }
+            h1 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <section class="hero">
+        <div class="container">
+            <span class="eyebrow">ATTENTION: FOUNDERS, CEOS, AND AGENCY OWNERS</span>
+            <h1>THE <span class="highlight">"SCALING TRAP"</span>: Why Working Harder Is Actually Shrinking Your Margins</h1>
+            <p class="subtitle">Discover the "Jumpstart Scaling" Methodology that has helped 500+ founders automate operations.</p>
+            <a href="#survey" class="cta-primary">YES! SEND ME THE JUMPSTART BLUEPRINT NOW</a>
+            <span class="cta-subtext">100% Free Access | No Credit Card Required</span>
+        </div>
+    </section>
+
+    <section class="letter">
+        <div class="container">
+            <div class="letter-content">
+                <h2>DEAR FELLOW FOUNDER,</h2>
+                <p>If you're reading this page, you're likely in the "Golden Handcuffs" phase or the "Plateau of Death". What got you to $1M will kill you at $5M.</p>
+                <p>You don't have a "lead generation" problem. You have a <strong>SCALING problem</strong>.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="pillars">
+        <div class="container">
+            <h2 class="section-title">THE JUMPSTART SCALING METHODOLOGY</h2>
+            <div class="pillars-grid">
+                <div class="pillar-card">
+                    <div class="pillar-number">01</div>
+                    <h3>THE ACQUISITION ENGINE</h3>
+                    <p>Stop relying on "referrals". Install an automated system to bring in leads like clockwork.</p>
+                </div>
+                <div class="pillar-card">
+                    <div class="pillar-number">02</div>
+                    <h3>THE DELIVERY SYSTEM</h3>
+                    <p>Extract your genius into a playbook your team can execute without you.</p>
+                </div>
+                <div class="pillar-card">
+                    <div class="pillar-number">03</div>
+                    <h3>THE TEAM OS</h3>
+                    <p>Install KPIs and accountability. Create a team that brings you solutions, not problems.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="services">
+        <div class="container">
+            <h2 class="section-title">OUR SERVICES & PRICING</h2>
+            <p class="section-subtitle">Everything you need to scale, done for you</p>
+            
+            <div class="service-grid">
+                <!-- Paid Ads -->
+                <div class="service-card">
+                    <div class="service-title">Ad Spend Pack ($0-5k)</div>
+                    <div class="service-price">$2,250/mo</div>
+                    <div class="service-desc">Expert ad management for early-stage scaling.</div>
+                    <ul class="service-list">
+                        <li>Daily Optimization</li><li>ROI Reports</li><li>Creative Refreshes</li><li>Dedicated Manager</li>
+                    </ul>
+                </div>
+                <div class="service-card">
+                    <div class="service-title">Ad Spend Pack ($5k-15k)</div>
+                    <div class="service-price">$4,500/mo</div>
+                    <div class="service-desc">Advanced management for growing budgets.</div>
+                    <ul class="service-list">
+                        <li>Advanced Targeting</li><li>Multi-Platform Ads</li><li>Weekly Analytics</li><li>Custom Strategies</li>
+                    </ul>
+                </div>
+                <div class="service-card">
+                    <div class="service-title">Ad Spend Pack ($15k-50k)</div>
+                    <div class="service-price">$5,500/mo</div>
+                    <div class="service-desc">Aggressive scaling for significant spend.</div>
+                    <ul class="service-list">
+                        <li>Daily Management</li><li>Funnel Optimization</li><li>VIP Support</li><li>Attribution Analytics</li>
+                    </ul>
+                </div>
+                <div class="service-card">
+                    <div class="service-title">Ad Spend Pack ($50k+)</div>
+                    <div class="service-price">$9,500/mo</div>
+                    <div class="service-desc">Elite, high-touch management.</div>
+                    <ul class="service-list">
+                        <li>Market Domination</li><li>Real-Time Optimization</li><li>24/7 Priority Support</li><li>White-Glove Service</li>
+                    </ul>
+                </div>
+
+                <!-- Funnels & Dev -->
+                <div class="service-card">
+                    <div class="service-title">Sales Funnel Creation</div>
+                    <div class="service-price">$3,500/project</div>
+                    <div class="service-desc">Custom, conversion-driven funnels.</div>
+                    <ul class="service-list">
+                        <li>Custom Design</li><li>A/B Testing</li><li>Copywriting</li><li>Tech Integration</li>
+                    </ul>
+                </div>
+                <div class="service-card">
+                    <div class="service-title">Website Dev & SEO</div>
+                    <div class="service-price">$4,500/project</div>
+                    <div class="service-desc">SEO-optimized, fast-loading websites.</div>
+                    <ul class="service-list">
+                        <li>SEO Strategy</li><li>Responsive Design</li><li>Speed Opt</li><li>Custom Coding</li>
+                    </ul>
+                </div>
+                <div class="service-card">
+                    <div class="service-title">Lead Capture Funnels</div>
+                    <div class="service-price">$3,500/project</div>
+                    <div class="service-desc">Funnels built to optimize lead capture.</div>
+                    <ul class="service-list">
+                        <li>Cross-Platform</li><li>Conversion Opt</li><li>Analytics</li><li>Implementation</li>
+                    </ul>
+                </div>
+                 <div class="service-card">
+                    <div class="service-title">Membership Funnels</div>
+                    <div class="service-price">$5,500/project</div>
+                    <div class="service-desc">Robust community/challenge funnels.</div>
+                    <ul class="service-list">
+                        <li>Payment Gateways</li><li>Drip Content</li><li>Engagement Tools</li><li>Retention Strategy</li>
+                    </ul>
+                </div>
+
+                <!-- Automation -->
+                <div class="service-card">
+                    <div class="service-title">CRM Automation Setup</div>
+                    <div class="service-price">$2,500/setup</div>
+                    <div class="service-desc">Custom automations for your business.</div>
+                    <ul class="service-list">
+                        <li>Custom Snapshots</li><li>Lead Routing</li><li>Integration Setup</li><li>Training</li>
+                    </ul>
+                </div>
+                 <div class="service-card">
+                    <div class="service-title">GoHighLevel Snapshot</div>
+                    <div class="service-price">$9,997</div>
+                    <div class="service-desc">Tailored setup for complete GHL mastery.</div>
+                    <ul class="service-list">
+                        <li>Complete CRM Setup</li><li>Adv. Automations</li><li>12-Month Support</li><li>Strategy</li>
+                    </ul>
+                </div>
+                 <div class="service-card">
+                    <div class="service-title">ClickFunnels Custom</div>
+                    <div class="service-price">$9,997</div>
+                    <div class="service-desc">Complete funnel solutions for CF.</div>
+                    <ul class="service-list">
+                        <li>Sales Funnels</li><li>12 Months Updates</li><li>Pro Copy & Design</li><li>Payment Setup</li>
+                    </ul>
+                </div>
+
+                <!-- Tracking & Compliance -->
+                <div class="service-card">
+                    <div class="service-title">Lead Tracking</div>
+                    <div class="service-price">$1,500/mo</div>
+                    <div class="service-desc">Transparency on lead sources.</div>
+                    <ul class="service-list">
+                        <li>Attribution Models</li><li>ROI Dashboards</li><li>Call Tracking</li><li>Reporting</li>
+                    </ul>
+                </div>
+                <div class="service-card">
+                    <div class="service-title">Retargeting Ads</div>
+                    <div class="service-price">$2,000/mo</div>
+                    <div class="service-desc">Advanced retargeting across platforms.</div>
+                    <ul class="service-list">
+                        <li>Cross-Channel</li><li>Dynamic Ads</li><li>Pixel Install</li><li>Audience Seg</li>
+                    </ul>
+                </div>
+                <div class="service-card">
+                    <div class="service-title">HIPAA Compliance</div>
+                    <div class="service-price">$1,200/setup</div>
+                    <div class="service-desc">Full HIPAA compliance setup.</div>
+                    <ul class="service-list">
+                        <li>Audit Support</li><li>Data Security</li><li>Employee Training</li><li>Monitoring</li>
+                    </ul>
+                </div>
+                <div class="service-card">
+                    <div class="service-title">FTC Compliance</div>
+                    <div class="service-price">$800/setup</div>
+                    <div class="service-desc">Ensure FTC marketing compliance.</div>
+                    <ul class="service-list">
+                        <li>Marketing Reviews</li><li>Disclosures</li><li>Audit Prep</li><li>Training</li>
+                    </ul>
+                </div>
+                
+                <!-- Retainer -->
+                <div class="service-card" style="border-color: var(--primary); background: rgba(255,107,53,0.05);">
+                    <div class="service-title" style="color: var(--primary);">Comprehensive Retainer</div>
+                    <div class="service-price">$5,200/week</div>
+                    <div class="service-desc">Full-service marketing without limits.</div>
+                    <ul class="service-list">
+                        <li>All Services</li><li>Unlimited Projects</li><li>Dedicated Team</li><li>Weekly Strategy</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials">
+        <div class="container">
+            <h2 class="section-title">SUCCESS STORIES</h2>
+            <div class="testimonial-grid">
+                <div class="testimonial">
+                    <p class="testimonial-text">"I went from working 80 hours a week to 30, and we doubled our revenue in 6 months."</p>
+                    <p class="testimonial-author">— Sarah Jenkins, CEO</p>
+                </div>
+                <div class="testimonial">
+                    <p class="testimonial-text">"We implemented Jumpstart and hit $5M the very next year. It felt... easy."</p>
+                    <p class="testimonial-author">— Mark D., Founder</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="survey" id="survey">
+        <div class="container">
+            <h2 class="section-title">GET YOUR FREE SCALING BLUEPRINT</h2>
+            <p class="section-subtitle">Customize your 90-day roadmap</p>
+            
+            <div class="form-container">
+                <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width: 14%;"></div></div>
+
+                <form id="surveyForm">
+                    <!-- Step 1: Challenge -->
+                    <div class="form-step active" data-step="1">
+                        <div class="form-group">
+                            <label>What's your biggest challenge right now?</label>
+                            <div class="radio-group">
+                                <label class="radio-option"><input type="radio" name="challenge" value="lead-gen" required><span>Getting consistent leads</span></label>
+                                <label class="radio-option"><input type="radio" name="challenge" value="delivery"><span>Delivering quality without me</span></label>
+                                <label class="radio-option"><input type="radio" name="challenge" value="team"><span>Building/managing a team</span></label>
+                                <label class="radio-option"><input type="radio" name="challenge" value="time"><span>I'm working 60+ hours/week</span></label>
+                                <label class="radio-option"><input type="radio" name="challenge" value="profit"><span>Profit margins are shrinking</span></label>
+                            </div>
+                        </div>
+                        <div class="form-buttons"><button type="button" class="btn btn-next" onclick="nextStep()">Next →</button></div>
+                    </div>
+
+                    <!-- Step 2: Revenue -->
+                    <div class="form-step" data-step="2">
+                        <div class="form-group">
+                            <label>What's your current annual revenue?</label>
+                            <div class="radio-group">
+                                <label class="radio-option"><input type="radio" name="revenue" value="250k-500k" required><span>$250k - $500k</span></label>
+                                <label class="radio-option"><input type="radio" name="revenue" value="500k-1m"><span>$500k - $1M</span></label>
+                                <label class="radio-option"><input type="radio" name="revenue" value="1m-5m"><span>$1M - $5M</span></label>
+                                <label class="radio-option"><input type="radio" name="revenue" value="5m-10m"><span>$5M - $10M</span></label>
+                                <label class="radio-option"><input type="radio" name="revenue" value="10m+"><span>$10M+</span></label>
+                            </div>
+                        </div>
+                        <div class="form-buttons">
+                            <button type="button" class="btn btn-prev" onclick="prevStep()">← Back</button>
+                            <button type="button" class="btn btn-next" onclick="nextStep()">Next →</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Team Size -->
+                    <div class="form-step" data-step="3">
+                        <div class="form-group">
+                            <label>How many people are on your team?</label>
+                            <div class="radio-group">
+                                <label class="radio-option"><input type="radio" name="team_size" value="solo" required><span>Just me (solo)</span></label>
+                                <label class="radio-option"><input type="radio" name="team_size" value="2-5"><span>2-5 people</span></label>
+                                <label class="radio-option"><input type="radio" name="team_size" value="6-10"><span>6-10 people</span></label>
+                                <label class="radio-option"><input type="radio" name="team_size" value="11-25"><span>11-25 people</span></label>
+                                <label class="radio-option"><input type="radio" name="team_size" value="25+"><span>25+ people</span></label>
+                            </div>
+                        </div>
+                        <div class="form-buttons">
+                            <button type="button" class="btn btn-prev" onclick="prevStep()">← Back</button>
+                            <button type="button" class="btn btn-next" onclick="nextStep()">Next →</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Services Interest -->
+                    <div class="form-step" data-step="4">
+                        <div class="form-group">
+                            <label>What services are you most interested in? (Select all that apply)</label>
+                            <div class="radio-group">
+                                <label class="radio-option"><input type="checkbox" name="services" value="paid-ads"><span>Leads & Paid Ads</span></label>
+                                <label class="radio-option"><input type="checkbox" name="services" value="funnels"><span>Funnels & Websites</span></label>
+                                <label class="radio-option"><input type="checkbox" name="services" value="automation"><span>Automation & CRM</span></label>
+                                <label class="radio-option"><input type="checkbox" name="services" value="tracking"><span>Tracking & Reporting</span></label>
+                                <label class="radio-option"><input type="checkbox" name="services" value="compliance"><span>Compliance & Security</span></label>
+                                <label class="radio-option"><input type="checkbox" name="services" value="full-service"><span>Full-Service Marketing</span></label>
+                            </div>
+                        </div>
+                        <div class="form-buttons">
+                            <button type="button" class="btn btn-prev" onclick="prevStep()">← Back</button>
+                            <button type="button" class="btn btn-next" onclick="nextStep()">Next →</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 5: Ad Spend -->
+                    <div class="form-step" data-step="5">
+                        <div class="form-group">
+                            <label>What's your current monthly ad spend?</label>
+                            <div class="radio-group">
+                                <label class="radio-option"><input type="radio" name="ad_spend" value="0-5k" required><span>$0 - $5k</span></label>
+                                <label class="radio-option"><input type="radio" name="ad_spend" value="5k-15k"><span>$5k - $15k</span></label>
+                                <label class="radio-option"><input type="radio" name="ad_spend" value="15k-50k"><span>$15k - $50k</span></label>
+                                <label class="radio-option"><input type="radio" name="ad_spend" value="50k+"><span>$50k+</span></label>
+                                <label class="radio-option"><input type="radio" name="ad_spend" value="none"><span>Not running ads yet</span></label>
+                            </div>
+                        </div>
+                        <div class="form-buttons">
+                            <button type="button" class="btn btn-prev" onclick="prevStep()">← Back</button>
+                            <button type="button" class="btn btn-next" onclick="nextStep()">Next →</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 6: Industry -->
+                    <div class="form-step" data-step="6">
+                        <div class="form-group">
+                            <label>What industry are you in?</label>
+                            <select name="industry" required>
+                                <option value="">Select your industry...</option>
+                                <option value="marketing-agency">Marketing Agency</option>
+                                <option value="saas">SaaS/Software</option>
+                                <option value="ecommerce">E-commerce</option>
+                                <option value="consulting">Consulting</option>
+                                <option value="professional-services">Professional Services</option>
+                                <option value="construction">Construction/Trades</option>
+                                <option value="healthcare">Healthcare</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-buttons">
+                            <button type="button" class="btn btn-prev" onclick="prevStep()">← Back</button>
+                            <button type="button" class="btn btn-next" onclick="nextStep()">Next →</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 7: Contact -->
+                    <div class="form-step" data-step="7">
+                        <div class="form-group">
+                            <label>First Name</label><input type="text" name="first_name" required placeholder="John">
+                        </div>
+                        <div class="form-group">
+                            <label>Last Name</label><input type="text" name="last_name" required placeholder="Doe">
+                        </div>
+                        <div class="form-group">
+                            <label>Email Address</label><input type="email" name="email" required placeholder="john@company.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number</label><input type="tel" name="phone" required placeholder="(555) 123-4567">
+                        </div>
+                        <div class="form-group">
+                            <label>Best time to call you?</label>
+                            <select name="best_time" required>
+                                <option value="">Select a time...</option>
+                                <option value="morning">Morning (8am-12pm)</option>
+                                <option value="afternoon">Afternoon (12pm-5pm)</option>
+                                <option value="evening">Evening (5pm-8pm)</option>
+                            </select>
+                        </div>
+                        <div class="form-buttons">
+                            <button type="button" class="btn btn-prev" onclick="prevStep()">← Back</button>
+                            <button type="submit" class="btn btn-next">Get My Blueprint →</button>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="success-message" id="successMessage">
+                    <div class="success-icon">🎉</div>
+                    <h2>Thank You!</h2>
+                    <p>Your Scaling Blueprint is being prepared. We'll call you at your preferred time.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="trust-badges">
+                <span class="badge">As Seen In: Forbes</span><span class="badge">Inc.</span>
+                <span class="badge">Entrepreneur</span><span class="badge">Business Insider</span>
+            </div>
+            <p style="color: var(--text-muted); margin-top: 2rem;">Copyright © 2026 Jumpstart Scaling. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        let currentStep = 1;
+        const totalSteps = 7;
+        const n8nWebhookUrl = 'https://n8n.jumpstartscaling.com/webhook/YOUR_UNIQUE_WEBHOOK_ID'; // UPDATE THIS WHEN READY
+
+        function updateProgress() {
+            const progress = (currentStep / totalSteps) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function nextStep() {
+            const currentStepEl = document.querySelector(`.form-step[data-step="${currentStep}"]`);
+            const inputs = currentStepEl.querySelectorAll('input, select');
+            let valid = true;
+            
+            // Check required fields (ignoring non-required checkbox groups if logically needed, but usually simpler here)
+            // For checkboxes in step 4, we might want at least one or optional. Let's make it optional for now or check if required.
+            
+            inputs.forEach(input => {
+                if(input.hasAttribute('required')) {
+                    if (input.type === 'radio') {
+                         const group = currentStepEl.querySelectorAll(`input[name="${input.name}"]`);
+                         if (!Array.from(group).some(r => r.checked)) valid = false;
+                    } else if (!input.value) {
+                        valid = false;
+                    }
+                }
+            });
+
+            if (!valid) { alert('Please fill in all required fields.'); return; }
+
+            if (currentStep < totalSteps) {
+                currentStepEl.classList.remove('active');
+                currentStep++;
+                document.querySelector(`.form-step[data-step="${currentStep}"]`).classList.add('active');
+                updateProgress();
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 1) {
+                document.querySelector(`.form-step[data-step="${currentStep}"]`).classList.remove('active');
+                currentStep--;
+                document.querySelector(`.form-step[data-step="${currentStep}"]`).classList.add('active');
+                updateProgress();
+            }
+        }
+        
+        // Expose functions global scope
+        window.nextStep = nextStep;
+        window.prevStep = prevStep;
+
+        document.getElementById('surveyForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const data = {};
+            formData.forEach((value, key) => {
+                if(!data[key]) {
+                    data[key] = value;
+                } else {
+                    if(!Array.isArray(data[key])) data[key] = [data[key]];
+                    data[key].push(value);
+                }
+            });
+
+            console.log('Submission data:', data);
+
+            // Send to n8n (Async, fire and forget for UI)
+            if (n8nWebhookUrl && !n8nWebhookUrl.includes('YOUR_UNIQUE_WEBHOOK_ID')) {
+                fetch(n8nWebhookUrl, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(data)
+                }).catch(err => console.error('Webhook failed', err));
+            } else {
+                console.log('n8n webhook placeholder active - data logged to console');
+            }
+
+            this.style.display = 'none';
+            document.getElementById('successMessage').classList.add('active');
+        });
+    </script>
+</body>
+</html>

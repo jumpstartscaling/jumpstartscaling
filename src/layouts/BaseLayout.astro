@@ -1,0 +1,267 @@
+---
+/**
+ * BaseLayout.astro
+ * 
+ * Enhanced base layout with:
+ * - Advanced SEO (JSON-LD, meta tags)
+ * - Cache control headers
+ * - Performance optimization
+ * - Social media integration
+ */
+
+interface Props {
+  title: string;
+  description: string;
+  ogImage?: string;
+  noIndex?: boolean;
+  keywords?: string;
+  author?: string;
+  publishedTime?: string;
+  modifiedTime?: string;
+  type?: 'website' | 'article' | 'product';
+}
+
+const { 
+  title, 
+  description, 
+  ogImage = '/og-image.jpg',
+  noIndex = false,
+  keywords = 'B2B marketing, paid ads, lead generation, CRM, automation, n8n, full-stack development',
+  author = 'Jumpstart Scaling',
+  publishedTime,
+  modifiedTime,
+  type = 'website'
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const siteName = canonicalURL.hostname.includes('chrisamaya') ? 'Chris Amaya' : 'Jumpstart Scaling';
+const currentYear = new Date().getFullYear();
+
+// Structured Data (JSON-LD)
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": type === 'article' ? 'Article' : 'Organization',
+  "name": siteName,
+  "url": canonicalURL.origin,
+  "logo": `${canonicalURL.origin}/logo.png`,
+  "description": description,
+  "sameAs": [
+    "https://twitter.com/jumpstartscale",
+    "https://linkedin.com/company/jumpstart-scaling"
+  ],
+  ...(type === 'article' && {
+    "headline": title,
+    "datePublished": publishedTime,
+    "dateModified": modifiedTime || publishedTime,
+    "author": {
+      "@type": "Person",
+      "name": author
+    }
+  })
+};
+
+// Cache control - force fresh content
+Astro.response.headers.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+Astro.response.headers.set('Pragma', 'no-cache');
+Astro.response.headers.set('Expires', '0');
+---
+
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="generator" content={Astro.generator} />
+  
+  <!-- Primary SEO -->
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <meta name="keywords" content={keywords} />
+  <meta name="author" content={author} />
+  <link rel="canonical" href={canonicalURL} />
+  
+  <!-- Robots & Indexing -->
+  {noIndex ? (
+    <meta name="robots" content="noindex, nofollow" />
+  ) : (
+    <>
+      <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+      <meta name="googlebot" content="index, follow" />
+      <meta name="bingbot" content="index, follow" />
+    </>
+  )}
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content={type} />
+  <meta property="og:url" content={canonicalURL} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={ogImage} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:site_name" content={siteName} />
+  <meta property="og:locale" content="en_US" />
+  {publishedTime && <meta property="article:published_time" content={publishedTime} />}
+  {modifiedTime && <meta property="article:modified_time" content={modifiedTime} />}
+  
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content={canonicalURL} />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={ogImage} />
+  <meta name="twitter:creator" content="@jumpstartscale" />
+  
+  <!-- Additional SEO -->
+  <meta name="theme-color" content="#000000" />
+  <meta name="format-detection" content="telephone=no" />
+  <link rel="alternate" type="application/rss+xml" title={`${siteName} RSS Feed`} href="/rss.xml" />
+  
+  <!-- Preconnect for performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
+  
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Orbitron:wght@400;500;700;900&display=swap" rel="stylesheet" />
+  
+  <!-- Structured Data (JSON-LD) -->
+  <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+  
+  <!-- Flowbite -->
+  <script is:inline src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
+</head>
+
+<body class="bg-black text-white font-sans antialiased">
+  <!-- Main Content -->
+  <main>
+    <slot />
+  </main>
+  
+  <!-- Footer -->
+  <footer class="bg-black border-t border-gold-900/20 py-12 px-4">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+        <!-- Brand -->
+        <div class="md:col-span-1">
+          <div class="text-2xl font-bold bg-clip-text text-transparent bg-gold-metal mb-4 font-mono">
+            JUMPSTART SCALING
+          </div>
+          <p class="text-gray-400 text-sm">
+            Warp speed revenue infrastructure.
+          </p>
+        </div>
+        
+        <!-- Links -->
+        <div>
+          <h4 class="font-semibold mb-4 text-gold-400 font-mono">SYSTEMS</h4>
+          <ul class="space-y-2 text-sm">
+            <li><a href="/services/paid-acquisition" class="text-gray-400 hover:text-gold-400 transition-colors">Acquisition</a></li>
+            <li><a href="/services/funnel-architecture" class="text-gray-400 hover:text-gold-400 transition-colors">Funnels</a></li>
+            <li><a href="/services/crm-transformation" class="text-gray-400 hover:text-gold-400 transition-colors">CRM Logic</a></li>
+            <li><a href="/services/data-attribution" class="text-gray-400 hover:text-gold-400 transition-colors">Data Radar</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4 class="font-semibold mb-4 text-gold-400">Company</h4>
+          <ul class="space-y-2 text-sm">
+            <li><a href="/about" class="text-gray-400 hover:text-gold-400 transition-colors">About</a></li>
+            <li><a href="/case-studies" class="text-gray-400 hover:text-gold-400 transition-colors">Case Studies</a></li>
+            <li><a href="/knowledge" class="text-gray-400 hover:text-gold-400 transition-colors">Knowledge Base</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4 class="font-semibold mb-4 text-gold-400">Connect</h4>
+          <ul class="space-y-2 text-sm">
+            <li><a href="/apply" class="text-gray-400 hover:text-gold-400 transition-colors">Apply Now</a></li>
+            <li><a href="mailto:hello@jumpstartscaling.com" class="text-gray-400 hover:text-gold-400 transition-colors">Email Us</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- Bottom Bar -->
+      <div class="border-t border-gold-900/20 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+        <p class="text-gray-500 text-sm">
+          © {new Date().getFullYear()} Jumpstart Scaling. All rights reserved.
+        </p>
+        <div class="flex gap-6 text-sm">
+          <a href="/privacy" class="text-gray-500 hover:text-gold-400 transition-colors">Privacy</a>
+          <a href="/terms" class="text-gray-500 hover:text-gold-400 transition-colors">Terms</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  
+  <!-- Analytics (placeholder) -->
+  <script is:inline>
+    // Add your analytics code here (Google Analytics, Plausible, etc.)
+  </script>
+</body>
+</html>
+
+<style is:global>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  
+  body {
+    overflow-x: hidden;
+  }
+  
+  /* Smooth scrolling */
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+  
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #000;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #BF953F;
+    border-radius: 5px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #AA771C;
+  }
+
+  /* GLOBAL HIGH CONTRAST OVERRIDES */
+  /* Ensure all text is white or near-white on black backgrounds */
+  body, main, section, div, p, span, li, h1, h2, h3, h4, h5, h6 {
+    color: #FFFFFF;
+  }
+
+  /* Exceptions for specific UI elements */
+  .text-black { color: #000000 !important; }
+  .text-gold-400, .text-gold-500 { color: #EAB308 !important; }
+  
+  /* Dimmed text should still be very readable */
+  .text-gray-400, .text-gray-500, .text-gray-600 {
+    color: #DDDDDD !important;
+  }
+  
+  /* Inputs */
+  input, textarea, select {
+    color: #FFFFFF !important;
+    background-color: #111111;
+    border-color: #333333;
+  }
+</style>

@@ -1,0 +1,60 @@
+backend:
+  name: git-gateway
+  branch: main
+
+# Local backend for development
+local_backend: true
+
+media_folder: "public/images"
+public_folder: "/images"
+
+collections:
+  - name: "services"
+    label: "Service Pages"
+    folder: "src/pages/services"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - {label: "Layout", name: "layout", widget: "hidden", default: "../../layouts/ServiceLayout.astro"}
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Subtitle", name: "subtitle", widget: "text"}
+      - {label: "Meta Description", name: "metaDescription", widget: "text"}
+      - {label: "Body", name: "body", widget: "markdown"}
+      
+  - name: "components"
+    label: "Components"
+    folder: "src/components"
+    create: true
+    extension: "astro"
+    fields:
+      - {label: "Component Name", name: "title", widget: "string"}
+      - {label: "Code", name: "body", widget: "code", default_language: "astro"}
+      
+  - name: "settings"
+    label: "Site Settings"
+    files:
+      - label: "Navigation"
+        name: "navigation"
+        file: "src/data/navigation.json"
+        fields:
+          - label: "Nav Items"
+            name: "items"
+            widget: "list"
+            fields:
+              - {label: "Label", name: "label", widget: "string"}
+              - {label: "Link", name: "link", widget: "string"}
+              
+      - label: "Homepage"
+        name: "homepage"
+        file: "src/data/homepage.json"
+        fields:
+          - {label: "Hero Title", name: "heroTitle", widget: "string"}
+          - {label: "Hero Subtitle", name: "heroSubtitle", widget: "text"}
+          - label: "Stats"
+            name: "stats"
+            widget: "list"
+            fields:
+              - {label: "Value", name: "value", widget: "number"}
+              - {label: "Label", name: "label", widget: "string"}
+              - {label: "Suffix", name: "suffix", widget: "string", required: false}
+              - {label: "Prefix", name: "prefix", widget: "string", required: false}

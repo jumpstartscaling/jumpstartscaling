@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Funnel Architecture | Jumpstart Scaling</title>
+    <meta name="description"
+        content="High-velocity landing pages with sub-100ms load times. The revenue engine for scaling brands.">
+
+    <!-- 1. FONTS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+
+    <!-- 2. ICONS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- 3. TAILWIND -->
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+
+    <!-- 4. ALPINE JS -->
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
+
+    <!-- 5. CONFIG -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            DEFAULT: '#C9A961',
+                            light: '#FFE5A0',
+                            dim: 'rgba(201, 169, 97, 0.1)',
+                            dark: '#8a733e'
+                        },
+                        dark: {
+                            900: '#050505',
+                            800: '#0A0A0A',
+                            700: '#111111',
+                            600: '#1a1a1a'
+                        }
+                    },
+                    fontFamily: {
+                        mono: ['JetBrains Mono', 'monospace'],
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    typography: (theme) => ({
+                        DEFAULT: {
+                            css: {
+                                color: theme('colors.gray.400'),
+                                strong: { color: '#fff' },
+                                h3: { color: '#fff', fontSize: '1.5em' },
+                                code: { color: theme('colors.gold.DEFAULT') },
+                            },
+                        },
+                    }),
+                }
+            }
+        }
+    </script>
+
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('nav', () => ({
+                mobileOpen: false,
+                scrolled: false,
+                solutionsOpen: false,
+                init() {
+                    window.addEventListener('scroll', () => {
+                        this.scrolled = window.scrollY > 50;
+                    });
+                }
+            }));
+        });
+    </script>
+
+    <style>
+        body {
+            background-color: #050505;
+            color: #e5e5e5;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, #C9A961 0%, #FFE5A0 50%, #C9A961 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% auto;
+            animation: shine 5s linear infinite;
+        }
+
+        @keyframes shine {
+            to {
+                background-position: 200% center;
+            }
+        }
+
+        /* Sticky Nav Fix */
+        .sticky-matrix {
+            position: sticky;
+            top: 6rem;
+            /* Adjust based on main nav height */
+            z-index: 40;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+
+<body class="antialiased selection:bg-gold selection:text-black overflow-x-hidden" x-data="nav">
+
+    <!-- MAIN NAVIGATION -->
+    <nav :class="{ 'bg-dark-900/95 backdrop-blur-md border-b border-white/5': scrolled, 'bg-transparent border-transparent': !scrolled }"
+        class="fixed top-0 w-full z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 h-24 flex justify-between items-center">
+            <a href="/" class="flex items-center gap-3 group">
+                <div
+                    class="w-10 h-10 bg-gradient-to-br from-gold to-gold-dark rounded flex items-center justify-center font-black text-black text-sm shadow-[0_0_15px_rgba(201,169,97,0.4)]">
+                    JS</div>
+                <div class="flex flex-col">
+                    <span
+                        class="text-xl font-black tracking-tighter text-white group-hover:text-gold transition-colors leading-none">JUMPSTART</span>
+                    <span class="text-xs font-mono text-gold tracking-widest">SCALING</span>
+                </div>
+            </a>
+            <div class="hidden lg:flex items-center gap-8">
+                <a href="/services/paid-acquisition.html"
+                    class="text-sm font-medium text-gray-300 hover:text-white transition-colors">Paid Acquisition</a>
+                <span class="text-sm font-bold text-white border-b-2 border-gold pb-1">Funnel Architecture</span>
+                <a href="/#audit"
+                    class="px-5 py-2.5 bg-gold text-black font-bold rounded-lg hover:bg-gold-light transition-all text-sm">Start
+                    Audit</a>
+            </div>
+            <button @click="mobileOpen = !mobileOpen" class="lg:hidden text-white text-2xl"><i
+                    class="fa-solid fa-bars"></i></button>
+        </div>
+        <!-- Mobile Menu -->
+        <div x-show="mobileOpen"
+            class="fixed inset-0 bg-dark-900 z-40 flex flex-col items-center justify-center space-y-8" x-transition>
+            <a href="/" class="text-2xl font-bold text-white">Home</a>
+            <a href="/services/paid-acquisition.html" class="text-2xl font-bold text-white">Paid Media</a>
+            <a href="/#audit" class="px-8 py-4 bg-gold text-black font-bold rounded text-xl">Start Audit</a>
+            <button @click="mobileOpen = false" class="absolute top-8 right-8 text-white text-2xl"><i
+                    class="fa-solid fa-xmark"></i></button>
+        </div>
+    </nav>
+
+    <main>
+        <!-- HERO -->
+        <section class="relative pt-40 pb-20 overflow-hidden bg-dark-900">
+            <div class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 z-0">
+            </div>
+            <div
+                class="absolute top-0 right-0 w-[500px] h-[500px] bg-gold/5 rounded-full blur-[100px] pointer-events-none z-0">
+            </div>
+
+            <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
+                <div
+                    class="inline-flex items-center gap-2 mb-6 px-4 py-1 rounded-full bg-white/5 border border-white/10">
+                    <i class="fa-solid fa-code text-gold text-xs"></i>
+                    <span class="text-xs font-mono text-gray-400 uppercase tracking-widest">Protocol 02:
+                        Architecture</span>
+                </div>
+                <h1 class="text-5xl md:text-7xl font-black text-white leading-tight mb-6">
+                    Speed is <span class="text-gradient">Revenue.</span>
+                </h1>
+                <p class="text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
+                    Stop letting WordPress plugins and drag-and-drop builders hold your revenue hostage. We engineer
+                    <strong>Headless, Sub-100ms Funnels</strong> that convert cold traffic into cash on the first click.
+                </p>
+                <div class="flex justify-center gap-4 text-sm font-mono text-gray-500">
+                    <span class="flex items-center gap-2"><i class="fa-brands fa-react text-blue-400"></i>
+                        React/Next.js</span>
+                    <span class="flex items-center gap-2"><i class="fa-solid fa-bolt text-yellow-400"></i> Astro</span>
+                    <span class="flex items-center gap-2"><i class="fa-brands fa-shopify text-green-400"></i>
+                        Hydrogen</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- QUICK JUMP MATRIX (STICKY) -->
+        <div class="sticky-matrix bg-dark-900/90 py-4 border-y border-white/10 shadow-2xl">
+            <div class="max-w-7xl mx-auto px-6 overflow-x-auto">
+                <div class="flex justify-between md:justify-center gap-4 md:gap-12 min-w-max">
+                    <a href="#sales"
+                        class="flex items-center gap-2 text-sm font-bold text-gray-400 hover:text-gold transition-colors group">
+                        <span class="w-2 h-2 rounded-full bg-green-500 group-hover:animate-ping"></span> SALES FUNNELS
+                    </a>
+                    <a href="#leads"
+                        class="flex items-center gap-2 text-sm font-bold text-gray-400 hover:text-gold transition-colors group">
+                        <span class="w-2 h-2 rounded-full bg-blue-500 group-hover:animate-ping"></span> LEAD GEN
+                    </a>
+                    <a href="#calls"
+                        class="flex items-center gap-2 text-sm font-bold text-gray-400 hover:text-gold transition-colors group">
+                        <span class="w-2 h-2 rounded-full bg-purple-500 group-hover:animate-ping"></span> INBOUND CALLS
+                    </a>
+                    <a href="#courses"
+                        class="flex items-center gap-2 text-sm font-bold text-gray-400 hover:text-gold transition-colors group">
+                        <span class="w-2 h-2 rounded-full bg-orange-500 group-hover:animate-ping"></span> COURSES/INFO
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- CATEGORY 1: SALES FUNNELS -->
+        <section id="sales" class="py-24 bg-dark-800">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="flex items-center gap-4 mb-12">
+                    <div class="p-4 bg-green-500/10 rounded-xl border border-green-500/20"><i
+                            class="fa-solid fa-cart-shopping text-3xl text-green-500"></i></div>
+                    <div>
+                        <h2 class="text-3xl font-bold text-white">Sales Architecture</h2>
+                        <p class="text-gray-400">For DTC Brands & Low-Ticket Offers</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <!-- Protocol 1: Headless Cart -->
+                    <div
+                        class="bg-dark-900 border border-white/10 rounded-2xl p-8 hover:border-gold/50 transition-all group">
+                        <div class="flex justify-between items-start mb-6">
+                            <h3 class="text-2xl font-bold text-white group-hover:text-gold transition-colors">The
+                                Headless Cart</h3>
+                            <span
+                                class="text-xs font-mono text-gray-500 border border-white/10 px-2 py-1 rounded">ECOMMERCE</span>
+                        </div>
+                        <p class="text-gray-400 mb-6 text-sm leading-relaxed">
+                            <strong>The Problem:</strong> Shopify themes are bloated. They load unused JS, killing your
+                            mobile conversion rate.
+                            <br><br>
+                            <strong>The Solution:</strong> We decouple the frontend using <strong>Hydrogen or
+                                Next.js</strong>. The site loads instantly. We code custom "Sticky Add-to-Carts" and
+                            "Slide-Out Drawers" that feel like a native app.
+                        </p>
+                        <div class="bg-black/50 p-4 rounded border border-white/5 font-mono text-xs text-green-400">
+                            > Implements: Shopify Storefront API<br>
+                            > Feature: Instant Page Transitions<br>
+                            > Result: +30% Mobile CVR
+                        </div>
+                    </div>
+
+                    <!-- Protocol 2: The Tripwire -->
+                    <div
+                        class="bg-dark-900 border border-white/10 rounded-2xl p-8 hover:border-gold/50 transition-all group">
+                        <div class="flex justify-between items-start mb-6">
+                            <h3 class="text-2xl font-bold text-white group-hover:text-gold transition-colors">The
+                                Tripwire Engine</h3>
+                            <span class="text-xs font-mono text-gray-500 border border-white/10 px-2 py-1 rounded">SLO
+                                FUNNEL</span>
+                        </div>
+                        <p class="text-gray-400 mb-6 text-sm leading-relaxed">
+                            <strong>The Secret:</strong> How to liquidate your ad costs on day one. We build a "2-Step
+                            Order Form" funnel.
+                            <br><br>
+                            <strong>The Stack:</strong> Step 1 captures the lead (email) even if they don't buy. Step 2
+                            offers a low-ticket product ($27-$47). Immediately after, we hit them with a
+                            <strong>One-Click Upsell</strong> (OTO) that adds pure profit without re-entering credit
+                            card info.
+                        </p>
+                        <div class="bg-black/50 p-4 rounded border border-white/5 font-mono text-xs text-green-400">
+                            > Tech: Stripe Elements + Webhooks<br>
+                            > Feature: Cart Abandonment Recovery<br>
+                            > Result: $0 CAC (Cost of Acquisition)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CATEGORY 2: LEAD GEN -->
+        <section id="leads" class="py-24 bg-dark-900 border-y border-white/5">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="flex items-center gap-4 mb-12">
+                    <div class="p-4 bg-blue-500/10 rounded-xl border border-blue-500/20"><i
+                            class="fa-solid fa-magnet text-3xl text-blue-500"></i></div>
+                    <div>
+                        <h2 class="text-3xl font-bold text-white">Lead Generation</h2>
+                        <p class="text-gray-400">For Cold Traffic & List Building</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <!-- Protocol 3: The Listicle -->
+                    <div
+                        class="bg-dark-800 border border-white/10 rounded-2xl p-8 hover:border-gold/50 transition-all group">
+                        <div class="flex justify-between items-start mb-6">
+                            <h3 class="text-2xl font-bold text-white group-hover:text-gold transition-colors">The
+                                Pre-Sell Editorial</h3>
+                            <span
+                                class="text-xs font-mono text-gray-500 border border-white/10 px-2 py-1 rounded">NATIVE
+                                ADS</span>
+                        </div>
+                        <p class="text-gray-400 mb-6 text-sm leading-relaxed">
+                            <strong>Stop Selling, Start Educating.</strong> Cold traffic hates being sold. We build
+                            "Listicle" or "Advertorial" pages that look like news sites (CNBC, Healthline style).
+                            <br><br>
+                            These pages warm up the user, handle objections via storytelling, and prime the click. By
+                            the time they hit your offer page, they are pre-sold.
+                        </p>
+                        <div class="bg-black/50 p-4 rounded border border-white/5 font-mono text-xs text-blue-400">
+                            > Tech: AMP-Compliant HTML<br>
+                            > Feature: UTM Parameter Passthrough<br>
+                            > Result: 50% Lower CPCs on Meta/TikTok
+                        </div>
+                    </div>
+
+                    <!-- Protocol 4: The Quiz -->
+                    <div
+                        class="bg-dark-800 border border-white/10 rounded-2xl p-8 hover:border-gold/50 transition-all group">
+                        <div class="flex justify-between items-start mb-6">
+                            <h3 class="text-2xl font-bold text-white group-hover:text-gold transition-colors">The
+                                Segmentation Loop</h3>
+                            <span
+                                class="text-xs font-mono text-gray-500 border border-white/10 px-2 py-1 rounded">ZERO-PARTY
+                                DATA</span>
+                        </div>
+                        <p class="text-gray-400 mb-6 text-sm leading-relaxed">
+                            <strong>The Diagnostic.</strong> Don't just ask for an email. Ask questions. "What is your
+                            skin type?" "What is your budget?"
+                            <br><br>
+                            We build custom interactive quizzes that segment users into different buckets. We then use
+                            <strong>Liquid Logic</strong> to show them a personalized product recommendation based on
+                            their answers.
+                        </p>
+                        <div class="bg-black/50 p-4 rounded border border-white/5 font-mono text-xs text-blue-400">
+                            > Tech: Conditional Logic Branching<br>
+                            > Integration: Klaviyo Custom Properties<br>
+                            > Result: 2x Higher Email Open Rates
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CATEGORY 3: INBOUND CALLS -->
+        <section id="calls" class="py-24 bg-dark-800 border-y border-white/5">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="flex items-center gap-4 mb-12">
+                    <div class="p-4 bg-purple-500/10 rounded-xl border border-purple-500/20"><i
+                            class="fa-solid fa-phone text-3xl text-purple-500"></i></div>
+                    <div>
+                        <h2 class="text-3xl font-bold text-white">Inbound Calls</h2>
+                        <p class="text-gray-400">For High-Ticket Agencies & Consultants</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <!-- Protocol 5: The VSL -->
+                    <div
+                        class="bg-dark-900 border border-white/10 rounded-2xl p-8 hover:border-gold/50 transition-all group">
+                        <div class="flex justify-between items-start mb-6">
+                            <h3 class="text-2xl font-bold text-white group-hover:text-gold transition-colors">The VSL
+                                Application</h3>
+                            <span class="text-xs font-mono text-gray-500 border border-white/10 px-2 py-1 rounded">HIGH
+                                TICKET</span>
+                        </div>
+                        <p class="text-gray-400 mb-6 text-sm leading-relaxed">
+                            <strong>The Setter.</strong> If you sell anything over $2,000, you need a Video Sales
+                            Letter.
+                            <br><br>
+                            We code a "Timed Reveal" funnel. The "Book a Call" button <strong>does not exist</strong>
+                            until the user has watched enough of the video to be qualified. This filters out the
+                            tire-kickers and ensures your sales team only talks to informed prospects.
+                        </p>
+                        <div class="bg-black/50 p-4 rounded border border-white/5 font-mono text-xs text-purple-400">
+                            > Tech: Wistia/Vimeo Player API<br>
+                            > Feature: Watch-Time Tracking -> CRM<br>
+                            > Result: 80% Show-Up Rates
+                        </div>
+                    </div>
+
+                    <!-- Protocol 6: Calendar Direct -->
+                    <div
+                        class="bg-dark-900 border border-white/10 rounded-2xl p-8 hover:border-gold/50 transition-all group">
+                        <div class="flex justify-between items-start mb-6">
+                            <h3 class="text-2xl font-bold text-white group-hover:text-gold transition-colors">The
+                                Calendar Direct</h3>
+                            <span
+                                class="text-xs font-mono text-gray-500 border border-white/10 px-2 py-1 rounded">RETARGETING</span>
+                        </div>
+                        <p class="text-gray-400 mb-6 text-sm leading-relaxed">
+                            <strong>The Low Friction Play.</strong> For warm audiences (email list or retargeting), we
+                            skip the VSL.
+                            <br><br>
+                            We embed a custom-styled scheduler (Calendly/GoHighLevel) directly onto the page. No
+                            redirects. No fluff. Just "Pick a Time." We use webhook automations to send SMS reminders
+                            instantly.
+                        </p>
+                        <div class="bg-black/50 p-4 rounded border border-white/5 font-mono text-xs text-purple-400">
+                            > Tech: Embed API + CSS Overrides<br>
+                            > Feature: Instant SMS Confirmation<br>
+                            > Result: 20% Increase in Booking Volume
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CATEGORY 4: COURSES -->
+        <section id="courses" class="py-24 bg-dark-900">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="flex items-center gap-4 mb-12">
+                    <div class="p-4 bg-orange-500/10 rounded-xl border border-orange-500/20"><i
+                            class="fa-solid fa-graduation-cap text-3xl text-orange-500"></i></div>
+                    <div>
+                        <h2 class="text-3xl font-bold text-white">Courses & Info</h2>
+                        <p class="text-gray-400">For Creators & Experts</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <!-- Protocol 7: Product Launch -->
+                    <div
+                        class="bg-dark-800 border border-white/10 rounded-2xl p-8 hover:border-gold/50 transition-all group">
+                        <div class="flex justify-between items-start mb-6">
+                            <h3 class="text-2xl font-bold text-white group-hover:text-gold transition-colors">The Launch
+                                Formula</h3>
+                            <span class="text-xs font-mono text-gray-500 border border-white/10 px-2 py-1 rounded">EVENT
+                                BASED</span>
+                        </div>
+                        <p class="text-gray-400 mb-6 text-sm leading-relaxed">
+                            <strong>The Sideways Letter.</strong> Based on Jeff Walker's PLF. We build a 4-part video
+                            sequence page.
+                            <br><br>
+                            Video 1 (The Opportunity), Video 2 (The Transformation), Video 3 (The Ownership), Video 4
+                            (The Offer). We use "Unlock Dates" to prevent binging, building massive anticipation before
+                            the cart opens.
+                        </p>
+                        <div class="bg-black/50 p-4 rounded border border-white/5 font-mono text-xs text-orange-400">
+                            > Tech: Scheduled Content Locking<br>
+                            > Feature: Waitlist Viral Sharing<br>
+                            > Result: Massive "Day 1" Spikes
+                        </div>
+                    </div>
+
+                    <!-- Protocol 8: The Challenge -->
+                    <div
+                        class="bg-dark-800 border border-white/10 rounded-2xl p-8 hover:border-gold/50 transition-all group">
+                        <div class="flex justify-between items-start mb-6">
+                            <h3 class="text-2xl font-bold text-white group-hover:text-gold transition-colors">The 5-Day
+                                Challenge</h3>
+                            <span
+                                class="text-xs font-mono text-gray-500 border border-white/10 px-2 py-1 rounded">COMMUNITY</span>
+                        </div>
+                        <p class="text-gray-400 mb-6 text-sm leading-relaxed">
+                            <strong>The Relationship Builder.</strong> Sell a low-ticket ($17) seat to a live 5-day
+                            workshop.
+                            <br><br>
+                            We engineer the "VIP Upgrade" flow. After they buy General Admission, we upsell them to VIP
+                            (Zoom Backstage Pass) for $97. This covers your ad spend immediately, while you build a
+                            cult-like following.
+                        </p>
+                        <div class="bg-black/50 p-4 rounded border border-white/5 font-mono text-xs text-orange-400">
+                            > Tech: Facebook Group Gatekeeping<br>
+                            > Feature: Gamified Homework Submission<br>
+                            > Result: High Trust, High LTV
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="py-24 bg-gradient-to-br from-dark-800 to-black text-center px-6 border-t border-white/10">
+            <div class="max-w-3xl mx-auto">
+                <h2 class="text-4xl md:text-5xl font-black text-white mb-6">Which Architecture Do You Need?</h2>
+                <p class="text-gray-400 mb-10 text-lg">Don't guess. We will audit your current funnel and tell you
+                    exactly which protocol will double your conversion rate.</p>
+                <a href="/#audit"
+                    class="inline-block px-10 py-5 bg-gold text-black font-bold rounded-xl hover:bg-gold-light transition-all shadow-lg shadow-gold/20 transform hover:-translate-y-1">
+                    Initialize Architecture Audit
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="py-12 border-t border-white/10 bg-black text-center">
+        <div class="max-w-7xl mx-auto px-6">
+            <a href="index.html" class="text-xl font-black tracking-tighter text-white">JUMPSTART <span
+                    class="text-gold">SCALING</span></a>
+            <p class="text-gray-700 text-xs mt-4">© 2026 Jumpstart Scaling. All rights reserved.</p>
+        </div>
+    </footer>
+
+</body>
+
+</html>

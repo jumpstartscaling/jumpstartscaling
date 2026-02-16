@@ -1,0 +1,56 @@
+;; Corrected DNS Zone for jumpstartscaling.com
+;; ALL RECORDS POINT TO ORACLE SERVER (150.136.117.198)
+
+;; SOA Record
+jumpstartscaling.com.	3600	IN	SOA	ara.ns.cloudflare.com. dns.cloudflare.com. 2051982700 10000 2400 604800 3600
+
+;; NS Records
+jumpstartscaling.com.	86400	IN	NS	ara.ns.cloudflare.com.
+jumpstartscaling.com.	86400	IN	NS	glen.ns.cloudflare.com.
+
+;; --- PRIMARY RECORDS ---
+jumpstartscaling.com.	1	IN	A	150.136.117.198	; cf_tags=cf-proxied:true
+www.jumpstartscaling.com.	1	IN	A	150.136.117.198	; cf_tags=cf-proxied:true
+*.jumpstartscaling.com.	1	IN	A	150.136.117.198	; cf_tags=cf-proxied:true
+
+;; --- APP & INFRASTRUCTURE ---
+n8n.jumpstartscaling.com.	1	IN	A	150.136.117.198	; cf_tags=cf-proxied:true
+api.jumpstartscaling.com.	1	IN	A	150.136.117.198	; cf_tags=cf-proxied:true
+ai.jumpstartscaling.com.	1	IN	A	150.136.117.198	; cf_tags=cf-proxied:true
+cms.jumpstartscaling.com.	1	IN	A	150.136.117.198	; cf_tags=cf-proxied:true
+godmode.jumpstartscaling.com.	1	IN	A	150.136.117.198	; cf_tags=cf-proxied:true
+cockpit.jumpstartscaling.com.	1	IN	A	150.136.117.198	; cf_tags=cf-proxied:true
+reaper.jumpstartscaling.com.	1	IN	A	150.136.117.198	; cf_tags=cf-proxied:true
+reaper-api.jumpstartscaling.com.	1	IN	A	150.136.117.198	; cf_tags=cf-proxied:true
+no.jumpstartscaling.com.	1	IN	A	150.136.117.198	; cf_tags=cf-proxied:true
+ion.jumpstartscaling.com.	1	IN	A	150.136.117.198	; cf_tags=cf-proxied:true
+ion-api.jumpstartscaling.com.	1	IN	A	150.136.117.198	; cf_tags=cf-proxied:true
+ion-ai.jumpstartscaling.com.	1	IN	A	150.136.117.198	; cf_tags=cf-proxied:true
+chrisamaya.work.jumpstartscaling.com.	1	IN	A	150.136.117.198	; cf_tags=cf-proxied:true
+
+;; --- LEGACY SUBDOMAINS (Updates from Old Host -> Oracle) ---
+app.jumpstartscaling.com.	1	IN	A	150.136.117.198	; cf_tags=cf-proxied:true
+b.jumpstartscaling.com.	1	IN	A	150.136.117.198	; cf_tags=cf-proxied:true
+connect.jumpstartscaling.com.	1	IN	A	150.136.117.198	; cf_tags=cf-proxied:true
+core.jumpstartscaling.com.	1	IN	A	150.136.117.198	; cf_tags=cf-proxied:true
+egg.jumpstartscaling.com.	1	IN	A	150.136.117.198	; cf_tags=cf-proxied:true
+gitthis.jumpstartscaling.com.	1	IN	A	150.136.117.198	; cf_tags=cf-proxied:true
+god.jumpstartscaling.com.	1	IN	A	150.136.117.198	; cf_tags=cf-proxied:true
+green.jumpstartscaling.com.	1	IN	A	150.136.117.198	; cf_tags=cf-proxied:true
+hero.jumpstartscaling.com.	1	IN	A	150.136.117.198	; cf_tags=cf-proxied:true
+jjj.jumpstartscaling.com.	1	IN	A	150.136.117.198	; cf_tags=cf-proxied:true
+launch.jumpstartscaling.com.	1	IN	A	150.136.117.198	; cf_tags=cf-proxied:true
+net1.jumpstartscaling.com.	1	IN	A	150.136.117.198	; cf_tags=cf-proxied:true
+nocore.jumpstartscaling.com.	1	IN	A	150.136.117.198	; cf_tags=cf-proxied:true
+office.jumpstartscaling.com.	1	IN	A	150.136.117.198	; cf_tags=cf-proxied:true
+red.jumpstartscaling.com.	1	IN	A	150.136.117.198	; cf_tags=cf-proxied:true
+solar.jumpstartscaling.com.	1	IN	A	150.136.117.198	; cf_tags=cf-proxied:true
+spark.jumpstartscaling.com.	1	IN	A	150.136.117.198	; cf_tags=cf-proxied:true
+universe.jumpstartscaling.com.	1	IN	A	150.136.117.198	; cf_tags=cf-proxied:true
+
+;; --- PRESERVED RECORDS (MX, TXT) ---
+jumpstartscaling.com.	1	IN	MX	87 route3.mx.cloudflare.net.
+jumpstartscaling.com.	1	IN	MX	99 route2.mx.cloudflare.net.
+jumpstartscaling.com.	1	IN	MX	50 route1.mx.cloudflare.net.
+cf2024-1._domainkey.jumpstartscaling.com.	1	IN	TXT	"v=DKIM1; h=sha256; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAiweykoi+o48IOGuP7GR3X0MOExCUDY/BCRHoWBnh3rChl7WhdyCxW3jgq1daEjPPqoi7sJvdg5hEQVsgVRQP4DcnQDVjGMbASQtrY4WmB1VebF+RPJB2ECPsEDTpeiI5ZyUAwJaVX7r6bznU67g7LvFq35yIo4sdlmtZGV+i0H4cpYH9+3JJ78k" "m4KXwaf9xUJCWF6nxeD+qG6Fyruw1Qlbds2r85U9dkNDVAS3gioCvELryh1TxKGiVTkg4wqHTyHfWsp7KD3WQHYJn0RyfJJu6YEmL77zonn7p2SRMvTMP3ZEXibnC9gz3nnhR6wcYL8Q7zXypKTMD58bTixDSJwIDAQAB"
+jumpstartscaling.com.	1	IN	TXT	"v=spf1 include:_spf.mx.cloudflare.net ~all"

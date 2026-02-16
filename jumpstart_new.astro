@@ -1,0 +1,194 @@
+---
+/**
+ * Jumpstart Scaling - Homepage
+ * Theme: High-Ticket Authority / Revenue Infrastructure
+ */
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CommandNav from '../components/CommandNav.astro';
+import CommandHero from '../components/CommandHero.astro';
+import ConsultativeAudit from '../components/ConsultativeAudit.astro'; // NEW
+import ProblemSolution from '../components/ProblemSolution.astro';
+import StatsCounter from '../components/StatsCounter.astro';
+import GlassCard from '../components/GlassCard.astro';
+import GoldenList from '../components/GoldenList.astro';
+
+// DATA CONFIGURATION
+const statsData = {
+  sectionTitle: "PROTOCOL RESULTS",
+  stats: [
+    { value: 4.8, suffix: "x", label: "AVERAGE ROAS" },
+    { value: 127, suffix: "", label: "SYSTEMS DEPLOYED" },
+    { value: 99.9, suffix: "%", label: "UPTIME" },
+    { value: 24, suffix: "M", prefix: "$", label: "REVENUE GENERATED" }
+  ]
+};
+---
+
+<BaseLayout 
+  title="Jumpstart Scaling - Revenue Infrastructure for B2B Leaders"
+  description="We build automated acquisition systems for 7-figure companies. No manual work. Just code and results."
+>
+  <CommandNav ctaText="Start Audit" ctaHref="#audit" />
+  
+  <CommandHero 
+    title="REVENUE INFRASTRUCTURE"
+    subtitle="We build self-optimizing growth systems that allow 7-figure companies to scale to 8 figures with mathematical certainty."
+    primaryCTA={{ text: "START AUDIT", href: "#audit" }}
+    secondaryCTA={{ text: "VIEW SYSTEMS", href: "#systems" }}
+  />
+  
+  <!-- PROBLEM / AGITATION -->
+  <div id="mission" class="border-t border-white/10 bg-[#050505]">
+    <div class="py-24 container mx-auto px-4 text-center max-w-4xl">
+      <h2 class="text-xs font-bold font-mono text-gold-500 tracking-[0.2em] uppercase mb-6">THE BOTTLENECK</h2>
+      <h3 class="text-4xl md:text-5xl font-bold text-white mb-8 leading-tight">
+        You Cannot Scale What You Must Manually Steer.
+      </h3>
+      <p class="text-xl text-gray-400 leading-relaxed mb-12">
+        Most companies stall at $1M-$3M because their growth depends on human effort—manual ad buying, manual lead follow-up, and manual reporting.
+        To break through, you must replace "effort" with "infrastructure".
+      </p>
+      
+      <div class="grid md:grid-cols-3 gap-8 text-left">
+        <GlassCard title="Variance" accent="red">
+          <p class="text-sm text-gray-400 mt-2">Revenue swings wildly based on who is "on their game" this week.</p>
+        </GlassCard>
+        <GlassCard title="Latency" accent="red">
+          <p class="text-sm text-gray-400 mt-2">Leads sit in your CRM for hours before being contacted, killing conversion.</p>
+        </GlassCard>
+        <GlassCard title="Blindness" accent="red">
+          <p class="text-sm text-gray-400 mt-2">You turn off winning ads because you can't see their true ROAS.</p>
+        </GlassCard>
+      </div>
+    </div>
+  </div>
+  
+  <!-- DEEP DIVE SECTIONS (The "Cool Informative" parts) -->
+  <div id="systems" class="bg-black">
+    
+    <!-- System 1: Acquisition -->
+    <section class="py-24 border-t border-white/10 relative overflow-hidden">
+      <div class="container mx-auto px-4 grid md:grid-cols-2 gap-16 items-center relative z-10">
+        <div>
+          <h4 class="text-gold-500 font-mono text-xs tracking-[0.2em] mb-4">SYSTEM 01 // ACQUISITION</h4>
+          <h2 class="text-4xl font-bold text-white mb-6">The ROAS Reactor</h2>
+          <p class="text-lg text-gray-400 mb-8 leading-relaxed">
+            Stop betting on luck. We deploy algorithmic bidding strategies that isolate your exact B2B buyer persona and optimize spend in real-time.
+          </p>
+          <GoldenList 
+            items={[
+              "Algorithmic Campaign Management",
+              "20+ Creative Tests Per Week",
+              "Cross-Channel Retargeting Grid"
+            ]}
+          />
+          <div class="mt-8">
+            <a href="/services/paid-acquisition" class="text-white border-b border-gold-500 pb-1 hover:text-gold-500 transition-colors uppercase tracking-widest text-sm font-bold">
+              Explore Acquisition Architecture >>
+            </a>
+          </div>
+        </div>
+        <div class="relative h-[400px] bg-[#0a0a0a] border border-white/10 rounded-sm p-4 flex items-center justify-center group hover:border-gold-500/30 transition-colors">
+          <!-- Visual Placeholder for ROAS Graph -->
+          <div class="text-center">
+            <div class="text-6xl font-bold text-white mb-2 font-mono">4.8x</div>
+            <div class="text-xs text-gold-500 tracking-widest uppercase">Average Sector ROAS</div>
+          </div>
+          <!-- Grid lines -->
+          <div class="absolute inset-0 bg-grid-pattern opacity-10"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- System 2: Funnels -->
+    <section class="py-24 border-t border-white/10 relative overflow-hidden bg-[#050505]">
+      <div class="container mx-auto px-4 grid md:grid-cols-2 gap-16 items-center relative z-10">
+        <div class="order-2 md:order-1 relative h-[400px] bg-[#0a0a0a] border border-white/10 rounded-sm p-4 flex items-center justify-center group hover:border-gold-500/30 transition-colors">
+           <!-- Visual Placeholder for Conversion -->
+           <div class="text-center">
+            <div class="text-6xl font-bold text-white mb-2 font-mono">40%</div>
+            <div class="text-xs text-gold-500 tracking-widest uppercase">Traffic-to-Lead Conv.</div>
+          </div>
+           <div class="absolute inset-0 bg-grid-pattern opacity-10"></div>
+        </div>
+        <div class="order-1 md:order-2">
+          <h4 class="text-gold-500 font-mono text-xs tracking-[0.2em] mb-4">SYSTEM 02 // CONVERSION</h4>
+          <h2 class="text-4xl font-bold text-white mb-6">Velocity Funnel Architecture</h2>
+          <p class="text-lg text-gray-400 mb-8 leading-relaxed">
+            Traffic is vanity. Conversions are sanity. We build high-velocity landing pages that load in under 1 second and filter out unqualified leads automatically.
+          </p>
+          <GoldenList 
+            iconType="lightning"
+            items={[
+              "Sub-Second Load Times",
+              "Pre-Suasion VSL Framework",
+              "Automated Lead Qualification"
+            ]}
+          />
+          <div class="mt-8">
+            <a href="/services/funnel-architecture" class="text-white border-b border-gold-500 pb-1 hover:text-gold-500 transition-colors uppercase tracking-widest text-sm font-bold">
+              View Filtration System >>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- System 3: Data -->
+    <section class="py-24 border-t border-white/10 relative overflow-hidden">
+      <div class="container mx-auto px-4 grid md:grid-cols-2 gap-16 items-center relative z-10">
+        <div>
+          <h4 class="text-gold-500 font-mono text-xs tracking-[0.2em] mb-4">SYSTEM 03 // INTELLIGENCE</h4>
+          <h2 class="text-4xl font-bold text-white mb-6">The Data Radar</h2>
+          <p class="text-lg text-gray-400 mb-8 leading-relaxed">
+            The "Black Box" of marketing is over. We implement server-side tracking so you can see exactly which dollar drove which deal, bypassing iOS blockers.
+          </p>
+          <GoldenList 
+            iconType="server"
+            items={[
+              "Server-Side CAPI Tracking",
+              "Unified Revenue Dashboard",
+              "Multi-Touch Attribution Modeling"
+            ]}
+          />
+          <div class="mt-8">
+            <a href="/services/data-attribution" class="text-white border-b border-gold-500 pb-1 hover:text-gold-500 transition-colors uppercase tracking-widest text-sm font-bold">
+              Access Data Clarity >>
+            </a>
+          </div>
+        </div>
+        <div class="relative h-[400px] bg-[#0a0a0a] border border-white/10 rounded-sm p-4 flex items-center justify-center group hover:border-gold-500/30 transition-colors">
+           <!-- Visual Placeholder -->
+           <div class="text-center">
+            <div class="text-6xl font-bold text-white mb-2 font-mono">100%</div>
+            <div class="text-xs text-gold-500 tracking-widest uppercase">Signal Visibility</div>
+          </div>
+           <div class="absolute inset-0 bg-grid-pattern opacity-10"></div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+  
+  <div id="telemetry" class="border-t border-white/20">
+    <StatsCounter {...statsData} />
+  </div>
+
+  <!-- CONSULTATIVE AUDIT -->
+  <section id="audit" class="py-24 bg-black relative border-t border-white/20">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl md:text-5xl font-bold mb-4 text-white font-serif tracking-tight">
+          Apply for Protocol Access
+        </h2>
+        <p class="text-gray-400 max-w-2xl mx-auto">
+          We only work with companies we can mathematically scale. Use this audit to see if you qualify.
+        </p>
+      </div>
+      
+      <ConsultativeAudit />
+      
+    </div>
+  </section>
+</BaseLayout>

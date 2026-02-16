@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Jumpstart Scaling | The Revenue Operating System for $1M+ ARR</title>
+    <meta name="description"
+        content="We engineer exponential velocity. A full-stack growth agency combining paid acquisition, funnel architecture, and CRM automation to build predictable revenue systems.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+
+    <!-- CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: '#C9A961',
+                        'gold-dim': 'rgba(201, 169, 97, 0.1)',
+                        'bg-dark': '#050505',
+                        'bg-card': '#0A0A0A'
+                    },
+                    fontFamily: {
+                        mono: ['JetBrains Mono', 'monospace'],
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #050505;
+            color: white;
+            opacity: 1;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, #C9A961 0%, #FFE5A0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section-pad {
+            padding: 6rem 0;
+        }
+
+        @media (min-width: 768px) {
+            .section-pad {
+                padding: 8rem 0;
+            }
+        }
+
+        .glass-card {
+            background: #0A0A0A;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            border-color: #C9A961;
+            transform: translateY(-2px);
+        }
+
+        /* Orbit Animation */
+        .orbit-container {
+            width: 300px;
+            height: 300px;
+            position: relative;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .core {
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle, #c9a961, #8a733e);
+            border-radius: 50%;
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 30px #c9a96166;
+            font-weight: 900;
+            color: #000;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .orbit {
+            position: absolute;
+            border: 1px dashed rgba(255, 255, 255, .1);
+            border-radius: 50%;
+            animation: spin linear infinite;
+        }
+
+        .orbit-1 {
+            width: 180px;
+            height: 180px;
+            animation-duration: 20s;
+        }
+
+        .orbit-2 {
+            width: 280px;
+            height: 280px;
+            animation-duration: 35s;
+            animation-direction: reverse;
+        }
+
+        .planet {
+            position: absolute;
+            background: #000;
+            border: 1px solid #333;
+            color: #fff;
+            font-size: .7rem;
+            padding: 4px 8px;
+            border-radius: 12px;
+            white-space: nowrap;
+            animation: counter-spin linear infinite;
+        }
+
+        /* Planet Positions */
+        .p1 {
+            top: 50%;
+            left: -20px;
+        }
+
+        .p2 {
+            top: 50%;
+            right: -20px;
+        }
+
+        .p3 {
+            top: 0;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .p4 {
+            bottom: 30px;
+            left: 30px;
+        }
+
+        .p5 {
+            bottom: 30px;
+            right: 30px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes counter-spin {
+            0% {
+                transform: rotate(0);
+            }
+
+            to {
+                transform: rotate(-360deg);
+            }
+        }
+
+        .orbit-1 .planet {
+            animation-duration: 20s;
+        }
+
+        .orbit-2 .planet {
+            animation-duration: 35s;
+            animation-direction: reverse;
+        }
+    </style>
+
+    <!-- Microsoft Clarity -->
+    <script type="text/javascript">
+            (function (c, l, a, r, i, t, y) {
+                c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments) };
+                t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i;
+                y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
+            })(window, document, "clarity", "script", "ueehvbrmy3");
+    </script>
+</head>
+
+<body class="bg-bg-dark text-white overflow-x-hidden selection:bg-gold selection:text-black">
+
+    <!-- Particles Background -->
+    <div id="particles-container" class="fixed inset-0 z-0 opacity-20 pointer-events-none"></div>
+
+    <!-- NAVIGATION -->
+    <nav class="fixed top-0 w-full bg-black/80 backdrop-blur-md border-b border-white/10 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="/"
+                class="text-xl md:text-2xl font-black tracking-tight hover:text-gold transition-colors">JUMPSTART
+                SCALING</a>
+            <div class="hidden md:flex gap-8 items-center text-sm font-medium">
+                <a href="#protocols" class="hover:text-gold transition-colors">Protocols</a>
+                <a href="#survey"
+                    class="px-5 py-2 bg-gold text-black font-bold rounded-lg hover:bg-gold/90 transition-all">Get
+                    Audit</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="relative z-10">
+
+        <!-- HERO SECTION -->
+        <section class="min-h-screen flex items-center justify-center px-6 pt-24 pb-12 relative overflow-hidden">
+            <div class="max-w-5xl mx-auto text-center relative z-10">
+                <div
+                    class="inline-block px-3 py-1 mb-6 border border-white/10 rounded-full bg-white/5 backdrop-blur-sm">
+                    <span class="font-mono text-xs md:text-sm tracking-widest text-gray-400 uppercase">
+                        <span class="text-gold mr-2">●</span>System Status: Online
+                    </span>
+                </div>
+
+                <h1 class="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight leading-tight mb-6">
+                    Stop Guessing.<br>
+                    Start <span class="text-gradient">Scaling.</span>
+                </h1>
+
+                <p class="text-lg md:text-2xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
+                    We build predictable revenue systems for businesses doing <span class="text-white font-semibold">$1M
+                        - $10M ARR</span>. No hacks. Just engineering.
+                </p>
+
+                <div class="flex flex-col md:flex-row gap-4 justify-center items-center">
+                    <a href="#survey"
+                        class="group relative px-8 py-4 bg-gold text-black font-bold text-lg rounded-lg overflow-hidden transition-all hover:scale-105">
+                        <span class="relative">Get Your Growth Audit</span>
+                    </a>
+                    <a href="#protocols"
+                        class="px-8 py-4 border border-white/20 hover:border-gold text-white font-medium rounded-lg transition-colors">
+                        View Protocols
+                    </a>
+                </div>
+
+                <div class="mt-16 pt-8 border-t border-white/5">
+                    <p class="font-mono text-xs text-gray-600 mb-4 tracking-widest">SYSTEMS DEPLOYED FOR</p>
+                    <div
+                        class="flex flex-wrap justify-center gap-8 md:gap-16 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
+                        <span class="text-xl font-bold">SHOPIFY PLUS</span>
+                        <span class="text-xl font-bold">HUBSPOT</span>
+                        <span class="text-xl font-bold">KLAVIYO</span>
+                        <span class="text-xl font-bold">META</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DIAGNOSIS SECTION -->
+        <section class="section-pad bg-[#080808] border-y border-white/5">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+                    <div>
+                        <h2 class="text-3xl md:text-5xl font-bold mb-6">The "Growth Plateau" is a Data Problem.</h2>
+                        <div class="space-y-6 text-gray-400 text-lg">
+                            <p>
+                                You have product-market fit. You have revenue. But scaling past $100k/mo has become
+                                exponentially harder. CPA is rising, attribution is broken, and your team is guessing.
+                            </p>
+                            <p>
+                                <strong>The Agency Model is dead.</strong> You don't need "more ads." You need a
+                                holistic revenue ecosystem that connects acquisition, retention, and data into a single
+                                source of truth.
+                            </p>
+                            <ul class="space-y-3 mt-4">
+                                <li class="flex items-center gap-3"><span class="text-red-500">✕</span> Disconnected
+                                    Funnels</li>
+                                <li class="flex items-center gap-3"><span class="text-red-500">✕</span> Leaky CRMs</li>
+                                <li class="flex items-center gap-3"><span class="text-red-500">✕</span> Vanity Metrics
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- ORBIT VISUAL -->
+                    <div
+                        class="relative h-[400px] w-full bg-gradient-to-br from-gray-900 to-black rounded-2xl border border-white/10 flex items-center justify-center overflow-hidden group">
+                        <div
+                            class="absolute inset-0 flex items-center justify-center opacity-70 group-hover:opacity-100 transition-opacity duration-700">
+                            <div class="orbit-container">
+                                <div class="core"><span class="text-xl">JS</span></div>
+                                <div class="orbit orbit-1">
+                                    <div class="planet p1">HubSpot</div>
+                                    <div class="planet p2">Google</div>
+                                </div>
+                                <div class="orbit orbit-2">
+                                    <div class="planet p3">Meta</div>
+                                    <div class="planet p4">Shopify</div>
+                                    <div class="planet p5">TikTok</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            class="z-10 bg-black/80 backdrop-blur px-6 py-3 border border-gold/30 rounded text-gold font-mono text-sm mt-32">
+                            ERROR: SILO DETECTED
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROTOCOLS GRID -->
+        <section id="protocols" class="section-pad px-6">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center mb-16">
+                    <span class="font-mono text-gold text-sm tracking-widest uppercase">Our Architecture</span>
+                    <h2 class="text-4xl md:text-5xl font-bold mt-2 mb-4">Core Growth Protocols</h2>
+                    <p class="text-gray-400 max-w-2xl mx-auto">We don't sell services. We install systems. Select a
+                        protocol to initiate.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Included in Astro Design -->
+                    <a href="/services/paid-acquisition.html"
+                        class="glass-card p-8 rounded-2xl group flex flex-col justify-between h-full">
+                        <div>
+                            <div
+                                class="w-12 h-12 bg-gold/10 rounded-lg flex items-center justify-center mb-6 text-2xl group-hover:text-gold transition-colors">
+                                ⚡️</div>
+                            <h3 class="text-2xl font-bold mb-3">Paid Acquisition</h3>
+                            <p class="text-gray-400 mb-6 text-sm leading-relaxed">Scientific media buying across Meta,
+                                Google, and LinkedIn. optimized for MER and LTV.</p>
+                        </div>
+                        <div class="text-gold font-bold text-sm flex items-center gap-2">Explore Protocol →</div>
+                    </a>
+
+                    <a href="/services/funnel-architecture.html"
+                        class="glass-card p-8 rounded-2xl group flex flex-col justify-between h-full">
+                        <div>
+                            <div
+                                class="w-12 h-12 bg-gold/10 rounded-lg flex items-center justify-center mb-6 text-2xl group-hover:text-gold transition-colors">
+                                📐</div>
+                            <h3 class="text-2xl font-bold mb-3">Funnel Architecture</h3>
+                            <p class="text-gray-400 mb-6 text-sm leading-relaxed">High-velocity landing pages with
+                                sub-100ms load times using advanced static architecture.</p>
+                        </div>
+                        <div class="text-gold font-bold text-sm flex items-center gap-2">Explore Protocol →</div>
+                    </a>
+
+                    <a href="/services/crm-transformation.html"
+                        class="glass-card p-8 rounded-2xl group flex flex-col justify-between h-full">
+                        <div>
+                            <div
+                                class="w-12 h-12 bg-gold/10 rounded-lg flex items-center justify-center mb-6 text-2xl group-hover:text-gold transition-colors">
+                                ⚙️</div>
+                            <h3 class="text-2xl font-bold mb-3">CRM & Automation</h3>
+                            <p class="text-gray-400 mb-6 text-sm leading-relaxed">Automated nurture pipelines in
+                                HubSpot/GoHighLevel turning leads into booked calls.</p>
+                        </div>
+                        <div class="text-gold font-bold text-sm flex items-center gap-2">Explore Protocol →</div>
+                    </a>
+
+                    <a href="/services/data-attribution.html"
+                        class="glass-card p-8 rounded-2xl group flex flex-col justify-between h-full">
+                        <div>
+                            <div
+                                class="w-12 h-12 bg-gold/10 rounded-lg flex items-center justify-center mb-6 text-2xl group-hover:text-gold transition-colors">
+                                📊</div>
+                            <h3 class="text-2xl font-bold mb-3">Data Attribution</h3>
+                            <p class="text-gray-400 mb-6 text-sm leading-relaxed">Server-side CAPI and Hyros/TripleWhale
+                                setups for 99% data accuracy post-iOS14.</p>
+                        </div>
+                        <div class="text-gold font-bold text-sm flex items-center gap-2">Explore Protocol →</div>
+                    </a>
+
+                    <a href="/services/authority-engine.html"
+                        class="glass-card p-8 rounded-2xl group flex flex-col justify-between h-full">
+                        <div>
+                            <div
+                                class="w-12 h-12 bg-gold/10 rounded-lg flex items-center justify-center mb-6 text-2xl group-hover:text-gold transition-colors">
+                                👑</div>
+                            <h3 class="text-2xl font-bold mb-3">Authority Engine</h3>
+                            <p class="text-gray-400 mb-6 text-sm leading-relaxed">SEO-optimized content and LinkedIn
+                                strategies that position you as the market leader.</p>
+                        </div>
+                        <div class="text-gold font-bold text-sm flex items-center gap-2">Explore Protocol →</div>
+                    </a>
+
+                    <a href="/services/growth-retainer.html"
+                        class="glass-card p-8 rounded-2xl group border-gold/30 bg-gold/5 flex flex-col justify-between h-full relative overflow-hidden">
+                        <div
+                            class="absolute inset-0 bg-gradient-to-b from-gold/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                        </div>
+                        <div class="relative z-10">
+                            <div
+                                class="w-12 h-12 bg-gold text-black rounded-lg flex items-center justify-center mb-6 text-2xl font-bold">
+                                ★</div>
+                            <h3 class="text-2xl font-bold mb-3 text-white">Growth Retainer</h3>
+                            <p class="text-gray-300 mb-6 text-sm leading-relaxed">The "All-In" partnership. Fractional
+                                CMO and Growth Team implementation.</p>
+                        </div>
+                        <div class="text-gold font-bold text-sm flex items-center gap-2 relative z-10">Apply for
+                            Partnership →</div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- PHILOSOPHY SECTION -->
+        <section class="py-24 bg-gradient-to-b from-[#050505] to-[#0a0a0a] px-6">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl font-bold mb-8 text-center text-white">The Philosophy of Scale</h2>
+                <div class="text-gray-400 text-lg leading-relaxed space-y-6">
+                    <p>
+                        Scaling a company from $1M to $10M ARR requires a fundamental shift in physics. The tactics that
+                        got you to $1M—founder-led sales, referrals, and sporadic ads—will be the very things that break
+                        you at $5M.
+                    </p>
+                    <p>
+                        At Jumpstart Scaling, we believe in <strong>Systematic Resonance</strong>. This is the alignment
+                        of three critical vectors:
+                    </p>
+                    <ol class="list-decimal pl-6 space-y-2 mt-4 text-white">
+                        <li><strong>Message-Market Fit:</strong> Does your offer cut through the noise?</li>
+                        <li><strong>Unit Economics:</strong> Can you acquire a customer for $1 and make $4 back within
+                            60 days?</li>
+                        <li><strong>Technological Leverage:</strong> Is your CRM doing the work of 5 sales reps?</li>
+                    </ol>
+                    <p>
+                        Most agencies focus on one vector (usually ads). We engineer all three. We do not just bring you
+                        leads; we build the machine that processes, nurtures, and converts them into high-LTV clients.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SURVEY SECTION -->
+        <section id="survey" class="section-pad relative px-6 bg-black">
+            <div class="absolute inset-0 bg-gradient-to-b from-gray-900/20 to-black z-0"></div>
+            <div class="max-w-4xl mx-auto relative z-10">
+                <div class="text-center mb-12">
+                    <span
+                        class="inline-block py-1 px-3 rounded bg-gold/10 text-gold font-mono text-xs tracking-widest mb-4">LIMITED
+                        CAPACITY</span>
+                    <h2 class="text-4xl md:text-6xl font-black text-white mb-6">Initialize Audit</h2>
+                    <p class="text-gray-400 text-lg max-w-xl mx-auto">
+                        Tell us about your current infrastructure. If you qualify, we will build a custom Growth Roadmap
+                        (Valued at $2,500) for free.
+                    </p>
+                </div>
+
+                <!-- SURVEY CONTAINER -->
+                <div id="survey-container"
+                    class="bg-gradient-to-br from-[#0a0a0a] to-black border border-white/10 rounded-3xl p-8 md:p-12 relative overflow-hidden shadow-2xl">
+                    <!-- Progress Bar -->
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gray-800">
+                        <div id="progress-fill" class="h-full bg-gold transition-all duration-500" style="width: 20%">
+                        </div>
+                    </div>
+
+                    <!-- Step 1: Industry -->
+                    <div class="survey-step" data-step="0">
+                        <div class="flex justify-between items-center mb-8">
+                            <span class="text-gray-500 font-mono text-xs tracking-widest">01 / 05</span>
+                        </div>
+                        <h3 class="text-3xl font-bold mb-8 text-white">What type of business are you scaling?</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <button onclick="selectOption('industry', 'E-Commerce')"
+                                class="p-6 bg-white/5 border border-white/10 rounded-xl hover:border-gold hover:bg-gold/5 transition-all text-left text-white group">
+                                <div class="text-3xl mb-2">🛍️</div>
+                                <div class="font-semibold group-hover:text-gold">E-Commerce</div>
+                            </button>
+                            <button onclick="selectOption('industry', 'B2B / SaaS')"
+                                class="p-6 bg-white/5 border border-white/10 rounded-xl hover:border-gold hover:bg-gold/5 transition-all text-left text-white group">
+                                <div class="text-3xl mb-2">💻</div>
+                                <div class="font-semibold group-hover:text-gold">B2B / SaaS</div>
+                            </button>
+                            <button onclick="selectOption('industry', 'Service Agency')"
+                                class="p-6 bg-white/5 border border-white/10 rounded-xl hover:border-gold hover:bg-gold/5 transition-all text-left text-white group">
+                                <div class="text-3xl mb-2">🤝</div>
+                                <div class="font-semibold group-hover:text-gold">Service Agency</div>
+                            </button>
+                            <button onclick="selectOption('industry', 'Local Business')"
+                                class="p-6 bg-white/5 border border-white/10 rounded-xl hover:border-gold hover:bg-gold/5 transition-all text-left text-white group">
+                                <div class="text-3xl mb-2">📍</div>
+                                <div class="font-semibold group-hover:text-gold">Local Business</div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Revenue -->
+                    <div class="survey-step hidden" data-step="1">
+                        <div class="flex justify-between items-center mb-8">
+                            <span class="text-gray-500 font-mono text-xs tracking-widest">02 / 05</span>
+                            <button onclick="prevStep()" class="text-gray-500 hover:text-white transition-colors">←
+                                Back</button>
+                        </div>
+                        <h3 class="text-3xl font-bold mb-8 text-white">Current monthly revenue?</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <button onclick="selectOption('revenue', '< $10k/mo')"
+                                class="p-6 bg-white/5 border border-white/10 rounded-xl hover:border-gold hover:bg-gold/5 transition-all text-left text-white group">
+                                <div class="text-3xl mb-2">🌱</div>
+                                <div class="font-semibold group-hover:text-gold">&lt; $10k/mo</div>
+                            </button>
+                            <button onclick="selectOption('revenue', '$10k - $50k')"
+                                class="p-6 bg-white/5 border border-white/10 rounded-xl hover:border-gold hover:bg-gold/5 transition-all text-left text-white group">
+                                <div class="text-3xl mb-2">🚀</div>
+                                <div class="font-semibold group-hover:text-gold">$10k - $50k</div>
+                            </button>
+                            <button onclick="selectOption('revenue', '$50k - $200k')"
+                                class="p-6 bg-white/5 border border-white/10 rounded-xl hover:border-gold hover:bg-gold/5 transition-all text-left text-white group">
+                                <div class="text-3xl mb-2">🏢</div>
+                                <div class="font-semibold group-hover:text-gold">$50k - $200k</div>
+                            </button>
+                            <button onclick="selectOption('revenue', '$200k+')"
+                                class="p-6 bg-white/5 border border-white/10 rounded-xl hover:border-gold hover:bg-gold/5 transition-all text-left text-white group">
+                                <div class="text-3xl mb-2">🦄</div>
+                                <div class="font-semibold group-hover:text-gold">$200k+</div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Team -->
+                    <div class="survey-step hidden" data-step="2">
+                        <div class="flex justify-between items-center mb-8">
+                            <span class="text-gray-500 font-mono text-xs tracking-widest">03 / 05</span>
+                            <button onclick="prevStep()" class="text-gray-500 hover:text-white transition-colors">←
+                                Back</button>
+                        </div>
+                        <h3 class="text-3xl font-bold mb-8 text-white">Team Structure?</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <button onclick="selectOption('team', 'Just Me')"
+                                class="p-6 bg-white/5 border border-white/10 rounded-xl hover:border-gold hover:bg-gold/5 transition-all text-left text-white group">
+                                <div class="text-3xl mb-2">👤</div>
+                                <div class="font-semibold group-hover:text-gold">Just Me (Founder)</div>
+                            </button>
+                            <button onclick="selectOption('team', 'Freelancers')"
+                                class="p-6 bg-white/5 border border-white/10 rounded-xl hover:border-gold hover:bg-gold/5 transition-all text-left text-white group">
+                                <div class="text-3xl mb-2">🎨</div>
+                                <div class="font-semibold group-hover:text-gold">Freelancers</div>
+                            </button>
+                            <button onclick="selectOption('team', 'Small In-House')"
+                                class="p-6 bg-white/5 border border-white/10 rounded-xl hover:border-gold hover:bg-gold/5 transition-all text-left text-white group">
+                                <div class="text-3xl mb-2">👥</div>
+                                <div class="font-semibold group-hover:text-gold">Small In-House</div>
+                            </button>
+                            <button onclick="selectOption('team', 'Full Department')"
+                                class="p-6 bg-white/5 border border-white/10 rounded-xl hover:border-gold hover:bg-gold/5 transition-all text-left text-white group">
+                                <div class="text-3xl mb-2">🏢</div>
+                                <div class="font-semibold group-hover:text-gold">Full Department</div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Bottleneck -->
+                    <div class="survey-step hidden" data-step="3">
+                        <div class="flex justify-between items-center mb-8">
+                            <span class="text-gray-500 font-mono text-xs tracking-widest">04 / 05</span>
+                            <button onclick="prevStep()" class="text-gray-500 hover:text-white transition-colors">←
+                                Back</button>
+                        </div>
+                        <h3 class="text-3xl font-bold mb-8 text-white">Biggest Blocker?</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <button onclick="selectOption('bottleneck', 'Lead Quality')"
+                                class="p-6 bg-white/5 border border-white/10 rounded-xl hover:border-gold hover:bg-gold/5 transition-all text-left text-white group">
+                                <div class="text-3xl mb-2">📉</div>
+                                <div class="font-semibold group-hover:text-gold">Lead Quality</div>
+                            </button>
+                            <button onclick="selectOption('bottleneck', 'Ad Performance')"
+                                class="p-6 bg-white/5 border border-white/10 rounded-xl hover:border-gold hover:bg-gold/5 transition-all text-left text-white group">
+                                <div class="text-3xl mb-2">💸</div>
+                                <div class="font-semibold group-hover:text-gold">Ad Performance</div>
+                            </button>
+                            <button onclick="selectOption('bottleneck', 'Tech / CRM')"
+                                class="p-6 bg-white/5 border border-white/10 rounded-xl hover:border-gold hover:bg-gold/5 transition-all text-left text-white group">
+                                <div class="text-3xl mb-2">⚙️</div>
+                                <div class="font-semibold group-hover:text-gold">Tech / CRM</div>
+                            </button>
+                            <button onclick="selectOption('bottleneck', 'Sales Process')"
+                                class="p-6 bg-white/5 border border-white/10 rounded-xl hover:border-gold hover:bg-gold/5 transition-all text-left text-white group">
+                                <div class="text-3xl mb-2">📞</div>
+                                <div class="font-semibold group-hover:text-gold">Sales Process</div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 5: Contact -->
+                    <div class="survey-step hidden" data-step="4">
+                        <div class="flex justify-between items-center mb-8">
+                            <span class="text-gray-500 font-mono text-xs tracking-widest">05 / 05</span>
+                            <button onclick="prevStep()" class="text-gray-500 hover:text-white transition-colors">←
+                                Back</button>
+                        </div>
+                        <h3 class="text-3xl font-bold mb-8 text-white">Where should we send your Growth Audit?</h3>
+                        <div class="space-y-4 max-w-md mx-auto">
+                            <div>
+                                <label class="block text-gray-400 text-sm mb-2 text-left">Full Name</label>
+                                <input type="text" id="input-name" placeholder="John Doe"
+                                    class="w-full px-4 py-3 bg-black border border-white/20 rounded-lg focus:border-gold focus:outline-none text-white focus:ring-1 focus:ring-gold transition-all">
+                            </div>
+                            <div>
+                                <label class="block text-gray-400 text-sm mb-2 text-left">Work Email</label>
+                                <input type="email" id="input-email" placeholder="name@company.com"
+                                    class="w-full px-4 py-3 bg-black border border-white/20 rounded-lg focus:border-gold focus:outline-none text-white focus:ring-1 focus:ring-gold transition-all">
+                            </div>
+                            <div>
+                                <label class="block text-gray-400 text-sm mb-2 text-left">Mobile Phone</label>
+                                <input type="tel" id="input-phone" placeholder="(555) 123-4567"
+                                    class="w-full px-4 py-3 bg-black border border-white/20 rounded-lg focus:border-gold focus:outline-none text-white focus:ring-1 focus:ring-gold transition-all">
+                                <p class="text-xs text-gray-600 mt-1 text-left">🔒 Data sent securely.</p>
+                            </div>
+                            <button onclick="submitForm()"
+                                class="w-full px-8 py-4 bg-gold text-black font-bold rounded-lg hover:bg-gold/90 transition-all mt-4 transform hover:scale-[1.02]">
+                                Get My Free Audit →
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Success Message -->
+                    <div id="success-message" class="hidden text-center py-12">
+                        <div
+                            class="w-24 h-24 bg-gold/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-gold/30 animate-pulse">
+                            <span class="text-5xl">✨</span>
+                        </div>
+                        <h3 class="text-3xl font-bold mb-4 text-white">Request Received</h3>
+                        <p class="text-gray-400 mb-2">Thanks <span class="text-gold font-semibold"
+                                id="success-name"></span>. We've started your file.</p>
+                        <p class="text-gray-500 text-sm mt-4">We will call you at <strong id="success-phone"></strong>
+                            shortly to verify details.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQs -->
+        <section class="py-20 border-t border-white/5 bg-[#030303] px-6">
+            <div class="max-w-4xl mx-auto">
+                <h3 class="text-2xl font-bold mb-8 text-center text-gray-200">System FAQs</h3>
+                <div class="space-y-4">
+                    <details class="group bg-white/5 rounded-lg open:bg-white/10 transition-all duration-300">
+                        <summary
+                            class="flex cursor-pointer items-center justify-between p-6 font-medium text-white select-none">
+                            <span>Who is this for?</span>
+                            <span class="transition group-open:rotate-180">▼</span>
+                        </summary>
+                        <div class="px-6 pb-6 text-gray-400 leading-relaxed border-t border-white/5 pt-4">
+                            We work best with B2B SaaS, High-Ticket Service Agencies, and E-commerce brands generating
+                            between $1M and $10M in annual revenue. You must have product-market fit and an existing
+                            sales process.
+                        </div>
+                    </details>
+                    <details class="group bg-white/5 rounded-lg open:bg-white/10 transition-all duration-300">
+                        <summary
+                            class="flex cursor-pointer items-center justify-between p-6 font-medium text-white select-none">
+                            <span>How fast can we launch?</span>
+                            <span class="transition group-open:rotate-180">▼</span>
+                        </summary>
+                        <div class="px-6 pb-6 text-gray-400 leading-relaxed border-t border-white/5 pt-4">
+                            Our onboarding "Sprint Zero" takes 7-14 days. This involves auditing your CRM, setting up
+                            tracking pixels, and designing creatives. You will see live traffic and data entering the
+                            system by Day 15.
+                        </div>
+                    </details>
+                    <details class="group bg-white/5 rounded-lg open:bg-white/10 transition-all duration-300">
+                        <summary
+                            class="flex cursor-pointer items-center justify-between p-6 font-medium text-white select-none">
+                            <span>Do you guarantee results?</span>
+                            <span class="transition group-open:rotate-180">▼</span>
+                        </summary>
+                        <div class="px-6 pb-6 text-gray-400 leading-relaxed border-t border-white/5 pt-4">
+                            We guarantee the <strong>system</strong>. We promise that we will build out the tracking,
+                            the funnels, and the ad campaigns to world-class standards.
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="py-12 border-t border-white/10 bg-black text-center relative z-10">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex justify-center gap-6 mb-8 text-sm text-gray-500 font-mono">
+                <a href="/privacy" class="hover:text-gold transition-colors">PRIVACY PROTOCOL</a>
+                <a href="/terms" class="hover:text-gold transition-colors">TERMS OF SERVICE</a>
+                <a href="mailto:chris@jumpstartscaling.com" class="hover:text-gold transition-colors">CONTACT
+                    COMMAND</a>
+            </div>
+            <p class="text-gray-600 text-sm">&copy; 2026 Jumpstart Scaling. All systems operational.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+    <script src="js/particles.js" defer></script>
+    <script src="js/core.js" defer></script>
+
+</body>
+
+</html>

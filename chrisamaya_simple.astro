@@ -1,0 +1,782 @@
+---
+const title = 'Chris Amaya - Technical Architect for Scaling Companies';
+const description = 'Full-Stack Developer & AI Engineer. I build intelligent systems that scale, integrate AI that works, and cut automation bills by 90%.';
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{title}</title>
+    <meta name="description" content={description}>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --black: #000000;
+            --gold: #C9A961;
+            --gold-bright: #E5C88D;
+            --gold-dark: #9B7E46;
+            --text: #FFFFFF;
+            --text-muted: #B8B8B8;
+        }
+        
+        html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--black);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        
+        #gradient-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(201, 169, 97, 0.15), transparent),
+                        radial-gradient(ellipse 60% 50% at 80% 50%, rgba(201, 169, 97, 0.08), transparent);
+            animation: gradientShift 20s ease infinite;
+        }
+        
+        @keyframes gradientShift { 0%, 100% { opacity: 1; } 50% { opacity: 0.8; } }
+        
+        .container { max-width: 1400px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 1; }
+        
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(201, 169, 97, 0.1);
+            padding: 1.25rem 0;
+        }
+        
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--gold-bright), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+        
+        .status {
+            color: #00FF00;
+            font-size: 0.9rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding-top: 80px;
+        }
+        
+        .hero h1 {
+            font-size: clamp(2.5rem, 7vw, 6rem);
+            font-weight: 900;
+            margin-bottom: 2rem;
+            letter-spacing: -0.04em;
+            line-height: 1.1;
+        }
+        
+        .hero h1 .gold {
+            background: linear-gradient(135deg, var(--gold-bright), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .hero .subtitle {
+            font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+            color: var(--text-muted);
+            max-width: 900px;
+            margin: 0 auto 3.5rem;
+            line-height: 1.6;
+        }
+        
+        .cta-primary {
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            color: var(--black);
+            padding: 1.75rem 4.5rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 2px;
+            text-decoration: none;
+            display: inline-block;
+            border: none;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            box-shadow: 0 4px 20px rgba(201, 169, 97, 0.2);
+        }
+        
+        .cta-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(201, 169, 97, 0.4);
+        }
+        
+        .section { padding: 8rem 0; position: relative; }
+        
+        .section-title {
+            font-size: clamp(2rem, 4vw, 4rem);
+            font-weight: 900;
+            margin-bottom: 4rem;
+            background: linear-gradient(135deg, var(--gold-bright), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.04em;
+        }
+        
+        .content-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6rem;
+            align-items: center;
+            margin-bottom: 4rem;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .content-row.visible { opacity: 1; transform: translateY(0); }
+        .content-row.reverse { direction: rtl; }
+        .content-row.reverse > * { direction: ltr; }
+        
+        .content-text h3 {
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+        
+        .content-text h3.gold {
+            background: linear-gradient(135deg, var(--gold-bright), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .content-text p {
+            color: var(--text);
+            line-height: 1.8;
+            font-size: 1.15rem;
+            margin-bottom: 2rem;
+        }
+        
+        .content-text ul {
+            list-style: none;
+            margin-top: 2rem;
+        }
+        
+        .content-text li {
+            color: var(--text);
+            margin-bottom: 1.25rem;
+            padding-left: 2rem;
+            position: relative;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+        
+        .content-text li::before {
+            content: '▸';
+            color: var(--gold);
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        
+        .visual-3d {
+            position: relative;
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .visual-3d canvas { width: 100%; height: 100%; }
+        
+        .survey-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(201, 169, 97, 0.2);
+            padding: 4.5rem;
+        }
+        
+        .survey-question {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, var(--gold-bright), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .options-grid { display: grid; gap: 1rem; }
+        
+        .option-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .option-card:hover {
+            border-color: var(--gold);
+            background: rgba(201, 169, 97, 0.05);
+        }
+        
+        .option-card input { width: 20px; height: 20px; accent-color: var(--gold); }
+        .option-text { font-size: 1.05rem; color: var(--text); }
+        
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 1.25rem;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 1.05rem;
+            font-family: 'Inter', sans-serif;
+            margin-bottom: 1.5rem;
+        }
+        
+        textarea { min-height: 120px; resize: vertical; }
+        
+        .progress-container {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            margin-bottom: 3rem;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--gold), var(--gold-bright));
+            width: 14%;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        footer {
+            padding: 5rem 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+            color: var(--text-muted);
+            margin-top: 10rem;
+        }
+        
+        @media(max-width: 968px) {
+            .content-row { grid-template-columns: 1fr; gap: 3rem; }
+            .content-row.reverse { direction: ltr; }
+            .section { padding: 5rem 0; }
+            .survey-container { padding: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div id="gradient-bg"></div>
+
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">Chris Amaya</a>
+            <div class="status">● Available for Projects</div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Stop Renting Your Automation.<br><span class="gold">Start Owning Your Infrastructure.</span></h1>
+            <p class="subtitle">
+                I build intelligent systems that scale, integrate AI that actually works, and cut your monthly automation bills by 90% by migrating you from "No-Code Traps" to professional Full-Stack Solutions.
+            </p>
+            <a href="#survey" class="cta-primary">Book Technical Roadmap Consultation</a>
+        </div>
+    </section>
+
+    <section class="section" id="diagnosis">
+        <div class="container">
+            <h2 class="section-title">Why Your "Modern Tech Stack" Feels Like a House of Cards</h2>
+            
+            <div class="content-row">
+                <div class="content-text">
+                    <h3>The "Success Tax" of Automation</h3>
+                    <p>When you started, Zapier cost you $20/mo. It was magic. Now? You're processing 50,000 tasks. Your bill is approaching the cost of a mortgage. You're hesitating to add new features because you're afraid of the "Task Count" going up. <strong>Innovation shouldn't have a meter running on it.</strong></p>
+                </div>
+                <div class="visual-3d">
+                    <canvas id="costCanvas" width="500" height="400"></canvas>
+                </div>
+            </div>
+            
+            <div class="content-row reverse">
+                <div class="visual-3d">
+                    <canvas id="blackboxCanvas" width="500" height="400"></canvas>
+                </div>
+                <div class="content-text">
+                    <h3>The "Black Box" Frustration</h3>
+                    <p>You want to integrate a specific AI model (like Ollama or a custom Llama 3 instance) into your workflow. But your SaaS tools don't support it yet. You're waiting on <em>their</em> roadmap instead of building <em>yours</em>. You're locked into their walled garden.</p>
+                </div>
+            </div>
+            
+            <div class="content-row">
+                <div class="content-text">
+                    <h3>The "Frankenstein" Database</h3>
+                    <p>Your data is scattered. Some is in Airtable, some in Google Sheets, some in a CRM. You don't have a "Single Source of Truth." You have a web of fragile connections. If one API key expires, your entire business operations grind to a halt.</p>
+                </div>
+                <div class="visual-3d">
+                    <canvas id="databaseCanvas" width="500" height="400"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="solution">
+        <div class="container">
+            <h2 class="section-title">Full-Stack Sovereignty</h2>
+            
+            <div class="content-row">
+                <div class="visual-3d">
+                    <canvas id="n8nCanvas" width="500" height="400"></canvas>
+                </div>
+                <div class="content-text">
+                    <h3 class="gold">The "Kill Zapier" Initiative</h3>
+                    <p>If you're spending more than $300/mo on Zapier, you're literally setting money on fire. <strong>n8n</strong> is a workflow automation tool that offers the same "drag and drop" ease, but it's open-source and self-hostable.</p>
+                    <ul>
+                        <li>I spin up a private cloud server running Docker</li>
+                        <li>I deploy a self-hosted instance of n8n</li>
+                        <li>I migrate your expensive, fragile Zaps</li>
+                        <li><strong>Result:</strong> From $1,000/mo to ~$20/mo. Unlimited executions.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="services">
+        <div class="container">
+            <h2 class="section-title">My Service Pillars</h2>
+            
+            <div class="content-row">
+                <div class="content-text">
+                    <h3 class="gold">Full-Stack Web Development</h3>
+                    <p><strong>The Frameworks:</strong> Python (Django/FastAPI), TypeScript, React, Astro.</p>
+                    <p><strong>The Use Case:</strong> Custom Client Portals, SaaS MVPs, internal dashboards that connect all your data sources into one view.</p>
+                </div>
+                <div class="visual-3d">
+                    <canvas id="fullstackCanvas" width="500" height="400"></canvas>
+                </div>
+            </div>
+            
+            <div class="content-row reverse">
+                <div class="visual-3d">
+                    <canvas id="aiCanvas" width="500" height="400"></canvas>
+                </div>
+                <div class="content-text">
+                    <h3 class="gold">AI Engineering & Intelligent Agents</h3>
+                    <p><strong>Beyond the Chatbot:</strong> I build <strong>Systems</strong> that use AI.</p>
+                    <p><strong>Local & Private:</strong> Using <strong>Ollama</strong> and custom models to run AI on your own infrastructure for privacy and zero per-token costs.</p>
+                </div>
+            </div>
+            
+            <div class="content-row">
+                <div class="content-text">
+                    <h3 class="gold">API Development & Integration</h3>
+                    <p><strong>The Glue:</strong> Connecting tools that "don't talk to each other."</p>
+                    <p><strong>The Use Case:</strong> Legacy ERP systems talking to modern Shopify stores. I build the bridge.</p>
+                </div>
+                <div class="visual-3d">
+                    <canvas id="apiCanvas" width="500" height="400"></canvas>
+                </div>
+            </div>
+            
+            <div class="content-row reverse">
+                <div class="visual-3d">
+                    <canvas id="devopsCanvas" width="500" height="400"></canvas>
+                </div>
+                <div class="content-text">
+                    <h3 class="gold">DevOps & Infrastructure</h3>
+                    <p><strong>The Setup:</strong> Docker, Nginx, Redis, PostgreSQL.</p>
+                    <p><strong>The Stability:</strong> I set up CI/CD pipelines so that updates are automated and nothing breaks in production.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="survey">
+        <div class="container">
+            <div class="survey-container">
+                <div style="text-align: center; margin-bottom: 3rem;">
+                    <h2 style="font-size: 2.5rem; margin-bottom: 1.25rem; background: linear-gradient(135deg, #E5C88D, #C9A961); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Project Intake Form</h2>
+                    <p style="color: var(--text-muted); font-size: 1.05rem;">Get a quote & technical strategy for your project.</p>
+                </div>
+
+                <div class="progress-container">
+                    <div class="progress-bar" id="progressFill"></div>
+                </div>
+
+                <form id="surveyForm">
+                    <div class="form-step active" data-step="1">
+                        <div class="survey-question">1. What is the primary nature of your request?</div>
+                        <div class="options-grid">
+                            <label class="option-card">
+                                <input type="radio" name="request_type" value="automation" required>
+                                <span class="option-text">Automation Migration (Zapier/Make to n8n)</span>
+                            </label>
+                            <label class="option-card">
+                                <input type="radio" name="request_type" value="fullstack">
+                                <span class="option-text">Full-Stack Build (Web app, dashboard, SaaS)</span>
+                            </label>
+                            <label class="option-card">
+                                <input type="radio" name="request_type" value="ai">
+                                <span class="option-text">AI Integration (Agents, LLMs, RAG systems)</span>
+                            </label>
+                            <label class="option-card">
+                                <input type="radio" name="request_type" value="api">
+                                <span class="option-text">API/Backend Fix (Integrations, custom APIs)</span>
+                            </label>
+                        </div>
+                        <div style="margin-top: 2.5rem; display: flex; justify-content: flex-end;">
+                            <button type="button" class="cta-primary" style="padding: 1.25rem 3.5rem; border: none; cursor: pointer;" onclick="nextStep()">Next →</button>
+                        </div>
+                    </div>
+
+                    <div class="form-step" data-step="2" style="display:none;">
+                        <div class="survey-question">2. Current monthly spend on automation tools?</div>
+                        <div class="options-grid">
+                            <label class="option-card"><input type="radio" name="spend" value="under100"><span class="option-text">Under $100/mo</span></label>
+                            <label class="option-card"><input type="radio" name="spend" value="100-500"><span class="option-text">$100 - $500/mo</span></label>
+                            <label class="option-card"><input type="radio" name="spend" value="500-1000"><span class="option-text">$500 - $1,000/mo</span></label>
+                            <label class="option-card"><input type="radio" name="spend" value="1000plus"><span class="option-text">$1,000+/mo (Emergency Priority)</span></label>
+                        </div>
+                        <div style="margin-top: 2.5rem; display: flex; justify-content: space-between;">
+                            <button type="button" class="cta-primary" style="padding: 1.25rem 2.5rem; cursor: pointer;" onclick="prevStep()">← Back</button>
+                            <button type="button" class="cta-primary" style="padding: 1.25rem 3.5rem; border: none; cursor: pointer;" onclick="nextStep()">Next →</button>
+                        </div>
+                    </div>
+
+                    <div class="form-step" data-step="3" style="display:none;">
+                        <div class="survey-question">3. Describe the "Pain" in one sentence</div>
+                        <textarea name="pain" placeholder="e.g., 'My team spends 10 hours a week copy-pasting data' or 'My SaaS bill is too high'" required></textarea>
+                        <div style="margin-top: 2.5rem; display: flex; justify-content: space-between;">
+                            <button type="button" class="cta-primary" style="padding: 1.25rem 2.5rem; cursor: pointer;" onclick="prevStep()">← Back</button>
+                            <button type="button" class="cta-primary" style="padding: 1.25rem 3.5rem; border: none; cursor: pointer;" onclick="nextStep()">Next →</button>
+                        </div>
+                    </div>
+
+                    <div class="form-step" data-step="4" style="display:none;">
+                        <div class="survey-question">4. Current Tech Stack (check all that apply)</div>
+                        <div class="options-grid">
+                            <label class="option-card"><input type="checkbox" name="stack" value="python"><span class="option-text">Python / Django / FastAPI</span></label>
+                            <label class="option-card"><input type="checkbox" name="stack" value="js"><span class="option-text">JavaScript / TypeScript / React</span></label>
+                            <label class="option-card"><input type="checkbox" name="stack" value="sql"><span class="option-text">SQL (Postgres/MySQL)</span></label>
+                            <label class="option-card"><input type="checkbox" name="stack" value="nocode"><span class="option-text">No-Code (Airtable/Bubble/Webflow)</span></label>
+                            <label class="option-card"><input type="checkbox" name="stack" value="legacy"><span class="option-text">Legacy (PHP/WordPress)</span></label>
+                            <label class="option-card"><input type="checkbox" name="stack" value="unknown"><span class="option-text">I have no idea (That's why I'm hiring you)</span></label>
+                        </div>
+                        <div style="margin-top: 2.5rem; display: flex; justify-content: space-between;">
+                            <button type="button" class="cta-primary" style="padding: 1.25rem 2.5rem; cursor: pointer;" onclick="prevStep()">← Back</button>
+                            <button type="button" class="cta-primary" style="padding: 1.25rem 3.5rem; border: none; cursor: pointer;" onclick="nextStep()">Next →</button>
+                        </div>
+                    </div>
+
+                    <div class="form-step" data-step="5" style="display:none;">
+                        <div class="survey-question">5. How do you want to handle execution?</div>
+                        <div class="options-grid">
+                            <label class="option-card"><input type="radio" name="execution" value="turnkey"><span class="option-text">Turn-Key: Design AND build everything</span></label>
+                            <label class="option-card"><input type="radio" name="execution" value="blueprint"><span class="option-text">Blueprint Only: Design architecture, I'll hire my team</span></label>
+                            <label class="option-card"><input type="radio" name="execution" value="augmentation"><span class="option-text">Staff Augmentation: Unblock my existing team</span></label>
+                        </div>
+                        <div style="margin-top: 2.5rem; display: flex; justify-content: space-between;">
+                            <button type="button" class="cta-primary" style="padding: 1.25rem 2.5rem; cursor: pointer;" onclick="prevStep()">← Back</button>
+                            <button type="button" class="cta-primary" style="padding: 1.25rem 3.5rem; border: none; cursor: pointer;" onclick="nextStep()">Next →</button>
+                        </div>
+                    </div>
+
+                    <div class="form-step" data-step="6" style="display:none;">
+                        <div class="survey-question">6. Estimated budget for this initiative?</div>
+                        <div class="options-grid">
+                            <label class="option-card"><input type="radio" name="budget" value="1-3k"><span class="option-text">$1,000 - $3,000 (Small fixes / Consulting)</span></label>
+                            <label class="option-card"><input type="radio" name="budget" value="3-10k"><span class="option-text">$3,000 - $10,000 (Standard Project / Migration)</span></label>
+                            <label class="option-card"><input type="radio" name="budget" value="10-25k"><span class="option-text">$10,000 - $25,000 (Full App Build)</span></label>
+                            <label class="option-card"><input type="radio" name="budget" value="25k-plus"><span class="option-text">$25,000+ (Ongoing Retainer / Enterprise)</span></label>
+                        </div>
+                        <div style="margin-top: 2.5rem; display: flex; justify-content: space-between;">
+                            <button type="button" class="cta-primary" style="padding: 1.25rem 2.5rem; cursor: pointer;" onclick="prevStep()">← Back</button>
+                            <button type="button" class="cta-primary" style="padding: 1.25rem 3.5rem; border: none; cursor: pointer;" onclick="nextStep()">Next →</button>
+                        </div>
+                    </div>
+
+                    <div class="form-step" data-step="7" style="display:none;">
+                        <div class="survey-question">7. Contact Information</div>
+                        <input type="text" name="name" placeholder="Your Full Name" required>
+                        <input type="text" name="email" placeholder="Work Email Address" required>
+                        <input type="text" name="company" placeholder="Company Name (Optional)">
+                        <textarea name="security" placeholder="Any specific data security requirements? (e.g., HIPAA, On-Premise only)"></textarea>
+                        <div style="margin-top: 2.5rem; display: flex; justify-content: space-between;">
+                            <button type="button" class="cta-primary" style="padding: 1.25rem 2.5rem; cursor: pointer;" onclick="prevStep()">← Back</button>
+                            <button type="submit" class="cta-primary" style="padding: 1.25rem 3.5rem; border: none; cursor: pointer;">Submit Application</button>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="success-message" id="successMessage" style="display:none; text-align: center;">
+                    <div style="font-size: 5rem; margin-bottom: 2rem;">✓</div>
+                    <h2 style="margin-bottom: 1.25rem; background: linear-gradient(135deg, #E5C88D, #C9A961); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Application Received</h2>
+                    <p style="color: var(--text-muted);">I'll review your project and reply with a direct booking link and preliminary assessment within 24 hours.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p class="mono">Chris Amaya | chrisamaya.work</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem;">Building the future, one node at a time.</p>
+        <p style="margin-top: 1rem; font-size: 0.85rem;">Full-Stack Development • AI Engineering • Cloud Architecture</p>
+    </footer>
+
+    <script>
+        const observerOptions = { threshold: 0.2, rootMargin: '0px 0px -100px 0px' };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, observerOptions);
+        document.querySelectorAll('.content-row').forEach(row => observer.observe(row));
+
+        function draw3DShapes(canvasId, type) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                const time = Date.now() * 0.001;
+                
+                if (type === 'cost') {
+                    ctx.strokeStyle = '#FF4444';
+                    ctx.lineWidth = 3;
+                    ctx.beginPath();
+                    for (let i = 0; i < canvas.width; i += 20) {
+                        const y = 350 - (i / canvas.width) * 250 - Math.sin(i * 0.02 + time) * 20;
+                        if (i === 0) ctx.moveTo(i, y);
+                        else ctx.lineTo(i, y);
+                    }
+                    ctx.stroke();
+                    ctx.fillStyle = '#C9A961';
+                    ctx.font = 'bold 16px JetBrains Mono';
+                    ctx.fillText('$1,200/mo', 400, 100);
+                } else if (type === 'blackbox') {
+                    const centerX = canvas.width / 2;
+                    const centerY = canvas.height / 2;
+                    ctx.strokeStyle = '#C9A961';
+                    ctx.lineWidth = 3;
+                    ctx.strokeRect(centerX - 80, centerY - 80, 160, 160);
+                    ctx.fillStyle = 'rgba(201, 169, 97, 0.1)';
+                    ctx.fillRect(centerX - 80, centerY - 80, 160, 160);
+                    ctx.beginPath();
+                    ctx.arc(centerX, centerY - 10, 20, 0, Math.PI, true);
+                    ctx.stroke();
+                    ctx.fillStyle = '#C9A961';
+                    ctx.fillRect(centerX - 15, centerY - 10, 30, 30);
+                } else if (type === 'database') {
+                    const nodes = [
+                        {x: 100, y: 100, label: 'Airtable'},
+                        {x: 400, y: 100, label: 'Sheets'},
+                        {x: 100, y: 300, label: 'CRM'},
+                        {x: 400, y: 300, label: 'SQL'}
+                    ];
+                    nodes.forEach((node, i) => {
+                        ctx.strokeStyle = 'rgba(201, 169, 97, 0.3)';
+                        ctx.lineWidth = 2;
+                        nodes.forEach((other, j) => {
+                            if (i < j) {
+                                ctx.beginPath();
+                                ctx.moveTo(node.x, node.y);
+                                ctx.lineTo(other.x, other.y);
+                                ctx.stroke();
+                            }
+                        });
+                        ctx.fillStyle = 'rgba(255, 68, 68, 0.3)';
+                        ctx.beginPath();
+                        ctx.arc(node.x, node.y, 40, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.strokeStyle = '#FF4444';
+                        ctx.stroke();
+                        ctx.fillStyle = '#FFF';
+                        ctx.font = '12px Inter';
+                        ctx.textAlign = 'center';
+                        ctx.fillText(node.label, node.x, node.y + 5);
+                    });
+                } else if (type === 'n8n') {
+                    const centerX = canvas.width / 2;
+                    const centerY = canvas.height / 2;
+                    ctx.fillStyle = 'rgba(201, 169, 97, 0.2)';
+                    ctx.fillRect(centerX - 60, centerY - 100, 120, 60);
+                    ctx.strokeStyle = '#C9A961';
+                    ctx.lineWidth = 2;
+                    ctx.strokeRect(centerX - 60, centerY - 100, 120, 60);
+                    ctx.fillRect(centerX - 60, centerY + 40, 120, 60);
+                    ctx.strokeRect(centerX - 60, centerY + 40, 120, 60);
+                    ctx.beginPath();
+                    ctx.moveTo(centerX, centerY - 40);
+                    ctx.lineTo(centerX, centerY + 40);
+                    ctx.stroke();
+                    const progress = (time % 2) / 2;
+                    const dotY = centerY - 40 + progress * 80;
+                    ctx.fillStyle = '#E5C88D';
+                    ctx.beginPath();
+                    ctx.arc(centerX, dotY, 6, 0, Math.PI * 2);
+                    ctx.fill();
+                } else if (type === 'fullstack') {
+                    const layers = ['React', 'FastAPI', 'PostgreSQL', 'Docker'];
+                    layers.forEach((layer, i) => {
+                        const y = 100 + i * 70;
+                        ctx.fillStyle = `rgba(201, 169, 97, ${0.2 + i * 0.15})`;
+                        ctx.fillRect(100, y, 300, 50);
+                        ctx.strokeStyle = '#C9A961';
+                        ctx.lineWidth = 2;
+                        ctx.strokeRect(100, y, 300, 50);
+                        ctx.fillStyle = '#FFF';
+                        ctx.font = 'bold 16px JetBrains Mono';
+                        ctx.textAlign = 'center';
+                        ctx.fillText(layer, 250, y + 32);
+                    });
+                } else if (type === 'ai') {
+                    const centerX = canvas.width / 2;
+                    const centerY = canvas.height / 2;
+                    for (let i = 0; i < 3; i++) {
+                        const angle = (i / 3) * Math.PI * 2 + time * 0.5;
+                        const x = centerX + Math.cos(angle) * 120;
+                        const y = centerY + Math.sin(angle) * 120;
+                        ctx.strokeStyle = 'rgba(201, 169, 97, 0.3)';
+                        ctx.lineWidth = 2;
+                        ctx.beginPath();
+                        ctx.moveTo(centerX, centerY);
+                        ctx.lineTo(x, y);
+                        ctx.stroke();
+                        ctx.fillStyle = '#C9A961';
+                        ctx.beginPath();
+                        ctx.arc(x, y, 20, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                    ctx.fillStyle = '#E5C88D';
+                    ctx.beginPath();
+                    ctx.arc(centerX, centerY, 30, 0, Math.PI * 2);
+                    ctx.fill();
+                } else if (type === 'api') {
+                    ctx.strokeStyle = '#C9A961';
+                    ctx.lineWidth = 2;
+                    ctx.strokeRect(50, 150, 150, 100);
+                    ctx.strokeRect(300, 150, 150, 100);
+                    ctx.fillStyle = '#FFF';
+                    ctx.font = '14px Inter';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('Legacy ERP', 125, 205);
+                    ctx.fillText('Shopify', 375, 205);
+                    ctx.beginPath();
+                    ctx.moveTo(200, 200);
+                    ctx.lineTo(300, 200);
+                    ctx.stroke();
+                    const progress = (time % 2) / 2;
+                    const dotX = 200 + progress * 100;
+                    ctx.fillStyle = '#E5C88D';
+                    ctx.beginPath();
+                    ctx.arc(dotX, 200, 6, 0, Math.PI * 2);
+                    ctx.fill();
+                } else if (type === 'devops') {
+                    for (let i = 0; i < 3; i++) {
+                        const x = 100 + i * 130;
+                        ctx.fillStyle = 'rgba(201, 169, 97, 0.1)';
+                        ctx.fillRect(x, 100, 100, 200);
+                        ctx.strokeStyle = '#C9A961';
+                        ctx.lineWidth = 2;
+                        ctx.strokeRect(x, 100, 100, 200);
+                        for (let j = 0; j < 4; j++) {
+                            const y = 120 + j * 45;
+                            ctx.fillStyle = i === 1 && j === 1 ? '#00FF00' : 'rgba(201, 169, 97, 0.5)';
+                            ctx.fillRect(x + 10, y, 80, 30);
+                        }
+                    }
+                }
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+
+        draw3DShapes('costCanvas', 'cost');
+        draw3DShapes('blackboxCanvas', 'blackbox');
+        draw3DShapes('databaseCanvas', 'database');
+        draw3DShapes('n8nCanvas', 'n8n');
+        draw3DShapes('fullstackCanvas', 'fullstack');
+        draw3DShapes('aiCanvas', 'ai');
+        draw3DShapes('apiCanvas', 'api');
+        draw3DShapes('devopsCanvas', 'devops');
+
+        let currentStep = 1;
+        const totalSteps = 7;
+
+        window.nextStep = function() {
+            if (currentStep < totalSteps) {
+                document.querySelector(`[data-step="${currentStep}"]`).style.display = 'none';
+                currentStep++;
+                document.querySelector(`[data-step="${currentStep}"]`).style.display = 'block';
+                document.getElementById('progressFill').style.width = `${(currentStep / totalSteps) * 100}%`;
+            }
+        };
+
+        window.prevStep = function() {
+            if (currentStep > 1) {
+                document.querySelector(`[data-step="${currentStep}"]`).style.display = 'none';
+                currentStep--;
+                document.querySelector(`[data-step="${currentStep}"]`).style.display = 'block';
+                document.getElementById('progressFill').style.width = `${(currentStep / totalSteps) * 100}%`;
+            }
+        };
+
+        document.getElementById('surveyForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            document.querySelector('#surveyForm').style.display = 'none';
+            document.querySelector('#successMessage').style.display = 'block';
+            
+            const webhooks = [
+                "https://n8n.jumpstartscaling.com/webhook/2aadbf03-cff5-48b7-8236-cf344d755ed0",
+                "https://n8n.jumpstartscaling.com/webhook-test/2aadbf03-cff5-48b7-8236-cf344d755ed0"
+            ];
+            webhooks.forEach(url => fetch(url, { method: "POST", body: new FormData(e.target) }));
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+---
+/**
+ * ServiceLayout.astro
+ * 
+ * The standard "shell" for all deep-dive service pages.
+ * Enforces uniformity: Nav, Footer, 3D BG, Typography.
+ */
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CommandNav from '../components/CommandNav.astro';
+import CyberLuxuryBG from '../components/CyberLuxuryBG.astro';
+
+interface Props {
+  title: string;
+  subtitle: string;
+  metaDescription: string;
+}
+
+const { title, subtitle, metaDescription } = Astro.props;
+---
+
+<BaseLayout title={title} description={metaDescription}>
+  
+  <!-- Global 3D Background -->
+  <CyberLuxuryBG />
+
+  <!-- Fixed Navigation -->
+  <CommandNav ctaText="Start Audit" ctaHref="/#audit" />
+
+  <div class="relative z-10 pt-32 pb-24 px-4 min-h-screen">
+    
+    <!-- Header Section (HUD Style) -->
+    <header class="max-w-5xl mx-auto text-center mb-20 animate-fade-in-up">
+      <div class="inline-block mb-6 px-4 py-1 border border-gold-500/30 rounded-full bg-gold-900/10 backdrop-blur-md">
+        <span class="text-gold-400 font-mono text-xs tracking-[0.3em] uppercase">System Architecture</span>
+      </div>
+      <h1 class="text-5xl md:text-7xl font-bold text-white font-orbitron mb-8 leading-tight drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">
+        {title.toUpperCase()}
+      </h1>
+      <p class="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed font-light">
+        {subtitle}
+      </p>
+    </header>
+
+    <!-- Main Content "Datapad" -->
+    <main class="max-w-4xl mx-auto">
+      <div class="bg-[#050505]/80 backdrop-blur-xl border border-white/10 rounded-lg p-8 md:p-12 shadow-2xl relative overflow-hidden">
+        
+        <!-- Decorative HUD Corners -->
+        <div class="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-gold-500"></div>
+        <div class="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-gold-500"></div>
+        <div class="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-gold-500"></div>
+        <div class="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-gold-500"></div>
+
+        <!-- Content Injection -->
+        <div class="prose prose-invert prose-lg max-w-none prose-headings:font-orbitron prose-headings:text-white prose-p:text-gray-200 prose-strong:text-gold-400 prose-li:text-gray-200">
+          <slot />
+        </div>
+
+      </div>
+    </main>
+
+    <!-- Bottom CTA Bar -->
+    <div class="max-w-4xl mx-auto mt-12 text-center">
+      <a href="/#audit" class="inline-flex items-center gap-3 px-10 py-5 bg-gold-600 hover:bg-gold-500 text-black font-bold text-lg uppercase tracking-widest rounded-sm transition-all hover:scale-[1.02] shadow-[0_0_20px_rgba(234,179,8,0.3)]">
+        Deploy This System
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+      </a>
+    </div>
+
+  </div>
+
+</BaseLayout>

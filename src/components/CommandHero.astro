@@ -1,0 +1,94 @@
+---
+/**
+ * CommandHero.astro
+ * 
+ * Aesthetic: SpaceX / Dark Aerospace / Control Room
+ * Features:
+ * - Subtle grid background
+ * - Minimalist typography
+ * - "Data Viz" aesthetic
+ */
+
+interface Props {
+  title: string;
+  subtitle: string;
+  primaryCTA: { text: string; href: string; };
+  secondaryCTA?: { text: string; href: string; };
+}
+
+const { title, subtitle, primaryCTA, secondaryCTA } = Astro.props;
+---
+
+<section class="relative min-h-screen w-full bg-[#030303] overflow-hidden flex flex-col justify-center items-center text-center pt-20">
+  
+  <!-- BACKGROUND LAYERS -->
+  <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-gray-900/40 via-[#030303] to-[#030303]"></div>
+  
+  <!-- Precision Grid -->
+  <div class="absolute inset-0 pointer-events-none opacity-[0.05]" 
+       style="background-image: linear-gradient(#333 1px, transparent 1px), linear-gradient(90deg, #333 1px, transparent 1px); background-size: 60px 60px;">
+  </div>
+
+  <!-- Decorative HUD Lines -->
+  <div class="absolute top-0 left-10 h-full w-[1px] bg-white/5"></div>
+  <div class="absolute top-0 right-10 h-full w-[1px] bg-white/5"></div>
+  <div class="absolute bottom-20 left-0 w-full h-[1px] bg-white/5"></div>
+  
+  <!-- CONTENT -->
+  <div class="relative z-10 container mx-auto px-4 max-w-6xl">
+    
+    <!-- Status Header -->
+    <div class="flex justify-between items-center border-b border-white/10 pb-4 mb-16 mx-auto max-w-4xl text-xs font-mono text-gray-500 uppercase tracking-widest">
+      <div>SYS: ONLINE</div>
+      <div>SECURE CONNECTION VERIFIED</div>
+      <div>V.2.0.4</div>
+    </div>
+
+    <!-- Main Title -->
+    <div>
+      <h1 class="text-6xl md:text-8xl font-black text-white mb-6 leading-none tracking-tight font-orbitron">
+        {title.toUpperCase()}
+      </h1>
+      
+      <p class="text-xl md:text-2xl text-gray-400 max-w-2xl mx-auto leading-relaxed font-light">
+        {subtitle}
+      </p>
+    </div>
+
+    <!-- Action Module -->
+    <div class="mt-16 flex flex-col md:flex-row gap-6 justify-center items-center">
+      
+      <a 
+        href={primaryCTA.href} 
+        class="group relative px-10 py-5 bg-white text-black font-bold text-lg tracking-wide uppercase transition-all hover:bg-gold-500 hover:scale-[1.02]"
+      >
+        <div class="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-black"></div>
+        <div class="absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 border-black"></div>
+        {primaryCTA.text}
+      </a>
+
+      {secondaryCTA && (
+        <a 
+          href={secondaryCTA.href} 
+          class="px-10 py-5 text-gray-400 hover:text-white border border-white/10 hover:border-white/30 font-mono text-sm tracking-widest uppercase transition-all"
+        >
+          {secondaryCTA.text}
+        </a>
+      )}
+    </div>
+
+  </div>
+
+  <!-- Bottom Data Stream -->
+  <div class="absolute bottom-0 left-0 w-full bg-[#050505] border-t border-white/10 py-4 px-10 flex justify-between items-center text-[10px] font-mono text-gray-600 uppercase">
+    <div class="flex gap-8">
+      <span>CPU: 12%</span>
+      <span>MEM: 4.2GB</span>
+      <span>LATENCY: 12ms</span>
+    </div>
+    <div class="animate-pulse text-gold-500">
+      ● LIVE DATA STREAM
+    </div>
+  </div>
+
+</section>

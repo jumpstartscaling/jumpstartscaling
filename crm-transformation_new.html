@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRM & Neural Automation | Jumpstart Scaling</title>
+    <meta name="description"
+        content="We build the nervous system of your business. GoHighLevel Snapshots, n8n Automation, and Custom AI Agents that print money while you sleep.">
+
+    <!-- 1. FONTS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+
+    <!-- 2. ICONS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- 3. TAILWIND -->
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+
+    <!-- 4. ALPINE JS -->
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
+
+    <!-- 5. CONFIG -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            DEFAULT: '#C9A961',
+                            light: '#FFE5A0',
+                            dim: 'rgba(201, 169, 97, 0.1)',
+                            dark: '#8a733e'
+                        },
+                        dark: {
+                            900: '#050505',
+                            800: '#0A0A0A',
+                            700: '#111111',
+                            600: '#1a1a1a'
+                        }
+                    },
+                    fontFamily: {
+                        mono: ['JetBrains Mono', 'monospace'],
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    typography: (theme) => ({
+                        DEFAULT: {
+                            css: {
+                                color: theme('colors.gray.400'),
+                                strong: { color: '#fff' },
+                                h3: { color: '#fff', fontSize: '1.5em' },
+                                code: { color: theme('colors.gold.DEFAULT') },
+                            },
+                        },
+                    }),
+                }
+            }
+        }
+    </script>
+
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('nav', () => ({
+                mobileOpen: false,
+                scrolled: false,
+                solutionsOpen: false,
+                init() {
+                    window.addEventListener('scroll', () => {
+                        this.scrolled = window.scrollY > 50;
+                    });
+                }
+            }));
+        });
+    </script>
+
+    <style>
+        body {
+            background-color: #050505;
+            color: #e5e5e5;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, #C9A961 0%, #FFE5A0 50%, #C9A961 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% auto;
+            animation: shine 5s linear infinite;
+        }
+
+        @keyframes shine {
+            to {
+                background-position: 200% center;
+            }
+        }
+
+        /* Sticky Nav Fix */
+        .sticky-matrix {
+            position: sticky;
+            top: 6rem;
+            z-index: 40;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+
+<body class="antialiased selection:bg-gold selection:text-black overflow-x-hidden" x-data="nav">
+
+    <!-- MAIN NAVIGATION -->
+    <nav :class="{ 'bg-dark-900/95 backdrop-blur-md border-b border-white/5': scrolled, 'bg-transparent border-transparent': !scrolled }"
+        class="fixed top-0 w-full z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 h-24 flex justify-between items-center">
+            <a href="/" class="flex items-center gap-3 group">
+                <div
+                    class="w-10 h-10 bg-gradient-to-br from-gold to-gold-dark rounded flex items-center justify-center font-black text-black text-sm shadow-[0_0_15px_rgba(201,169,97,0.4)]">
+                    JS</div>
+                <div class="flex flex-col">
+                    <span
+                        class="text-xl font-black tracking-tighter text-white group-hover:text-gold transition-colors leading-none">JUMPSTART</span>
+                    <span class="text-xs font-mono text-gold tracking-widest">SCALING</span>
+                </div>
+            </a>
+            <div class="hidden lg:flex items-center gap-8">
+                <a href="/services/paid-acquisition.html"
+                    class="text-sm font-medium text-gray-300 hover:text-white transition-colors">Paid Acquisition</a>
+                <a href="/services/funnel-architecture.html"
+                    class="text-sm font-medium text-gray-300 hover:text-white transition-colors">Funnel Architecture</a>
+                <span class="text-sm font-bold text-white border-b-2 border-gold pb-1">CRM & AI</span>
+                <a href="/#audit"
+                    class="px-5 py-2.5 bg-gold text-black font-bold rounded-lg hover:bg-gold-light transition-all text-sm">Start
+                    Audit</a>
+            </div>
+            <button @click="mobileOpen = !mobileOpen" class="lg:hidden text-white text-2xl"><i
+                    class="fa-solid fa-bars"></i></button>
+        </div>
+        <!-- Mobile Menu -->
+        <div x-show="mobileOpen"
+            class="fixed inset-0 bg-dark-900 z-40 flex flex-col items-center justify-center space-y-8" x-transition>
+            <a href="/" class="text-2xl font-bold text-white">Home</a>
+            <a href="/services/paid-acquisition.html" class="text-2xl font-bold text-white">Paid Media</a>
+            <a href="/services/funnel-architecture.html" class="text-2xl font-bold text-white">Funnels</a>
+            <a href="/#audit" class="px-8 py-4 bg-gold text-black font-bold rounded text-xl">Start Audit</a>
+            <button @click="mobileOpen = false" class="absolute top-8 right-8 text-white text-2xl"><i
+                    class="fa-solid fa-xmark"></i></button>
+        </div>
+    </nav>
+
+    <main>
+        <!-- HERO -->
+        <section class="relative pt-40 pb-20 overflow-hidden bg-dark-900">
+            <div class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 z-0">
+            </div>
+            <div
+                class="absolute top-0 right-0 w-[500px] h-[500px] bg-gold/5 rounded-full blur-[100px] pointer-events-none z-0">
+            </div>
+
+            <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
+                <div
+                    class="inline-flex items-center gap-2 mb-6 px-4 py-1 rounded-full bg-white/5 border border-white/10">
+                    <i class="fa-solid fa-network-wired text-gold text-xs"></i>
+                    <span class="text-xs font-mono text-gray-400 uppercase tracking-widest">Protocol 03: The Nervous
+                        System</span>
+                </div>
+                <h1 class="text-5xl md:text-7xl font-black text-white leading-tight mb-6">
+                    Traffic is Vanity. <br>
+                    <span class="text-gradient">Automation is Sanity.</span>
+                </h1>
+                <p class="text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
+                    We build the invisible machines that run your business. From complex <strong>GoHighLevel
+                        Snapshots</strong> to <strong>Autonomous AI Agents</strong>, we eliminate human error and scale
+                    your fulfillment.
+                </p>
+                <div class="flex justify-center gap-4 text-sm font-mono text-gray-500">
+                    <span class="flex items-center gap-2"><i class="fa-solid fa-bolt text-yellow-400"></i>
+                        GoHighLevel</span>
+                    <span class="flex items-center gap-2"><i class="fa-solid fa-code-branch text-pink-400"></i>
+                        n8n</span>
+                    <span class="flex items-center gap-2"><i class="fa-solid fa-brain text-purple-400"></i>
+                        OpenAI</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- QUICK JUMP MATRIX (STICKY) -->
+        <div class="sticky-matrix bg-dark-900/90 py-4 border-y border-white/10 shadow-2xl">
+            <div class="max-w-7xl mx-auto px-6 overflow-x-auto">
+                <div class="flex justify-between md:justify-center gap-4 md:gap-12 min-w-max">
+                    <a href="#ghl"
+                        class="flex items-center gap-2 text-sm font-bold text-gray-400 hover:text-gold transition-colors group">
+                        <span class="w-2 h-2 rounded-full bg-blue-500 group-hover:animate-ping"></span> GHL & SNAPSHOTS
+                    </a>
+                    <a href="#frontend"
+                        class="flex items-center gap-2 text-sm font-bold text-gray-400 hover:text-gold transition-colors group">
+                        <span class="w-2 h-2 rounded-full bg-orange-500 group-hover:animate-ping"></span>
+                        CLICKFUNNELS/WP
+                    </a>
+                    <a href="#custom"
+                        class="flex items-center gap-2 text-sm font-bold text-gray-400 hover:text-gold transition-colors group">
+                        <span class="w-2 h-2 rounded-full bg-purple-500 group-hover:animate-ping"></span> CUSTOM
+                        APPS/API
+                    </a>
+                    <a href="#ai"
+                        class="flex items-center gap-2 text-sm font-bold text-gray-400 hover:text-gold transition-colors group">
+                        <span class="w-2 h-2 rounded-full bg-green-500 group-hover:animate-ping"></span> AI & n8n
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 1: GHL & SNAPSHOTS -->
+        <section id="ghl" class="py-24 bg-dark-800">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="flex items-center gap-4 mb-12">
+                    <div class="p-4 bg-blue-500/10 rounded-xl border border-blue-500/20"><i
+                            class="fa-solid fa-building-user text-3xl text-blue-500"></i></div>
+                    <div>
+                        <h2 class="text-3xl font-bold text-white">GoHighLevel Operating Systems</h2>
+                        <p class="text-gray-400">The Core Engine of Modern Business</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <!-- Protocol 1: Custom Snapshots -->
+                    <div
+                        class="bg-dark-900 border border-white/10 rounded-2xl p-8 hover:border-gold/50 transition-all group">
+                        <div class="flex justify-between items-start mb-6">
+                            <h3 class="text-2xl font-bold text-white group-hover:text-gold transition-colors">
+                                Vertical-Specific Snapshots</h3>
+                            <span
+                                class="text-xs font-mono text-gray-500 border border-white/10 px-2 py-1 rounded">INFRASTRUCTURE</span>
+                        </div>
+                        <p class="text-gray-400 mb-6 text-sm leading-relaxed">
+                            <strong>Stop Building from Scratch.</strong> Most agencies waste 50 hours setting up a new
+                            client account.
+                            <br><br>
+                            We engineer complex, "Ready-to-Deploy" Snapshots tailored to your niche (Solar, MedSpa,
+                            SaaS, Real Estate). These act as proprietary IP. You press one button, and your client gets
+                            40+ workflows, 10 funnels, and all email templates instantly installed.
+                        </p>
+                        <div class="bg-black/50 p-4 rounded border border-white/5 font-mono text-xs text-blue-400">
+                            > Includes: Custom Values & Trigger Links<br>
+                            > Feature: One-Click Onboarding<br>
+                            > Benefit: Scale from 10 to 100 clients without adding staff
+                        </div>
+                    </div>
+
+                    <!-- Protocol 2: Advanced Workflows -->
+                    <div
+                        class="bg-dark-900 border border-white/10 rounded-2xl p-8 hover:border-gold/50 transition-all group">
+                        <div class="flex justify-between items-start mb-6">
+                            <h3 class="text-2xl font-bold text-white group-hover:text-gold transition-colors">The
+                                Nurture Matrix</h3>
+                            <span
+                                class="text-xs font-mono text-gray-500 border border-white/10 px-2 py-1 rounded">RETENTION</span>
+                        </div>
+                        <p class="text-gray-400 mb-6 text-sm leading-relaxed">
+                            <strong>The Money is in the Follow-up.</strong> We build "If/Then" logic branches that adapt
+                            to user behavior.
+                            <br><br>
+                            Did they click the link but not book? Send SMS #1. Did they book but not show? Trigger the
+                            "No-Show Reactivation" sequence. We automate the entire lifecycle from Lead -> Sale ->
+                            Review Request -> Referral Ask.
+                        </p>
+                        <div class="bg-black/50 p-4 rounded border border-white/5 font-mono text-xs text-blue-400">
+                            > Tech: Webhook listeners & Conditional Logic<br>
+                            > Feature: Database Reactivation (DR)<br>
+                            > Result: 30% Boost in LTV
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: FRONTEND STACK -->
+        <section id="frontend" class="py-24 bg-dark-900 border-y border-white/5">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="flex items-center gap-4 mb-12">
+                    <div class="p-4 bg-orange-500/10 rounded-xl border border-orange-500/20"><i
+                            class="fa-solid fa-layer-group text-3xl text-orange-500"></i></div>
+                    <div>
+                        <h2 class="text-3xl font-bold text-white">Legacy & Frontend Integration</h2>
+                        <p class="text-gray-400">ClickFunnels & WordPress Ecosystems</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <!-- Protocol 3: ClickFunnels 2.0 -->
+                    <div
+                        class="bg-dark-800 border border-white/10 rounded-2xl p-8 hover:border-gold/50 transition-all group">
+                        <div class="flex justify-between items-start mb-6">
+                            <h3 class="text-2xl font-bold text-white group-hover:text-gold transition-colors">
+                                ClickFunnels Architecture</h3>
+                            <span
+                                class="text-xs font-mono text-gray-500 border border-white/10 px-2 py-1 rounded">FUNNEL
+                                HACKING</span>
+                        </div>
+                        <p class="text-gray-400 mb-6 text-sm leading-relaxed">
+                            <strong>Classic Direct Response.</strong> Sometimes, you need the classic CF style. We build
+                            high-converting CF 2.0 pipelines that integrate seamlessly with your backend.
+                            <br><br>
+                            We handle the custom CSS to make it look premium (removing that "generic funnel" look) and
+                            set up the CF Webhooks to push data instantly into your CRM of choice.
+                        </p>
+                        <div class="bg-black/50 p-4 rounded border border-white/5 font-mono text-xs text-orange-400">
+                            > Tech: CF 2.0 Liquid Code<br>
+                            > Feature: Cross-Domain Tracking<br>
+                            > Integration: Stripe & PayPal Rotators
+                        </div>
+                    </div>
+
+                    <!-- Protocol 4: WordPress Power -->
+                    <div
+                        class="bg-dark-800 border border-white/10 rounded-2xl p-8 hover:border-gold/50 transition-all group">
+                        <div class="flex justify-between items-start mb-6">
+                            <h3 class="text-2xl font-bold text-white group-hover:text-gold transition-colors">WordPress
+                                & Elementor</h3>
+                            <span
+                                class="text-xs font-mono text-gray-500 border border-white/10 px-2 py-1 rounded">CONTENT
+                                SCALE</span>
+                        </div>
+                        <p class="text-gray-400 mb-6 text-sm leading-relaxed">
+                            <strong>The SEO Heavyweight.</strong> For content-heavy sites, we build custom WordPress
+                            instances using Elementor Pro or Bricks Builder.
+                            <br><br>
+                            We optimize the backend (Redis Object Cache, CDN) so it doesn't run slow. We connect Gravity
+                            Forms or WPForms directly to GHL via API, ensuring no lead is ever lost in a "Contact Form
+                            7" abyss.
+                        </p>
+                        <div class="bg-black/50 p-4 rounded border border-white/5 font-mono text-xs text-orange-400">
+                            > Tech: Custom PHP Functions<br>
+                            > Feature: Headless WP Config Options<br>
+                            > Result: 99/100 Google PageSpeed Score
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: CUSTOM DEV & API -->
+        <section id="custom" class="py-24 bg-dark-800 border-y border-white/5">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="flex items-center gap-4 mb-12">
+                    <div class="p-4 bg-purple-500/10 rounded-xl border border-purple-500/20"><i
+                            class="fa-solid fa-code text-3xl text-purple-500"></i></div>
+                    <div>
+                        <h2 class="text-3xl font-bold text-white">Custom Engineering</h2>
+                        <p class="text-gray-400">Web Apps, Dashboards & API Connections</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <!-- Protocol 5: Custom Web Apps -->
+                    <div
+                        class="bg-dark-900 border border-white/10 rounded-2xl p-8 hover:border-gold/50 transition-all group">
+                        <div class="flex justify-between items-start mb-6">
+                            <h3 class="text-2xl font-bold text-white group-hover:text-gold transition-colors">Custom
+                                Dashboards & Apps</h3>
+                            <span class="text-xs font-mono text-gray-500 border border-white/10 px-2 py-1 rounded">FULL
+                                STACK</span>
+                        </div>
+                        <p class="text-gray-400 mb-6 text-sm leading-relaxed">
+                            <strong>Beyond the SaaS Limitations.</strong> Sometimes GHL or Shopify isn't enough. We
+                            build custom React/Node.js web applications tailored to your specific logic.
+                            <br><br>
+                            Need a custom client portal? A specialized ROI calculator? A dynamic reporting dashboard
+                            that pulls data from 5 different sources? We code it from scratch to your exact specs.
+                        </p>
+                        <div class="bg-black/50 p-4 rounded border border-white/5 font-mono text-xs text-purple-400">
+                            > Tech: React, Next.js, Node.js, Postgres<br>
+                            > Feature: Single Sign-On (SSO)<br>
+                            > Use Case: Custom Employee Portals
+                        </div>
+                    </div>
+
+                    <!-- Protocol 6: API Integration -->
+                    <div
+                        class="bg-dark-900 border border-white/10 rounded-2xl p-8 hover:border-gold/50 transition-all group">
+                        <div class="flex justify-between items-start mb-6">
+                            <h3 class="text-2xl font-bold text-white group-hover:text-gold transition-colors">Universal
+                                API Connector</h3>
+                            <span
+                                class="text-xs font-mono text-gray-500 border border-white/10 px-2 py-1 rounded">CONNECTIVITY</span>
+                        </div>
+                        <p class="text-gray-400 mb-6 text-sm leading-relaxed">
+                            <strong>Connecting the Unconnectable.</strong> We don't just use "Zapier." We write custom
+                            Python scripts and API wrappers to connect legacy systems to modern tools.
+                            <br><br>
+                            Connect your ERP to GHL. Connect your proprietary inventory system to Shopify. If it has an
+                            API documentation page, we can build a bridge to it.
+                        </p>
+                        <div class="bg-black/50 p-4 rounded border border-white/5 font-mono text-xs text-purple-400">
+                            > Tech: REST, GraphQL, SOAP<br>
+                            > Feature: Real-time Data Sync<br>
+                            > Result: Zero Data Silos
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: AI & N8N -->
+        <section id="ai" class="py-24 bg-dark-900">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="flex items-center gap-4 mb-12">
+                    <div class="p-4 bg-green-500/10 rounded-xl border border-green-500/20"><i
+                            class="fa-solid fa-brain text-3xl text-green-500"></i></div>
+                    <div>
+                        <h2 class="text-3xl font-bold text-white">Neural Automation & AI</h2>
+                        <p class="text-gray-400">The Future of Labor</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <!-- Protocol 7: Zapier to n8n Migration -->
+                    <div
+                        class="bg-dark-800 border border-white/10 rounded-2xl p-8 hover:border-gold/50 transition-all group">
+                        <div class="flex justify-between items-start mb-6">
+                            <h3 class="text-2xl font-bold text-white group-hover:text-gold transition-colors">Zapier ->
+                                n8n Migration</h3>
+                            <span class="text-xs font-mono text-gray-500 border border-white/10 px-2 py-1 rounded">COST
+                                SAVINGS</span>
+                        </div>
+                        <p class="text-gray-400 mb-6 text-sm leading-relaxed">
+                            <strong>Zapier is expensive and limited.</strong> n8n is the developer's automation tool. We
+                            migrate your costly Zapier tasks to self-hosted n8n workflows.
+                            <br><br>
+                            This allows for complex branching logic, data transformation, and infinite scaling without
+                            paying per-task premiums. It is enterprise-grade automation at a fraction of the cost.
+                        </p>
+                        <div class="bg-black/50 p-4 rounded border border-white/5 font-mono text-xs text-green-400">
+                            > Tech: Self-Hosted Docker Containers<br>
+                            > Feature: Unlimited Execution Time<br>
+                            > Result: Save $1,000s/mo in SaaS fees
+                        </div>
+                    </div>
+
+                    <!-- Protocol 8: AI Agents -->
+                    <div
+                        class="bg-dark-800 border border-white/10 rounded-2xl p-8 hover:border-gold/50 transition-all group">
+                        <div class="flex justify-between items-start mb-6">
+                            <h3 class="text-2xl font-bold text-white group-hover:text-gold transition-colors">Autonomous
+                                AI Agents</h3>
+                            <span class="text-xs font-mono text-gray-500 border border-white/10 px-2 py-1 rounded">24/7
+                                SALES</span>
+                        </div>
+                        <p class="text-gray-400 mb-6 text-sm leading-relaxed">
+                            <strong>Employees who never sleep.</strong> We build custom AI Agents using OpenAI
+                            Assistants API and Vapi.ai.
+                            <br><br>
+                            These agents sit inside your GHL chat widget, SMS, or even handle inbound phone calls. They
+                            qualify leads, answer FAQs, check your calendar availability, and book appointments in
+                            real-time.
+                        </p>
+                        <div class="bg-black/50 p-4 rounded border border-white/5 font-mono text-xs text-green-400">
+                            > Tech: OpenAI GPT-4o, Pinecone Vector DB<br>
+                            > Feature: Voice-to-Voice AI Calling<br>
+                            > Result: 100% Lead Response Rate
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="py-24 bg-gradient-to-br from-dark-800 to-black text-center px-6 border-t border-white/10">
+            <div class="max-w-3xl mx-auto">
+                <h2 class="text-4xl md:text-5xl font-black text-white mb-6">Automate Your Empire.</h2>
+                <p class="text-gray-400 mb-10 text-lg">We will map out your entire operational workflow and show you
+                    exactly where AI can replace manual labor.</p>
+                <a href="index.html#audit"
+                    class="inline-block px-10 py-5 bg-gold text-black font-bold rounded-xl hover:bg-gold-light transition-all shadow-lg shadow-gold/20 transform hover:-translate-y-1">
+                    Initialize Automation Audit
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="py-12 border-t border-white/10 bg-black text-center">
+        <div class="max-w-7xl mx-auto px-6">
+            <a href="index.html" class="text-xl font-black tracking-tighter text-white">JUMPSTART <span
+                    class="text-gold">SCALING</span></a>
+            <p class="text-gray-700 text-xs mt-4">© 2026 Jumpstart Scaling. All rights reserved.</p>
+        </div>
+    </footer>
+
+</body>
+
+</html>

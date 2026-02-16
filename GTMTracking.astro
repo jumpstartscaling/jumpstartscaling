@@ -1,0 +1,31 @@
+---
+// GTM Tracking Enhancement Component
+---
+
+<script is:inline>
+// Add GTM Data Layer tracking to existing form
+if (typeof window !== 'undefined') {
+  window.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('surveyForm');
+    if (form) {
+      const originalHandler = form.onsubmit;
+      form.addEventListener('submit', function(e) {
+        // GTM Data Layer Push
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          'event': 'form_submission',
+          'formType': 'scaling_survey',
+          'conversionValue': 50
+        });
+      });
+    }
+    
+    // Add IDs to CTAs if they don't exist
+    const heroCTA = document.querySelector('a[href="#survey"]');
+    if (heroCTA && !heroCTA.id) heroCTA.id = 'cta-hero';
+    
+    const submitBtn = document.querySelector('button[type="submit"]');
+    if (submitBtn && !submitBtn.id) submitBtn.id = 'cta-submit';
+  });
+}
+</script>

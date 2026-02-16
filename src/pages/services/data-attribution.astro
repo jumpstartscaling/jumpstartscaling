@@ -1,0 +1,99 @@
+---
+import ServiceLayout from '../../layouts/ServiceLayout.astro';
+import GoldenList from '../../components/GoldenList.astro';
+import GlassCard from '../../components/GlassCard.astro';
+---
+
+<ServiceLayout
+  title="The Data Radar"
+  subtitle="Server-Side Attribution & Signal Fidelity. Know the Truth About Your Revenue."
+  metaDescription="Ad platforms lie. We implement server-side tracking (CAPI) and multi-touch attribution to give you a single source of truth for your revenue."
+>
+
+  <h2>The "Black Box" Era Is Over</h2>
+  <p>
+    Since iOS14.5, "Client-Side" tracking (the Facebook Pixel) has gone dark. It relies on third-party cookies, which Safari, Firefox, and Chrome are blocking.
+  </p>
+  <p>
+    <strong>The Consequence:</strong>
+    <br/>
+    You spend $1,000. You make $3,000. Facebook reports 0 sales. You turn off the ad because you *think* it's failing. You just killed your best campaign because you were flying blind.
+  </p>
+  <p>
+    You cannot scale if you do not know the score.
+  </p>
+
+  <hr class="border-white/10 my-12" />
+
+  <h2>System Architecture: Server-Side Signal</h2>
+  <p>
+    We bypass the browser entirely. We implement <strong>Conversion API (CAPI)</strong> protocols.
+  </p>
+  <p>
+    When a user buys on your site, we do not rely on the browser to tell Facebook. Your *Server* talks directly to Facebook's *Server*. 
+  </p>
+  <div class="p-6 bg-[#111] border border-white/10 rounded-sm font-mono text-sm text-green-400 my-8 overflow-x-auto">
+    > PURCHASE_EVENT DETECTED<br/>
+    > EXTRACTING USER_DATA (HASHED_SHA256)<br/>
+    > SENDING PACKET TO: GRAPH.FACEBOOK.COM/V19.0/EVENTS<br/>
+    > STATUS: 200 OK (MATCH_QUALITY: 9.8/10)<br/>
+    > SIGNAL PRESERVED.
+  </div>
+  <p>
+    This restores your data visibility from ~40% to ~95%. Suddenly, your ads start "learning" again. Your CAC drops because the algorithm can finally see who is buying.
+  </p>
+
+  <h2>The "Truth" Dashboard (Looker Studio)</h2>
+  <p>
+    You should never log into Facebook Ads Manager to check your business health. Facebook wants you to spend more. They grade their own homework.
+  </p>
+  <p>
+    We build you a <strong>Unified Executive Dashboard</strong> using Looker Studio or PowerBI. It pulls data from:
+  </p>
+  <ul>
+    <li>Stripe (Actual Cash Collected)</li>
+    <li>Facebook/Google/TikTok (Ad Spend)</li>
+    <li>HubSpot (Lead Status)</li>
+  </ul>
+  <p>
+    It calculates your <strong>MER (Marketing Efficiency Ratio)</strong> and <strong>New Customer ROAS</strong> in real-time. You look at one screen, see "3.5x MER," and you know you are profitable. No guesswork.
+  </p>
+
+  <h2>Multi-Touch Attribution: The Customer Journey</h2>
+  <p>
+    A customer clicks a Facebook Ad (Day 1). They watch a YouTube video (Day 3). They search your brand on Google (Day 7). They buy.
+  </p>
+  <p>
+    Facebook claims the sale. Google claims the sale. You think you made 2 sales, but you only made 1.
+  </p>
+  <p>
+    Our <strong>Attribution Modeling</strong> weights these touchpoints. We tell you: <em>"Facebook started the journey, but YouTube closed it."</em> This allows you to allocate budget to channels that *actually* drive growth, not just the ones that steal credit.
+  </p>
+
+  <hr class="border-white/10 my-12" />
+
+  <h2>Technical Specifications</h2>
+  <div class="grid md:grid-cols-2 gap-8 not-prose">
+    <GlassCard title="Offline Conversion Import">
+      <p class="text-sm mt-4 text-gray-400">
+        For businesses with long sales cycles (calls), we upload your closed deals back into the ad platforms 30 days later. This trains the AI to find "High Value Leads" not just "Cheap Leads."
+      </p>
+    </GlassCard>
+    <GlassCard title="UTM Architecture">
+      <p class="text-sm mt-4 text-gray-400">
+        We enforce a strict UTM Taxonomy across your entire organization. Every link, every email, every post is tracked. If it moves, we measure it.
+      </p>
+    </GlassCard>
+  </div>
+
+  <div class="mt-16 p-8 border border-gold-500/30 bg-gold-900/5 rounded-lg text-center">
+    <h3 class="text-2xl font-bold text-white mb-4">See The Matrix</h3>
+    <p class="text-gray-300 mb-8">
+      Get total visibility into your revenue engine today.
+    </p>
+    <a href="/#audit" class="inline-block px-8 py-4 bg-gold-500 hover:bg-gold-400 text-black font-bold uppercase tracking-widest rounded-sm transition-colors">
+      Install Data Radar
+    </a>
+  </div>
+
+</ServiceLayout>

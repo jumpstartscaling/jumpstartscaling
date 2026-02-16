@@ -1,0 +1,741 @@
+---
+const title = 'Chris Amaya - Technical Architect for Scaling Companies';
+const description = 'Full-Stack Developer & AI Engineer. I build intelligent systems that scale, integrate AI that works, and cut automation bills by 90%.';
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{title}</title>
+    <meta name="description" content={description}>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --black: #050505;
+            --dark-grey: #0F0F0F;
+            --gold: #C9A961;
+            --gold-bright: #E5C88D;
+            --gold-dark: #9B7E46;
+            --text: #E0E0E0;
+            --text-muted: #A0A0A0;
+            --accent-green: #00FF94;
+            --accent-red: #FF4444;
+        }
+        
+        html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--black);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        
+        #gradient-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
+        }
+        
+        .container { max-width: 1400px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 2; }
+        
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(5, 5, 5, 0.9);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 1.25rem 0;
+        }
+        
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: #fff;
+            text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+        
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--accent-green);
+            background: rgba(0, 255, 148, 0.1);
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            border: 1px solid rgba(0, 255, 148, 0.2);
+        }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--accent-green);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+        
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding-top: 80px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 5.5rem);
+            font-weight: 800;
+            margin-bottom: 2rem;
+            letter-spacing: -0.04em;
+            line-height: 1.1;
+        }
+        
+        .hero h1 .gold {
+            color: var(--gold);
+        }
+        
+        .hero .subtitle {
+            font-size: clamp(1.1rem, 2vw, 1.4rem);
+            color: var(--text-muted);
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            font-weight: 400;
+        }
+        
+        .cta-primary {
+            background: var(--gold);
+            color: var(--black);
+            padding: 1.5rem 3rem;
+            font-size: 1rem;
+            font-weight: 700;
+            border-radius: 2px;
+            text-decoration: none;
+            display: inline-block;
+            border: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .cta-primary:hover {
+            background: var(--gold-bright);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(201, 169, 97, 0.3);
+        }
+        
+        .section {
+            padding: 8rem 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        section:nth-of-type(even) {
+            background-color: var(--dark-grey);
+            border-top: 1px solid rgba(255,255,255,0.03);
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+        }
+        
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 4rem;
+            letter-spacing: -0.03em;
+            color: #fff;
+        }
+        
+        .content-row {
+            display: flex;
+            gap: 5rem;
+            align-items: center;
+            margin-bottom: 5rem;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        
+        .content-row.visible { opacity: 1; transform: translateY(0); }
+        .content-row > * { flex: 1; }
+        .content-row.reverse { flex-direction: row-reverse; }
+        
+        .content-text h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: -0.02em;
+        }
+        
+        .content-text h3.gold { color: var(--gold); }
+        
+        .content-text p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+        
+        .content-text ul {
+            list-style: none;
+            margin-top: 1.5rem;
+        }
+        
+        .content-text li {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+            position: relative;
+            color: var(--text);
+        }
+        
+        .content-text li::before {
+            content: '>';
+            color: var(--gold);
+            font-family: 'JetBrains Mono', monospace;
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+        
+        .visual-3d {
+            height: 400px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .visual-3d canvas { width: 100%; height: 100%; }
+        
+        .survey-wrapper {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #0A0A0A;
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 3rem;
+            border-radius: 4px;
+        }
+        
+        .progress-bar-container {
+            width: 100%;
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            margin-bottom: 2.5rem;
+        }
+        
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--gold);
+            width: 14%;
+            transition: width 0.3s ease;
+        }
+        
+        .survey-question {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: #fff;
+        }
+        
+        .options-grid { display: grid; gap: 1rem; }
+        
+        .option-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 1.25rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .option-card:hover {
+            background: rgba(201, 169, 97, 0.1);
+            border-color: var(--gold);
+        }
+        
+        .option-card input { accent-color: var(--gold); transform: scale(1.2); }
+        
+        input[type="text"], input[type="email"], textarea {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            margin-bottom: 1rem;
+            border-radius: 2px;
+        }
+        
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--gold);
+        }
+        
+        footer {
+            padding: 4rem 0;
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            margin-top: 6rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        
+        @media(max-width: 968px) {
+            .content-row {
+                flex-direction: column;
+                gap: 2rem;
+            }
+            .content-row:not(.reverse) { flex-direction: column; }
+            .content-row.reverse { flex-direction: column-reverse; }
+            .hero h1 { font-size: 3rem; }
+            .section { padding: 4rem 0; }
+            .survey-wrapper { padding: 1.5rem; }
+            .status-badge { font-size: 0.7rem; padding: 0.3rem 0.6rem; }
+        }
+    </style>
+</head>
+<body>
+    <div id="gradient-bg"></div>
+
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">Chris Amaya</a>
+            <div class="status-badge">
+                <div class="status-dot"></div>
+                AVAILABLE FOR PROJECTS
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Stop Renting Your Automation.<br><span class="gold">Start Owning It.</span></h1>
+            <p class="subtitle">
+                I build intelligent systems that scale, integrate AI that actually works, and cut your monthly automation bills by 90% by migrating you to Full-Stack Solutions.
+            </p>
+            <a href="#survey" class="cta-primary">Book Technical Roadmap</a>
+        </div>
+    </section>
+
+    <section class="section" id="pain">
+        <div class="container">
+            <h2 class="section-title">Why Your "Modern Stack" is Breaking</h2>
+            
+            <div class="content-row">
+                <div class="content-text">
+                    <h3>The "Success Tax" of Automation</h3>
+                    <p>When you started, Zapier cost you $20/mo. Now you're processing 50k tasks and your bill rivals a mortgage. You hesitate to build new features because you're afraid of the "Task Count." <strong>Innovation shouldn't have a meter.</strong></p>
+                </div>
+                <div class="visual-3d">
+                    <canvas id="costCanvas" width="600" height="400"></canvas>
+                </div>
+            </div>
+            
+            <div class="content-row reverse">
+                <div class="visual-3d">
+                    <canvas id="blackboxCanvas" width="600" height="400"></canvas>
+                </div>
+                <div class="content-text">
+                    <h3>The "Black Box" Frustration</h3>
+                    <p>You want to integrate a specific AI model or custom logic. But your SaaS tools don't support it yet. You're waiting on <em>their</em> roadmap instead of building <em>yours</em>. You are locked into their walled garden.</p>
+                </div>
+            </div>
+            
+            <div class="content-row">
+                <div class="content-text">
+                    <h3>The "Frankenstein" Database</h3>
+                    <p>Your data is scattered across Airtable, Sheets, and CRMs. You have no Single Source of Truth. If one API key expires, your entire operation halts. This isn't an asset; it's a liability.</p>
+                </div>
+                <div class="visual-3d">
+                    <canvas id="databaseCanvas" width="600" height="400"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="solution">
+        <div class="container">
+            <h2 class="section-title">Full-Stack Sovereignty</h2>
+            
+            <div class="content-row reverse">
+                <div class="visual-3d">
+                    <canvas id="n8nCanvas" width="600" height="400"></canvas>
+                </div>
+                <div class="content-text">
+                    <h3 class="gold">The "Kill Zapier" Initiative</h3>
+                    <p>I migrate scaling companies from expensive SaaS glue to robust, self-hosted infrastructure using <strong>n8n</strong> and <strong>Docker</strong>.</p>
+                    <ul>
+                        <li>I provision private cloud servers (DigitalOcean/Hetzner)</li>
+                        <li>I deploy self-hosted n8n instances</li>
+                        <li>I refactor fragile Zaps into robust workflows</li>
+                        <li><strong>Result:</strong> Unlimited executions for a flat $20/mo server cost.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="services">
+        <div class="container">
+            <h2 class="section-title">Service Pillars</h2>
+            
+            <div class="content-row">
+                <div class="content-text">
+                    <h3 class="gold">Full-Stack Web Development</h3>
+                    <p>Fast, SEO-optimized applications built to handle real traffic. No drag-and-drop builders. Real code.</p>
+                    <ul>
+                        <li><strong>Frameworks:</strong> Python (Django/FastAPI), React, Astro</li>
+                        <li><strong>Use Case:</strong> Client Portals, SaaS MVPs, Internal Dashboards</li>
+                    </ul>
+                </div>
+                <div class="visual-3d">
+                    <canvas id="fullstackCanvas" width="600" height="400"></canvas>
+                </div>
+            </div>
+            
+            <div class="content-row reverse">
+                <div class="visual-3d">
+                    <canvas id="aiCanvas" width="600" height="400"></canvas>
+                </div>
+                <div class="content-text">
+                    <h3 class="gold">AI Engineering</h3>
+                    <p>Beyond simple chatbots. I build intelligent agent systems that run on your own infrastructure for privacy and zero per-token costs.</p>
+                    <ul>
+                        <li><strong>Tech:</strong> Ollama, Llama 3, RAG Pipelines</li>
+                        <li><strong>Use Case:</strong> Auto-drafting emails, analyzing CSVs, updating CRMs</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="content-row">
+                <div class="content-text">
+                    <h3 class="gold">DevOps & API Integration</h3>
+                    <p>The glue that holds it all together. I connect tools that "don't talk to each other" and ensure your servers stay up.</p>
+                    <ul>
+                        <li><strong>Tech:</strong> Docker, Nginx, Redis, PostgreSQL</li>
+                        <li><strong>Use Case:</strong> Connecting Legacy ERPs to modern Shopify stores</li>
+                    </ul>
+                </div>
+                <div class="visual-3d">
+                    <canvas id="devopsCanvas" width="600" height="400"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="survey">
+        <div class="container">
+            <div class="survey-wrapper">
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <h2 style="font-size: 2rem; color: #fff;">Project Intake</h2>
+                    <p style="color: var(--text-muted);">Tell me what you're building. I'll tell you how we execute.</p>
+                </div>
+
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" id="progressFill"></div>
+                </div>
+
+                <form id="surveyForm">
+                    <div class="form-step active" data-step="1">
+                        <div class="survey-question">1. What is the primary request?</div>
+                        <div class="options-grid">
+                            <label class="option-card"><input type="radio" name="type" value="automation" required> <span>Automation Migration (Zapier to n8n)</span></label>
+                            <label class="option-card"><input type="radio" name="type" value="dev"> <span>Full-Stack Build (Web App/SaaS)</span></label>
+                            <label class="option-card"><input type="radio" name="type" value="ai"> <span>AI Integration (Agents/RAG)</span></label>
+                            <label class="option-card"><input type="radio" name="type" value="api"> <span>Backend/API Fixes</span></label>
+                        </div>
+                        <div style="margin-top: 2rem; text-align: right;">
+                            <button type="button" class="cta-primary" onclick="nextStep()">Next ></button>
+                        </div>
+                    </div>
+
+                    <div class="form-step" data-step="2" style="display:none;">
+                        <div class="survey-question">2. Estimated monthly automation spend?</div>
+                        <div class="options-grid">
+                            <label class="option-card"><input type="radio" name="spend" value="low"> <span>Under $100/mo</span></label>
+                            <label class="option-card"><input type="radio" name="spend" value="mid"> <span>$100 - $500/mo</span></label>
+                            <label class="option-card"><input type="radio" name="spend" value="high"> <span>$500 - $1,000/mo</span></label>
+                            <label class="option-card"><input type="radio" name="spend" value="enterprise"> <span>$1,000+/mo (Priority)</span></label>
+                        </div>
+                        <div style="margin-top: 2rem; display: flex; justify-content: space-between;">
+                            <button type="button" class="cta-primary" style="background:transparent; border:1px solid #333; color:#fff;" onclick="prevStep()">< Back</button>
+                            <button type="button" class="cta-primary" onclick="nextStep()">Next ></button>
+                        </div>
+                    </div>
+
+                    <div class="form-step" data-step="3" style="display:none;">
+                        <div class="survey-question">3. Describe the technical pain point</div>
+                        <textarea name="pain" placeholder="e.g. 'We spend 10 hours a week copy-pasting data from Email to Airtable...'" style="min-height: 100px;"></textarea>
+                        <div style="margin-top: 2rem; display: flex; justify-content: space-between;">
+                            <button type="button" class="cta-primary" style="background:transparent; border:1px solid #333; color:#fff;" onclick="prevStep()">< Back</button>
+                            <button type="button" class="cta-primary" onclick="nextStep()">Next ></button>
+                        </div>
+                    </div>
+
+                    <div class="form-step" data-step="4" style="display:none;">
+                        <div class="survey-question">4. Current Tech Stack</div>
+                        <div class="options-grid">
+                            <label class="option-card"><input type="checkbox" name="stack" value="python"> <span>Python / Django / FastAPI</span></label>
+                            <label class="option-card"><input type="checkbox" name="stack" value="js"> <span>React / Node / TypeScript</span></label>
+                            <label class="option-card"><input type="checkbox" name="stack" value="sql"> <span>SQL (Postgres/MySQL)</span></label>
+                            <label class="option-card"><input type="checkbox" name="stack" value="nocode"> <span>No-Code (Airtable/Bubble)</span></label>
+                        </div>
+                        <div style="margin-top: 2rem; display: flex; justify-content: space-between;">
+                            <button type="button" class="cta-primary" style="background:transparent; border:1px solid #333; color:#fff;" onclick="prevStep()">< Back</button>
+                            <button type="button" class="cta-primary" onclick="nextStep()">Next ></button>
+                        </div>
+                    </div>
+
+                    <div class="form-step" data-step="5" style="display:none;">
+                        <div class="survey-question">5. Execution Preference</div>
+                        <div class="options-grid">
+                            <label class="option-card"><input type="radio" name="execution" value="turnkey"> <span>Turn-Key: You build and deliver it.</span></label>
+                            <label class="option-card"><input type="radio" name="execution" value="blueprint"> <span>Blueprint: You design it, my team builds it.</span></label>
+                            <label class="option-card"><input type="radio" name="execution" value="augment"> <span>Staff Augmentation: Join my team to unblock us.</span></label>
+                        </div>
+                        <div style="margin-top: 2rem; display: flex; justify-content: space-between;">
+                            <button type="button" class="cta-primary" style="background:transparent; border:1px solid #333; color:#fff;" onclick="prevStep()">< Back</button>
+                            <button type="button" class="cta-primary" onclick="nextStep()">Next ></button>
+                        </div>
+                    </div>
+
+                    <div class="form-step" data-step="6" style="display:none;">
+                        <div class="survey-question">6. Budget Estimate</div>
+                        <div class="options-grid">
+                            <label class="option-card"><input type="radio" name="budget" value="1-3k"> <span>$1k - $3k (Consulting/Fixes)</span></label>
+                            <label class="option-card"><input type="radio" name="budget" value="3-10k"> <span>$3k - $10k (Project/Migration)</span></label>
+                            <label class="option-card"><input type="radio" name="budget" value="10k+"> <span>$10k+ (Enterprise/Retainer)</span></label>
+                        </div>
+                        <div style="margin-top: 2rem; display: flex; justify-content: space-between;">
+                            <button type="button" class="cta-primary" style="background:transparent; border:1px solid #333; color:#fff;" onclick="prevStep()">< Back</button>
+                            <button type="button" class="cta-primary" onclick="nextStep()">Next ></button>
+                        </div>
+                    </div>
+
+                    <div class="form-step" data-step="7" style="display:none;">
+                        <div class="survey-question">7. Contact Info</div>
+                        <input type="text" name="name" placeholder="Name" required>
+                        <input type="email" name="email" placeholder="Work Email" required>
+                        <textarea name="security" placeholder="Any security constraints? (e.g. HIPAA, On-Prem)" style="min-height: 80px;"></textarea>
+                        <div style="margin-top: 2rem; display: flex; justify-content: space-between;">
+                            <button type="button" class="cta-primary" style="background:transparent; border:1px solid #333; color:#fff;" onclick="prevStep()">< Back</button>
+                            <button type="submit" class="cta-primary">Submit Application</button>
+                        </div>
+                    </div>
+                </form>
+
+                <div id="successMessage" style="display:none; text-align:center; padding: 2rem;">
+                    <h3 style="color:var(--gold); font-size:2rem;">Received.</h3>
+                    <p>I'll review your stack and reach out within 24 hours.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p class="mono">Chris Amaya | chrisamaya.work</p>
+        <p style="opacity: 0.6;">Full-Stack Development • AI Engineering • Cloud Architecture</p>
+    </footer>
+
+    <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, { threshold: 0.2 });
+        document.querySelectorAll('.content-row').forEach(row => observer.observe(row));
+
+        let currentStep = 1;
+        const totalSteps = 7;
+        
+        window.nextStep = function() {
+            if(currentStep < totalSteps) {
+                document.querySelector(`[data-step="${currentStep}"]`).style.display = 'none';
+                currentStep++;
+                document.querySelector(`[data-step="${currentStep}"]`).style.display = 'block';
+                updateProgress();
+            }
+        };
+        
+        window.prevStep = function() {
+            if(currentStep > 1) {
+                document.querySelector(`[data-step="${currentStep}"]`).style.display = 'none';
+                currentStep--;
+                document.querySelector(`[data-step="${currentStep}"]`).style.display = 'block';
+                updateProgress();
+            }
+        };
+        
+        function updateProgress() {
+            document.getElementById('progressFill').style.width = `${(currentStep / totalSteps) * 100}%`;
+        }
+
+        document.getElementById('surveyForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            document.getElementById('surveyForm').style.display = 'none';
+            document.getElementById('successMessage').style.display = 'block';
+            
+            const formData = new FormData(e.target);
+            fetch("https://n8n.jumpstartscaling.com/webhook/2aadbf03-cff5-48b7-8236-cf344d755ed0", { method: "POST", body: formData });
+        });
+
+        function drawCanvas(id, type) {
+            const canvas = document.getElementById(id);
+            if(!canvas) return;
+            const ctx = canvas.getContext('2d');
+            
+            function animate() {
+                ctx.clearRect(0,0,canvas.width,canvas.height);
+                const t = Date.now() * 0.001;
+                
+                if(type === 'cost') {
+                    ctx.strokeStyle = '#FF4444';
+                    ctx.lineWidth = 3;
+                    ctx.beginPath();
+                    for(let x=0; x<canvas.width; x+=10) {
+                        let y = 350 - (x/canvas.width)*200 - Math.sin(x*0.02 + t)*10;
+                        if(x===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+                    }
+                    ctx.stroke();
+                    ctx.fillStyle = '#FF4444';
+                    ctx.font = 'bold 16px JetBrains Mono';
+                    ctx.fillText('COSTS', 500, 100);
+                }
+                
+                if(type === 'blackbox') {
+                    const cx = canvas.width/2, cy = canvas.height/2;
+                    ctx.strokeStyle = '#C9A961';
+                    ctx.lineWidth = 2;
+                    ctx.strokeRect(cx-60, cy-60, 120, 120);
+                    ctx.fillStyle = 'rgba(201,169,97,0.1)';
+                    ctx.fillRect(cx-60, cy-60, 120, 120);
+                    ctx.beginPath();
+                    ctx.arc(cx, cy-10, 15, 0, Math.PI, true);
+                    ctx.stroke();
+                    ctx.fillStyle = '#C9A961';
+                    ctx.fillRect(cx-12, cy-10, 24, 24);
+                }
+                
+                if(type === 'database') {
+                    ctx.fillStyle = '#666';
+                    [150, 300, 450].forEach((x, i) => {
+                        let y = 200 + Math.sin(t + i)*50;
+                        ctx.beginPath(); ctx.arc(x, y, 10, 0, Math.PI*2); ctx.fill();
+                        if(i>0) {
+                            ctx.strokeStyle = '#444';
+                            ctx.beginPath(); ctx.moveTo(x-150, 200+Math.sin(t+i-1)*50); ctx.lineTo(x,y); ctx.stroke();
+                        }
+                    });
+                }
+                
+                if(type === 'n8n') {
+                    ctx.strokeStyle = '#C9A961';
+                    ctx.lineWidth = 2;
+                    [100, 250, 400].forEach((x, i) => {
+                        ctx.strokeRect(x, 180, 80, 40);
+                        if(i<2) {
+                            ctx.beginPath(); ctx.moveTo(x+80, 200); ctx.lineTo(x+150, 200); ctx.stroke();
+                            let p = (t + i*0.5) % 1;
+                            ctx.fillStyle = '#E5C88D';
+                            ctx.beginPath(); ctx.arc(x+80 + p*70, 200, 4, 0, Math.PI*2); ctx.fill();
+                        }
+                    });
+                }
+                
+                if(type === 'fullstack') {
+                    ctx.strokeStyle = '#C9A961';
+                    ctx.fillStyle = 'rgba(201,169,97,0.1)';
+                    for(let i=0; i<4; i++) {
+                        let y = 100 + i*60;
+                        ctx.fillRect(200, y, 200, 40);
+                        ctx.strokeRect(200, y, 200, 40);
+                    }
+                }
+                
+                if(type === 'ai') {
+                    ctx.fillStyle = '#C9A961';
+                    const cx = canvas.width/2, cy = canvas.height/2;
+                    for(let i=0; i<6; i++) {
+                        let a = (i/6)*Math.PI*2 + t*0.5;
+                        let x = cx + Math.cos(a)*80;
+                        let y = cy + Math.sin(a)*80;
+                        ctx.beginPath(); ctx.arc(x,y,5,0,Math.PI*2); ctx.fill();
+                        ctx.strokeStyle = 'rgba(201,169,97,0.3)';
+                        ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(x,y); ctx.stroke();
+                    }
+                    ctx.fillStyle = '#E5C88D';
+                    ctx.beginPath(); ctx.arc(cx,cy,15,0,Math.PI*2); ctx.fill();
+                }
+                
+                if(type === 'devops') {
+                    ctx.fillStyle = '#333';
+                    ctx.strokeStyle = '#C9A961';
+                    for(let i=0; i<3; i++) {
+                        let x = 150 + i*120;
+                        ctx.fillRect(x, 150, 80, 120);
+                        ctx.strokeRect(x, 150, 80, 120);
+                        if(Math.random() > 0.9) ctx.fillStyle = '#00FF00'; else ctx.fillStyle = '#111';
+                        ctx.fillRect(x+10, 160, 10, 5);
+                        ctx.fillStyle = '#333';
+                    }
+                }
+
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+
+        drawCanvas('costCanvas', 'cost');
+        drawCanvas('blackboxCanvas', 'blackbox');
+        drawCanvas('databaseCanvas', 'database');
+        drawCanvas('n8nCanvas', 'n8n');
+        drawCanvas('fullstackCanvas', 'fullstack');
+        drawCanvas('aiCanvas', 'ai');
+        drawCanvas('devopsCanvas', 'devops');
+    </script>
+</body>
+</html>

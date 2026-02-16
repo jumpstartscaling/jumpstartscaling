@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jumpstart Scaling | Revenue Engineering Command Center</title>
+    <meta name="description"
+        content="The Command Center for high-velocity founders. We engineer revenue systems that scale without chaos.">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Jumpstart Scaling | Revenue Engineering">
+    <meta property="og:description" content="Scale or Die. The Agency Model is Broken. We Fix It.">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <style>
+        :root {
+            --color-obsidian: #050505;
+            --color-gold: #C9A961;
+            --color-amber: #FBBF24;
+            --color-cream: #FFE5A0;
+            --color-ash: #111111;
+        }
+
+        body {
+            background-color: var(--color-obsidian);
+            color: white;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease-in;
+        }
+
+        body.loaded {
+            opacity: 1;
+        }
+
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .glass-nav {
+            background: rgba(5, 5, 5, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(201, 169, 97, 0.1);
+        }
+
+        /* Grid Background */
+        .grid-bg {
+            background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+
+        /* Custom Micro-Interactions (Hover Effects) */
+        .hvr-glow:hover {
+            box-shadow: 0 0 8px rgba(251, 191, 36, 0.6);
+            transition-duration: 0.3s;
+        }
+
+        .hvr-float {
+            transition-duration: 0.3s;
+            transition-property: transform;
+            transition-timing-function: ease-out;
+        }
+        .hvr-float:hover {
+            transform: translateY(-8px);
+        }
+
+        .hvr-underline-from-center {
+            position: relative;
+            overflow: hidden;
+        }
+        .hvr-underline-from-center:before {
+            content: "";
+            position: absolute;
+            z-index: -1;
+            left: 51%;
+            right: 51%;
+            bottom: 0;
+            background: #fff;
+            height: 4px;
+            transition-property: left, right;
+            transition-duration: 0.3s;
+            transition-timing-function: ease-out;
+        }
+        .hvr-underline-from-center:hover:before {
+            left: 0;
+            right: 0;
+        }
+
+        .interactive-card {
+            transition: all 0.3s ease;
+        }
+        .interactive-card:hover {
+            transform: scale(1.02);
+            border-color: var(--color-gold);
+            box-shadow: 0 0 30px rgba(201, 169, 97, 0.1);
+        }
+    </style>
+
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('homeLogic', () => ({
+                isScrolled: false,
+                mobileMenuOpen: false,
+                status: 'OPEN',
+                statusColor: 'text-green-500',
+
+                init() {
+                    document.body.classList.add('loaded');
+                    window.addEventListener('scroll', () => { this.isScrolled = window.scrollY > 50; });
+
+                    // Initialize AOS
+                    AOS.init({
+                        once: true,
+                        duration: 800,
+                        offset: 100,
+                    });
+
+                    // Simple Status Simulation
+                    const hour = new Date().getHours();
+                    if (hour > 9 && hour < 18) {
+                        this.status = 'OPERATIONAL';
+                        this.statusColor = 'text-green-500';
+                    } else {
+                        this.status = 'LOW LATENCY';
+                        this.statusColor = 'text-gold';
+                    }
+                },
+
+                toggleMobileMenu() {
+                    this.mobileMenuOpen = !this.mobileMenuOpen;
+                }
+            }));
+        });
+    </script>
+</head>
+
+<body x-data="homeLogic" class="antialiased bg-black selection:bg-[#C9A961] selection:text-black grid-bg">
+
+    <nav class="fixed top-0 w-full z-50 transition-all duration-500 ease-in-out h-24 flex items-center"
+        :class="isScrolled ? 'glass-nav h-20' : 'bg-transparent border-b border-white/5'">
+        <div class="w-full max-w-[1400px] mx-auto px-6 lg:px-12 flex justify-between items-center">
+            <a href="index.html" class="flex items-center gap-4">
+                <svg class="w-10 h-10 text-[#C9A961]" viewBox="0 0 40 40" fill="none">
+                    <path d="M20 5L30 25H10L20 5Z" stroke="currentColor" stroke-width="2" />
+                    <path d="M20 15L25 25H15L20 15Z" fill="currentColor" class="opacity-50" />
+                    <rect x="18" y="30" width="4" height="4" fill="currentColor" />
+                </svg>
+                <div class="flex flex-col"><span
+                        class="font-bold text-lg tracking-tight text-white">JUMPSTART</span><span
+                        class="font-mono text-[10px] tracking-[0.3em] text-[#C9A961] uppercase">SCALING</span></div>
+            </a>
+
+            <div class="hidden xl:flex items-center gap-8 font-mono text-xs tracking-widest text-gray-500">
+                <div class="flex items-center gap-2 px-4 py-2 border border-white/10 rounded bg-white/5">
+                    <div class="w-2 h-2 rounded-full animate-pulse bg-green-500"></div>
+                    <span x-text="status" :class="statusColor"></span>
+                </div>
+                <button onclick="document.querySelector('#protocols').scrollIntoView({behavior: 'smooth'})"
+                    class="hover:text-white transition-colors">PROTOCOLS</button>
+                <button onclick="document.querySelector('#data-room').scrollIntoView({behavior: 'smooth'})"
+                    class="hover:text-white transition-colors">DATA ROOM</button>
+                <a href="#audit"
+                    class="ml-4 px-6 py-2 border border-[#C9A961] text-[#C9A961] hover:bg-[#C9A961] hover:text-black font-bold transition-all duration-300">SYSTEM
+                    ACCESS</a>
+            </div>
+            <button @click="toggleMobileMenu" class="xl:hidden z-50 text-white hover:text-[#C9A961]">
+                <div class="space-y-2"><span class="block w-8 h-0.5 bg-current"></span><span
+                        class="block w-8 h-0.5 bg-current"></span><span class="block w-8 h-0.5 bg-current"></span></div>
+            </button>
+        </div>
+    </nav>
+
+    <section class="min-h-screen flex flex-col justify-center items-center relative pt-20 overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-black/50 to-[#050505]"></div>
+
+        <div class="relative z-10 text-center max-w-5xl px-6" data-aos="zoom-in" data-aos-duration="1000">
+            <div
+                class="inline-flex items-center gap-2 px-3 py-1 rounded border border-[#C9A961]/30 bg-[#C9A961]/5 text-[#C9A961] font-mono text-xs tracking-widest mb-8 animate-pulse">
+                SYSTEM INITIALIZED: V.2.0.4
+            </div>
+
+            <h1
+                class="text-7xl md:text-9xl font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-800 mb-8 leading-none">
+                SCALE OR DIE.
+            </h1>
+
+            <p class="text-xl md:text-2xl text-gray-400 max-w-2xl mx-auto leading-relaxed mb-12">
+                The Agency Model is Broken. We replace "Hope Marketing" with <span class="text-[#C9A961]">Revenue
+                    Engineering</span>.
+            </p>
+
+            <div class="flex flex-col md:flex-row justify-center gap-6">
+                <a href="#protocols"
+                    class="px-10 py-4 bg-[#C9A961] text-black font-bold tracking-wider hover:bg-white transition-all transform hover:scale-105">
+                    INITIATE PROTOCOLS
+                </a>
+                <a href="#data-room"
+                    class="px-10 py-4 border border-white/20 text-white font-mono hover:border-[#C9A961] hover:text-[#C9A961] transition-all">
+                    VIEW DATA ROOM
+                </a>
+            </div>
+        </div>
+
+        <div class="absolute bottom-0 w-full h-32 bg-gradient-to-t from-[#050505] to-transparent"></div>
+    </section>
+
+    <section class="py-32 bg-[#050505] relative border-t border-white/10">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-12 grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
+            <div data-aos="fade-right">
+                <h2 class="text-5xl font-bold text-white mb-8">The "Black Box" Problem.</h2>
+                <div class="space-y-6 text-gray-400 text-lg leading-relaxed">
+                    <p>Founders are tired of "Magic." Agencies sell you a black box—they take your money, hide the work,
+                        and deliver excuses.</p>
+                    <p>We build <strong class="text-white">Glass Boxes</strong>. You see the code. You own the assets.
+                        You control the data. We are not a service provider; we are fractional architects who build the
+                        machine, hand you the keys, and teach you how to drive.</p>
+                </div>
+            </div>
+            <div class="relative" data-aos="fade-left">
+                <div class="absolute inset-0 bg-[#C9A961]/10 blur-3xl"></div>
+                <div class="relative border border-white/10 bg-white/5 p-8 rounded-xl backdrop-blur-sm">
+                    <div class="flex justify-between items-center border-b border-white/10 pb-4 mb-4">
+                        <span class="font-mono text-xs text-red-500">TRADITIONAL AGENCY</span>
+                        <span class="font-mono text-xs text-red-500">(-40% EFFICIENCY)</span>
+                    </div>
+                    <div class="space-y-4 font-mono text-sm text-gray-500">
+                        <div class="flex justify-between"><span>Retainer Cost</span> <span>$10,000/mo</span></div>
+                        <div class="flex justify-between"><span>Asset Ownership</span> <span>Zero</span></div>
+                        <div class="flex justify-between"><span>Data Transparency</span> <span>Opaque</span></div>
+                    </div>
+
+                    <div class="mt-8 pt-4 border-t border-[#C9A961]/20 flex justify-between items-center">
+                        <span class="font-mono text-xs text-[#C9A961]">JUMPSTART SCALING</span>
+                        <span class="font-mono text-xs text-[#C9A961]">(+400% VELOCITY)</span>
+                    </div>
+                    <div class="space-y-4 font-mono text-sm text-gray-300 mt-4">
+                        <div class="flex justify-between"><span>Investment</span> <span>Performance</span></div>
+                        <div class="flex justify-between"><span>Asset Ownership</span> <span>100% Client</span></div>
+                        <div class="flex justify-between"><span>Data Transparency</span> <span>Absolute</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 px-6 md:px-12 bg-[#050505]">
+        <div class="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center bg-[#050505] border-l-2 border-[#FBBF24]/20 pl-8 md:pl-16">
+            
+            <div data-aos="fade-right">
+                <h2 class="text-5xl font-extrabold tracking-tighter text-white mb-6">Is Your Growth Being Throttled?</h2>
+                <p class="text-gray-400 font-light text-lg mb-8 leading-relaxed">
+                    <strong class="text-white">Most agencies are designed to retain you, not scale you.</strong> They thrive on "Activity Metrics" (clicks, impressions, meetings) while your <strong class="text-white">Contribution Margin</strong> bleeds out. We call this <strong class="text-[#FBBF24]">Agency Decay</strong>.
+                </p>
+
+                <div class="space-y-6">
+                    <div class="flex items-start gap-4">
+                        <svg class="w-6 h-6 text-[#FBBF24] mt-1 shrink-0" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+                        <div>
+                            <h4 class="text-white font-bold text-lg">Creative Stagnation</h4>
+                            <p class="text-gray-500 text-sm">Using the same 3 winners for 6 months.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <svg class="w-6 h-6 text-[#FBBF24] mt-1 shrink-0" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+                        <div>
+                            <h4 class="text-white font-bold text-lg">The "Shadow" Team</h4>
+                            <p class="text-gray-500 text-sm">You sold the A-Team, but a junior intern is pulling the levers.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <svg class="w-6 h-6 text-[#FBBF24] mt-1 shrink-0" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+                        <div>
+                            <h4 class="text-white font-bold text-lg">Opaque Attribution</h4>
+                            <p class="text-gray-500 text-sm">Data that looks good in a PDF but doesn't match your bank account.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="relative group" data-aos="zoom-in" data-aos-delay="300">
+                <div class="absolute -inset-1 bg-gradient-to-r from-[#FBBF24] to-transparent opacity-20 blur-lg transition duration-500 group-hover:opacity-40"></div>
+                <div class="relative bg-[#111111] border border-[#333] rounded-lg p-6 font-mono text-xs text-green-400 backdrop-blur-md hvr-glow">
+                    <div class="flex gap-2 mb-4 border-b border-[#333] pb-2">
+                        <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                    </div>
+                    <div class="space-y-2">
+                        <p>> INITIATING DIAGNOSTIC...</p>
+                        <p>> ANALYZING AD_ACCOUNT_01...</p>
+                        <p class="text-red-500">> [ALERT] FREQUENCY CAP EXCEEDED (4.2x)</p>
+                        <p class="text-red-500">> [ALERT] CPA SPIKE DETECTED (+32%)</p>
+                        <p class="text-yellow-500">> [WARN] CREATIVE FATIGUE: HIGH</p>
+                        <p>> CALCULATING EFFICIENCY LOSS...</p>
+                        <p class="text-white animate-pulse">>> ESTIMATED MONTHLY WASTE: $14,200.00</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="protocols" class="py-32 bg-[#050505] relative">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="text-center mb-24">
+                <span class="font-mono text-[#C9A961] text-xs tracking-[0.3em]">SYSTEM ARCHITECTURE</span>
+                <h2 class="text-5xl md:text-6xl font-bold text-white mt-4 mb-6">The 6 Scaling Protocols</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">A sequential framework to engineer 8-figure valuation.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <a href="#" class="group relative p-8 border border-white/10 bg-white/5 hover:border-[#C9A961]/50 transition-all hover:-translate-y-1">
+                    <div class="absolute top-0 right-0 p-4 font-mono text-xs text-gray-600 group-hover:text-[#C9A961]">01</div>
+                    <h3 class="text-2xl font-bold text-white mb-4 group-hover:text-[#C9A961]">Acquisition</h3>
+                    <p class="text-gray-400 text-sm mb-8">High-velocity media buying focused on Unit Economics and Contribution Margin.</p>
+                    <span class="font-mono text-xs text-[#C9A961] flex items-center gap-2">DEPLOY PROTOCOL <span class="group-hover:translate-x-1 transition-transform">→</span></span>
+                </a>
+                
+                <a href="#" class="group relative p-8 border border-white/10 bg-white/5 hover:border-[#C9A961]/50 transition-all hover:-translate-y-1">
+                    <div class="absolute top-0 right-0 p-4 font-mono text-xs text-gray-600 group-hover:text-[#C9A961]">02</div>
+                    <h3 class="text-2xl font-bold text-white mb-4 group-hover:text-[#C9A961]">Architecture</h3>
+                    <p class="text-gray-400 text-sm mb-8">Engineering "Consumption Environments" to leverage the 7-Hour Rule.</p>
+                    <span class="font-mono text-xs text-[#C9A961] flex items-center gap-2">DEPLOY PROTOCOL <span class="group-hover:translate-x-1 transition-transform">→</span></span>
+                </a>
+
+                <a href="#" class="group relative p-8 border border-white/10 bg-white/5 hover:border-[#C9A961]/50 transition-all hover:-translate-y-1">
+                    <div class="absolute top-0 right-0 p-4 font-mono text-xs text-gray-600 group-hover:text-[#C9A961]">03</div>
+                    <h3 class="text-2xl font-bold text-white mb-4 group-hover:text-[#C9A961]">Automation</h3>
+                    <p class="text-gray-400 text-sm mb-8">Autonomous AI Sales Agents and self-hosted n8n infrastructure.</p>
+                    <span class="font-mono text-xs text-[#C9A961] flex items-center gap-2">DEPLOY PROTOCOL <span class="group-hover:translate-x-1 transition-transform">→</span></span>
+                </a>
+                
+                <a href="#" class="group relative p-8 border border-white/10 bg-white/5 hover:border-[#C9A961]/50 transition-all hover:-translate-y-1">
+                    <div class="absolute top-0 right-0 p-4 font-mono text-xs text-gray-600 group-hover:text-[#C9A961]">04</div>
+                    <h3 class="text-2xl font-bold text-white mb-4 group-hover:text-[#C9A961]">Authority</h3>
+                    <p class="text-gray-400 text-sm mb-8">The only defensible moat. Founder branding and pSEO ecosystems.</p>
+                    <span class="font-mono text-xs text-[#C9A961] flex items-center gap-2">DEPLOY PROTOCOL <span class="group-hover:translate-x-1 transition-transform">→</span></span>
+                </a>
+
+                <a href="#" class="group relative p-8 border border-white/10 bg-white/5 hover:border-[#C9A961]/50 transition-all hover:-translate-y-1">
+                    <div class="absolute top-0 right-0 p-4 font-mono text-xs text-gray-600 group-hover:text-[#C9A961]">05</div>
+                    <h3 class="text-2xl font-bold text-white mb-4 group-hover:text-[#C9A961]">Analytics</h3>
+                    <p class="text-gray-400 text-sm mb-8">Server-side tracking (sGTM) to solve the iOS 14 data loss crisis.</p>
+                    <span class="font-mono text-xs text-[#C9A961] flex items-center gap-2">DEPLOY PROTOCOL <span class="group-hover:translate-x-1 transition-transform">→</span></span>
+                </a>
+
+                <a href="#" class="group relative p-8 border border-white/10 bg-white/5 hover:border-[#C9A961]/50 transition-all hover:-translate-y-1">
+                    <div class="absolute top-0 right-0 p-4 font-mono text-xs text-gray-600 group-hover:text-[#C9A961]">06</div>
+                    <h3 class="text-2xl font-bold text-white mb-4 group-hover:text-[#C9A961]">Strategy</h3>
+                    <p class="text-gray-400 text-sm mb-8">Fractional CMO and Sprint-based iterative optimization loops.</p>
+                    <span class="font-mono text-xs text-[#C9A961] flex items-center gap-2">DEPLOY PROTOCOL <span class="group-hover:translate-x-1 transition-transform">→</span></span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 bg-[#050505]">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="mb-16">
+                <h3 class="text-3xl font-bold text-white">Infrastructure over Interaction.</h3>
+                <p class="text-gray-400 mt-2">We don't "run ads." We deploy <span class="text-[#FBBF24]">Revenue Infrastructure</span>.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-[#111827] p-8 rounded-lg shadow-[0_0_20px_rgba(251,191,36,0.05)] hover:border hover:border-[#FBBF24] transition-all duration-300 hvr-float" data-aos="fade-up" data-aos-delay="100">
+                    <div class="text-[#FBBF24] mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield-check"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="m9 12 2 2 4-4"/></svg>
+                    </div>
+                    <h4 class="text-[#FBBF24] font-mono uppercase tracking-widest text-sm mb-4">Protocol: Hardened Attribution</h4>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Stop guessing. We deploy <strong class="text-white">sGTM</strong> and <strong class="text-white">CAPI</strong> integrations to bypass iOS tracking limitations, ensuring every dollar spent is tracked to the penny.
+                    </p>
+                </div>
+
+                <div class="bg-[#111827] p-8 rounded-lg shadow-[0_0_20px_rgba(251,191,36,0.05)] hover:border hover:border-[#FBBF24] transition-all duration-300 hvr-float" data-aos="fade-up" data-aos-delay="200">
+                    <div class="text-[#FBBF24] mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-zap"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>
+                    </div>
+                    <h4 class="text-[#FBBF24] font-mono uppercase tracking-widest text-sm mb-4">Protocol: Velocity Creative</h4>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        High-dwell-time creative engineering. We don't just make "videos"; we build <strong class="text-white">psychological conversion triggers</strong> designed for high-velocity scrolling.
+                    </p>
+                </div>
+
+                <div class="bg-[#111827] p-8 rounded-lg shadow-[0_0_20px_rgba(251,191,36,0.05)] hover:border hover:border-[#FBBF24] transition-all duration-300 hvr-float" data-aos="fade-up" data-aos-delay="300">
+                    <div class="text-[#FBBF24] mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-database"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+                    </div>
+                    <h4 class="text-[#FBBF24] font-mono uppercase tracking-widest text-sm mb-4">Protocol: The Data Lake</h4>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        You own the data. We build a custom <strong class="text-white">n8n</strong> dashboard that pulls from your CRM, Ads, and Stripe in real-time. No more "End of Month" reports.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-32 bg-gradient-to-b from-[#050505] to-[#111827] text-center overflow-hidden">
+        <div class="max-w-6xl mx-auto px-6" data-aos="zoom-out">
+            <div class="flex justify-center mb-6">
+                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#FBBF24" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clock animate-pulse"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            
+            <h2 class="text-8xl md:text-9xl font-black bg-clip-text text-transparent bg-gradient-to-r from-amber-400 to-orange-500 tracking-tighter mb-4">
+                420 MINUTES.
+            </h2>
+            
+            <h3 class="text-3xl text-white font-bold mb-8">The threshold of absolute trust.</h3>
+            
+            <p class="text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
+                Google’s research is clear: it takes <strong class="text-white">7 hours of content consumption</strong> across <strong class="text-white">11 touchpoints</strong> in <strong class="text-white">4 distinct locations</strong> before a cold prospect is ready to close. Most agencies stop at the click. <strong class="text-[#FBBF24]">We engineer the environment that finishes the job.</strong>
+            </p>
+        </div>
+    </section>
+
+    <section class="py-24 bg-[#111827]">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="text-center mb-16">
+                <h3 class="text-4xl font-bold text-white mb-4">Why Architects Win.</h3>
+                <p class="text-gray-400">The traditional agency wants more headcount. We want more <strong class="text-white">Efficiency</strong>.</p>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch" data-aos="flip-up">
+                
+                <div class="flex-1 bg-white/5 opacity-50 p-8 rounded-lg border border-white/5">
+                    <h4 class="text-red-500 font-mono text-xs uppercase tracking-widest mb-6">Legacy Agency</h4>
+                    <div class="space-y-6">
+                        <div class="flex justify-between border-b border-white/5 pb-2">
+                            <span class="text-gray-500 font-mono text-sm">Ownership</span>
+                            <span class="text-gray-300 text-sm">They own the accounts</span>
+                        </div>
+                        <div class="flex justify-between border-b border-white/5 pb-2">
+                            <span class="text-gray-500 font-mono text-sm">Philosophy</span>
+                            <span class="text-gray-300 text-sm">Spend to grow</span>
+                        </div>
+                        <div class="flex justify-between border-b border-white/5 pb-2">
+                            <span class="text-gray-500 font-mono text-sm">Speed</span>
+                            <span class="text-gray-300 text-sm">2-week turnaround</span>
+                        </div>
+                        <div class="flex justify-between border-b border-white/5 pb-2">
+                            <span class="text-gray-500 font-mono text-sm">Incentive</span>
+                            <span class="text-gray-300 text-sm">% of Ad Spend</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex-1 bg-white/10 border-2 border-[#FBBF24] shadow-2xl scale-105 p-8 rounded-lg interactive-card z-10 relative">
+                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#FBBF24] text-black text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">Recommended</div>
+                    <h4 class="text-[#FBBF24] font-mono text-xs uppercase tracking-widest mb-6">Sovereign Architect</h4>
+                    <div class="space-y-6">
+                        <div class="flex justify-between border-b border-[#FBBF24]/20 pb-2">
+                            <span class="text-gray-400 font-mono text-sm">Ownership</span>
+                            <span class="text-white font-bold text-sm">You own the machine</span>
+                        </div>
+                        <div class="flex justify-between border-b border-[#FBBF24]/20 pb-2">
+                            <span class="text-gray-400 font-mono text-sm">Philosophy</span>
+                            <span class="text-white font-bold text-sm">Engineer to scale</span>
+                        </div>
+                        <div class="flex justify-between border-b border-[#FBBF24]/20 pb-2">
+                            <span class="text-gray-400 font-mono text-sm">Speed</span>
+                            <span class="text-white font-bold text-sm">Daily sprint cycles</span>
+                        </div>
+                        <div class="flex justify-between border-b border-[#FBBF24]/20 pb-2">
+                            <span class="text-gray-400 font-mono text-sm">Incentive</span>
+                            <span class="text-white font-bold text-sm">Performance & Valuation</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="data-room" class="py-32 bg-gradient-to-b from-[#111827] to-[#0a0a0a] border-t border-white/10">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16">
+                <div>
+                    <span class="font-mono text-[#C9A961] text-xs tracking-[0.3em]">THE DATA ROOM</span>
+                    <h2 class="text-4xl font-bold text-white mt-4">System Performance.</h2>
+                </div>
+                <div class="font-mono text-xs text-gray-500 mt-4 md:mt-0">LIVE METRICS // UPDATED 14M AGO</div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="p-8 border border-white/10 bg-black rounded-xl">
+                    <h4 class="text-gray-400 text-sm font-mono mb-4">REVENUE VELOCITY (YOY)</h4>
+                    <div class="h-64 flex items-end justify-between gap-2">
+                        <div class="w-full bg-white/10 hover:bg-[#C9A961]/50 transition-colors h-[20%] rounded-t"></div>
+                        <div class="w-full bg-white/10 hover:bg-[#C9A961]/50 transition-colors h-[35%] rounded-t"></div>
+                        <div class="w-full bg-white/10 hover:bg-[#C9A961]/50 transition-colors h-[45%] rounded-t"></div>
+                        <div class="w-full bg-white/10 hover:bg-[#C9A961]/50 transition-colors h-[60%] rounded-t"></div>
+                        <div class="w-full bg-white/10 hover:bg-[#C9A961]/50 transition-colors h-[55%] rounded-t"></div>
+                        <div class="w-full bg-[#C9A961] hover:bg-white transition-colors h-[85%] rounded-t relative group">
+                            <div
+                                class="absolute -top-8 left-1/2 -translate-x-1/2 bg-white text-black text-xs font-bold px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+                                +245%
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex justify-between mt-4 text-xs font-mono text-gray-600">
+                        <span>Q1</span><span>Q2</span><span>Q3</span><span>Q4</span><span>Q1</span><span>Q2 (NOW)</span>
+                    </div>
+                </div>
+
+                <div class="p-8 border border-white/10 bg-black rounded-xl">
+                    <h4 class="text-gray-400 text-sm font-mono mb-4">COST PER ACQUISITION (CPA)</h4>
+                    <div class="h-64 flex items-end justify-between gap-2 relative">
+                        <div class="absolute bottom-0 left-0 w-full h-full pointer-events-none">
+                            <svg class="w-full h-full" overflow="visible">
+                                <path d="M0 20 L50 40 L100 35 L150 80 L200 120 L250 150 L300 200" fill="none"
+                                    stroke="#C9A961" stroke-width="2" vector-effect="non-scaling-stroke" />
+                            </svg>
+                        </div>
+                        <div
+                            class="w-full h-[90%] bg-red-500/10 rounded-t border-t border-red-500/30 flex items-start justify-center pt-2 text-[10px] text-red-500 font-mono">
+                            MARKET AUGUST</div>
+                        <div
+                            class="w-full h-[30%] bg-green-500/10 rounded-t border-t border-green-500/30 flex items-start justify-center pt-2 text-[10px] text-green-500 font-mono">
+                            SYSTEM CA</div>
+                    </div>
+                    <p class="mt-4 text-xs text-gray-400 leading-relaxed">System implementation typically results in a
+                        <span class="text-white font-bold">45% reduction in CPA</span> by month 3 via sGTM accuracy and
+                        creative iteration.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="audit" class="py-20 border-y border-white/10 bg-[#050505] text-center">
+        <div class="max-w-4xl mx-auto px-6">
+            <div class="flex justify-center mb-6">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-terminal"><polyline points="4 17 10 11 4 5"/><line x1="12" x2="20" y1="19" y2="19"/></svg>
+            </div>
+            
+            <h3 class="text-4xl font-bold text-white mb-6">Stop Guessing. Start Engineering.</h3>
+            
+            <p class="text-xl text-gray-400 mb-10 leading-relaxed">
+                The <strong class="text-white">Market Gap Audit</strong> is not a sales pitch. It is a <strong class="text-white">stress test</strong> of your current acquisition, retention, and attribution systems. We identify the leaks; you decide if we plug them.
+            </p>
+
+            <button class="bg-[#3b82f6] text-white px-12 py-5 font-bold tracking-wide rounded hover:bg-white hover:text-[#3b82f6] transition-all shadow-[0_0_20px_rgba(59,130,246,0.3)] hvr-underline-from-center flex items-center gap-3 mx-auto">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                INITIATE SYSTEM AUDIT
+            </button>
+        </div>
+    </section>
+
+    <footer class="bg-[#050505] pt-24 pb-12 relative z-10">
+        <div class="max-w-[1400px] mx-auto px-6 lg:px-12 flex flex-col items-center text-center">
+
+            <a href="index.html" class="flex items-center gap-3 mb-8">
+                <svg class="w-10 h-10 text-[#C9A961]" viewBox="0 0 40 40" fill="none">
+                    <path d="M20 5L30 25H10L20 5Z" stroke="currentColor" stroke-width="2" />
+                </svg>
+            </a>
+
+            <h2 class="text-3xl font-bold text-white mb-6">Ready to Engineer Your Exit?</h2>
+
+            <button onclick="document.querySelector('#audit').scrollIntoView({behavior: 'smooth'})"
+                class="px-10 py-4 bg-[#C9A961] text-black font-bold mb-12 hover:bg-white transition-colors">
+                START MARKET GAP AUDIT
+            </button>
+
+            <div class="text-xs text-gray-700 font-mono">
+                &copy; 2026 JUMPSTART SCALING. ALL SYSTEMS NOMINAL.
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,142 @@
+---
+/**
+ * ConsultativeAudit.astro
+ * 
+ * High-Ticket Client Audit Interface
+ * UX Goal: Feel like a $500 paid consultation, not a contact form.
+ */
+
+---
+
+<div id="audit-system" class="w-full max-w-4xl mx-auto bg-[#0a0a0a] border border-white/10 rounded-sm shadow-2xl relative overflow-hidden">
+  
+  <!-- Progress Bar -->
+  <div class="h-1 bg-gray-900 w-full">
+    <div id="progress-bar" class="h-full bg-gold-500 w-[20%] transition-all duration-500 ease-out"></div>
+  </div>
+
+  <div class="p-8 md:p-12">
+    <!-- Header -->
+    <div class="mb-10 text-center">
+      <h3 id="step-eyebrow" class="text-xs font-bold font-mono text-gold-500 tracking-[0.2em] uppercase mb-2">
+        STEP 01 // QUALIFICATION
+      </h3>
+      <h2 id="step-question" class="text-3xl md:text-4xl font-bold text-white font-serif">
+        What is your current monthly revenue range?
+      </h2>
+    </div>
+
+    <!-- Form Interface -->
+    <form id="audit-form" class="space-y-8">
+      
+      <!-- STEP 1: Revenue -->
+      <div class="audit-step block" data-step="1">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {['<$20k / month', '$20k - $50k / month', '$50k - $100k / month', '$100k+ / month'].map((opt) => (
+            <label class="group cursor-pointer relative">
+              <input type="radio" name="revenue" value={opt} class="peer sr-only" onchange="nextStep(2)" />
+              <div class="p-6 border border-white/10 bg-white/5 hover:bg-white/10 hover:border-gold-500/50 transition-all duration-300 flex items-center justify-between">
+                <span class="text-lg text-gray-300 peer-checked:text-white group-hover:text-white">{opt}</span>
+                <div class="w-4 h-4 rounded-full border border-gray-600 group-hover:border-gold-500 peer-checked:bg-gold-500 peer-checked:border-gold-500 transition-all"></div>
+              </div>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      <!-- STEP 2: Bottleneck -->
+      <div class="audit-step hidden" data-step="2">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {[
+            { title: 'Lead Volume', desc: 'I need more qualified opportunities.' },
+            { title: 'Conversion Rate', desc: 'I have leads, but they aren\'t closing.' },
+            { title: 'Systems & Ops', desc: 'My delivery breaks when we scale.' }
+          ].map((opt) => (
+            <label class="group cursor-pointer relative h-full">
+              <input type="radio" name="bottleneck" value={opt.title} class="peer sr-only" onchange="nextStep(3)" />
+              <div class="p-8 h-full border border-white/10 bg-white/5 hover:bg-white/10 hover:border-gold-500/50 transition-all duration-300 flex flex-col items-center text-center">
+                <span class="text-xl font-bold text-white mb-2">{opt.title}</span>
+                <p class="text-sm text-gray-400 leading-relaxed">{opt.desc}</p>
+                <div class="mt-6 px-4 py-1 text-xs border border-white/20 rounded-full group-hover:border-gold-500/50 group-hover:text-gold-400 transition-colors">Select</div>
+              </div>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      <!-- STEP 3: Ad Spend -->
+      <div class="audit-step hidden" data-step="3">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {['$0 (Organic Only)', '<$5k / month', '$5k - $20k / month', '$20k+ / month'].map((opt) => (
+            <label class="group cursor-pointer relative">
+              <input type="radio" name="ad_spend" value={opt} class="peer sr-only" onchange="nextStep(4)" />
+              <div class="p-6 border border-white/10 bg-white/5 hover:bg-white/10 hover:border-gold-500/50 transition-all duration-300 flex items-center justify-between">
+                <span class="text-lg text-gray-300 peer-checked:text-white group-hover:text-white">{opt}</span>
+                <div class="w-4 h-4 rounded-full border border-gray-600 group-hover:border-gold-500 peer-checked:bg-gold-500 peer-checked:border-gold-500 transition-all"></div>
+              </div>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      <!-- STEP 4: Contact -->
+      <div class="audit-step hidden" data-step="4">
+        <div class="space-y-6 max-w-md mx-auto">
+          <div class="space-y-1">
+            <label class="text-xs uppercase tracking-widest text-gray-500 mb-2 block">Full Name</label>
+            <input type="text" name="name" class="w-full bg-[#111] border border-white/10 p-4 text-white focus:border-gold-500 focus:ring-0 transition-colors" placeholder="John Doe" required />
+          </div>
+          <div class="space-y-1">
+            <label class="text-xs uppercase tracking-widest text-gray-500 mb-2 block">Work Email</label>
+            <input type="email" name="email" class="w-full bg-[#111] border border-white/10 p-4 text-white focus:border-gold-500 focus:ring-0 transition-colors" placeholder="john@company.com" required />
+          </div>
+          <div class="space-y-1">
+            <label class="text-xs uppercase tracking-widest text-gray-500 mb-2 block">Website URL</label>
+            <input type="url" name="website" class="w-full bg-[#111] border border-white/10 p-4 text-white focus:border-gold-500 focus:ring-0 transition-colors" placeholder="company.com" />
+          </div>
+          
+          <button type="submit" class="w-full py-5 bg-gold-600 hover:bg-gold-500 text-black font-bold text-lg uppercase tracking-widest transition-all hover:scale-[1.02] shadow-lg shadow-gold-900/20">
+            Submit Application
+          </button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+<script is:inline>
+  const totalSteps = 4;
+  const questions = [
+    "What is your current monthly revenue range?",
+    "What is your primary growth bottleneck?",
+    "What is your current monthly ad spend?",
+    "Where should we send your audit report?"
+  ];
+  const eyebrows = [
+    "STEP 01 // QUALIFICATION",
+    "STEP 02 // DIAGNOSIS",
+    "STEP 03 // RESOURCES",
+    "STEP 04 // FINALIZATION"
+  ];
+
+  window.nextStep = function(step) {
+    // Hide all steps
+    document.querySelectorAll('.audit-step').forEach(el => el.classList.add('hidden'));
+    
+    // Show new step with fade in (handled by CSS transition usually, but simple class switch here)
+    const nextEl = document.querySelector(`.audit-step[data-step="${step}"]`);
+    if(nextEl) {
+      nextEl.classList.remove('hidden');
+      nextEl.classList.add('animate-fade-in'); // Ensure you have a fade-in utility
+    }
+
+    // Update Text
+    document.getElementById('step-question').innerText = questions[step-1];
+    document.getElementById('step-eyebrow').innerText = eyebrows[step-1];
+
+    // Update Progress
+    const percent = (step / totalSteps) * 100;
+    document.getElementById('progress-bar').style.width = `${percent}%`;
+  }
+</script>

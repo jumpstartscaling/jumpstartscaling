@@ -1,0 +1,768 @@
+---
+import SEOTags from '../components/SEOTags.astro';
+import GTMTracking from '../components/GTMTracking.astro';
+import SchemaOrg from '../components/SchemaOrg.astro';
+
+const title = 'Jumpstart Scaling - Break Through The 7-Figure Ceiling';
+const description = 'The proven methodology that helped 500+ founders automate operations, reclaim 20 hours a week, and build a valuation-ready asset in 90 days.';
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{title}</title>
+    <meta name="description" content={description}>
+    <SEOTags title={title} description={description} />
+    <SchemaOrg />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --gold: #FFD700;
+            --gold-dark: #FFA500;
+            --black: #000000;
+            --text: #ffffff;
+        }
+        
+        html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--black);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Premium Gradient Mesh Background */
+        #gradient-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .container { 
+            max-width: 1400px; 
+            margin: 0 auto; 
+            padding: 0 2rem; 
+            position: relative; 
+            z-index: 1; 
+        }
+        
+        /* Sticky Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 215, 0, 0.1);
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+        }
+        
+        nav.scrolled {
+            background: rgba(0, 0, 0, 0.98);
+            border-bottom-color: rgba(255, 215, 0, 0.2);
+        }
+        
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--gold);
+            text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 0.9rem;
+            letter-spacing: 0.02em;
+        }
+        
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--gold);
+        }
+        
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            padding-top: 80px;
+        }
+        
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 6.5rem);
+            font-weight: 900;
+            margin-bottom: 2rem;
+            color: var(--text);
+            letter-spacing: -0.03em;
+        }
+        
+        .hero h1 .gold {
+            color: var(--gold);
+        }
+        
+        .hero .subtitle {
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            color: var(--text);
+            max-width: 900px;
+            margin: 0 auto 3rem;
+            font-weight: 400;
+            opacity: 0.9;
+        }
+        
+        .cta-primary {
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            color: var(--black);
+            padding: 1.5rem 4rem;
+            font-size: 1.3rem;
+            font-weight: 800;
+            border-radius: 0;
+            text-decoration: none;
+            display: inline-block;
+            border: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .cta-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 60px rgba(255, 215, 0, 0.3);
+        }
+        
+        /* Section */
+        .section {
+            padding: 8rem 0;
+            position: relative;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 900;
+            margin-bottom: 5rem;
+            color: var(--gold);
+            letter-spacing: -0.03em;
+        }
+        
+        /* Full Width Problem */
+        .problem-block {
+            background: #000000;
+            padding: 4rem;
+            margin-bottom: 3rem;
+            border: 1px solid rgba(255, 215, 0, 0.15);
+            transition: border-color 0.3s ease;
+        }
+        
+        .problem-block:hover {
+            border-color: rgba(255, 215, 0, 0.3);
+        }
+        
+        .problem-block h3 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--text);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+        
+        .problem-block p {
+            color: var(--text);
+            line-height: 1.8;
+            font-size: 1.2rem;
+            font-weight: 400;
+            opacity: 0.95;
+        }
+        
+        /* Solution Block */
+        .solution-block {
+            background: #000000;
+            padding: 4rem;
+            margin-bottom: 3rem;
+            border: 1px solid rgba(255, 215, 0, 0.15);
+            transition: border-color 0.3s ease;
+        }
+        
+        .solution-block:hover {
+            border-color: rgba(255, 215, 0, 0.3);
+        }
+        
+        .solution-block h3 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--gold);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+        
+        .solution-block p {
+            color: var(--text);
+            line-height: 1.8;
+            font-size: 1.2rem;
+            font-weight: 400;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+        
+        .solution-block ul {
+            list-style: none;
+            margin-top: 2rem;
+        }
+        
+        .solution-block li {
+            color: var(--text);
+            margin-bottom: 1.2rem;
+            padding-left: 2rem;
+            position: relative;
+            font-size: 1.2rem;
+            font-weight: 400;
+            opacity: 0.95;
+        }
+        
+        .solution-block li::before {
+            content: '→';
+            color: var(--gold);
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        
+        .solution-block li strong {
+            color: var(--text);
+            font-weight: 600;
+        }
+        
+        /* Survey Styles */
+        .survey-container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: #000000;
+            padding: 4rem;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+        
+        .survey-question {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: var(--gold);
+            letter-spacing: -0.01em;
+        }
+        
+        .options-grid {
+            display: grid;
+            gap: 1rem;
+        }
+        
+        .option-card {
+            background: rgba(0,0,0,0.3);
+            border: 2px solid rgba(255,255,255,0.1);
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .option-card:hover {
+            border-color: var(--gold);
+            background: rgba(255, 215, 0, 0.05);
+        }
+        
+        .option-card input[type="radio"],
+        .option-card input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+        }
+        
+        .option-text {
+            font-size: 1.1rem;
+            color: var(--text);
+        }
+        
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            margin-bottom: 3rem;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--gold), var(--gold-dark));
+            width: 25%;
+            transition: width 0.3s;
+        }
+        
+        footer {
+            padding: 4rem 0;
+            border-top: 1px solid rgba(255, 215, 0, 0.1);
+            text-align: center;
+            color: var(--text);
+            margin-top: 8rem;
+            opacity: 0.8;
+        }
+        
+        footer a {
+            color: var(--text);
+            text-decoration: none;
+            margin: 0 1.5rem;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+        
+        footer a:hover {
+            color: var(--gold);
+        }
+        
+        @media(max-width: 968px) {
+            .section {
+                padding: 5rem 0;
+            }
+            .problem-block, .solution-block, .survey-container {
+                padding: 2rem;
+            }
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gradient-canvas"></canvas>
+
+    <nav id="mainNav">
+        <div class="nav-container">
+            <a href="#" class="logo">Jumpstart</a>
+            <ul class="nav-links">
+                <li><a href="#ads">Ads</a></li>
+                <li><a href="#funnels">Funnels</a></li>
+                <li><a href="#crm">CRM</a></li>
+                <li><a href="#analytics">Analytics</a></li>
+                <li><a href="#content">Content</a></li>
+                <li><a href="#retainer">Team</a></li>
+                <li><a href="#survey" class="cta-primary" style="padding: 0.75rem 2rem; font-size: 0.9rem;">Apply Now</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Scale From 7 to 8 Figures<br><span class="gold">Without The Burnout</span></h1>
+            <p class="subtitle">
+                The Jumpstart Methodology: Automate operations, install self-managing teams, 
+                and build a valuation-ready asset in 90 days or less.
+            </p>
+            <a href="#survey" class="cta-primary">Get Your Free Scaling Blueprint</a>
+        </div>
+    </section>
+
+    <!-- Section 1: Paid Ads -->
+    <section class="section" id="ads">
+        <div class="container">
+            <h2 class="section-title">Paid Acquisition Engine</h2>
+            
+            <div class="problem-block">
+                <h3>The Problem: You're Trapped in the Referral Hamster Wheel</h3>
+                <p>Referrals are great—until they're not. Your growth is completely at the mercy of your existing client's schedules and moods. One bad quarter? Your pipeline dries up. You can't forecast. You can't plan hires. You're constantly white-knuckling it, hoping someone sends business your way.</p>
+            </div>
+            
+            <div class="solution-block">
+                <h3>The Solution: A Predictable Lead Machine</h3>
+                <p>We build and manage a self-sustaining acquisition system that turns $1 into $5. Every day, we're optimizing your ad spend, killing underperformers, and scaling winners.</p>
+                <ul>
+                    <li><strong>Daily Ads Management</strong> - We monitor performance hourly, not monthly</li>
+                    <li><strong>Creative Testing</strong> - New ad angles every week to beat fatigue</li>
+                    <li><strong>Multi-Platform Scaling</strong> - Google, Facebook, LinkedIn—wherever your buyers are</li>
+                    <li><strong>ROI Dashboards</strong> - Real-time tracking so you know exactly what's working</li>
+                </ul>
+            </div>
+            
+            <div style="text-align: center;">
+                <a href="#survey" class="cta-primary">Start With Paid Ads →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 2: Funnels -->
+    <section class="section" id="funnels">
+        <div class="container">
+            <h2 class="section-title">Funnel Architecture</h2>
+            
+            <div class="problem-block">
+                <h3>The Problem: Traffic Doesn't Equal Revenue</h3>
+                <p>You're driving traffic to your site. People are clicking. And then... nothing. They bounce. They ghost. Your sales team is stuck chasing lukewarm leads who "need to think about it." Why? Because your funnel is a leaky bucket.</p>
+            </div>
+            
+            <div class="solution-block">
+                <h3>The Solution: A Funnel That Qualifies & Converts On Autopilot</h3>
+                <p>We design, build, and optimize complete sales funnels that do the heavy lifting for you. From the first ad click to the booked call, every step is optimized to filter out tire-kickers and fast-track serious buyers.</p>
+                <ul>
+                    <li><strong>Conversion Copywriting</strong> - Psychology-backed messaging that resonates with your ICP</li>
+                    <li><strong>UX/UI Design</strong> - Clean, fast, mobile-optimized pages</li>
+                    <li><strong>Technical Integration</strong> - CRM, email, SMS, Calendly—everything talks to each other</li>
+                    <li><strong>A/B Testing Setup</strong> - Continuous optimization to improve conversion rates</li>
+                </ul>
+            </div>
+            
+            <div style="text-align: center;">
+                <a href="#survey" class="cta-primary">Build My Funnel →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: CRM -->
+    <section class="section" id="crm">
+        <div class="container">
+            <h2 class="section-title">CRM Transformation</h2>
+            
+            <div class="problem-block">
+                <h3>The Problem: Your CRM is a Digital Junk Drawer</h3>
+                <p>Be honest: when was the last time your CRM actually *helped* you close a deal? Right now, it's just a contact graveyard. Leads fall through the cracks. Your team forgets to follow up. Deals sit in "Proposal Sent" for 90 days because no one knows who's supposed to do what.</p>
+            </div>
+            
+            <div class="solution-block">
+                <h3>The Solution: A Self-Driving CRM</h3>
+                <p>We turn your CRM from a glorified Rolodex into a revenue machine. Leads are automatically enriched, scored, and routed. Follow-ups happen on autopilot. Contracts get sent at the perfect time.</p>
+                <ul>
+                    <li><strong>Custom Pipelines</strong> - Stages that match your actual sales process</li>
+                    <li><strong>Auto-Follow Up</strong> - Email & SMS sequences triggered by behavior</li>
+                    <li><strong>Contract Automation</strong> - Proposals sent automatically when deals hit "Qualified"</li>
+                    <li><strong>Lead Scoring</strong> - AI-powered prioritization so your team calls the hottest leads first</li>
+                </ul>
+            </div>
+            
+            <div style="text-align: center;">
+                <a href="#survey" class="cta-primary">Fix My CRM →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 4: Analytics -->
+    <section class="section" id="analytics">
+        <div class="container">
+            <h2 class="section-title">Data & Attribution</h2>
+            
+            <div class="problem-block">
+                <h3>The Problem: You're Flying Blind</h3>
+                <p>Quick question: which marketing channel drove your last 3 deals? If you can't answer that in 5 seconds, you're guessing. And guessing is expensive. You're probably over-investing in channels that don't convert and under-investing in the ones that print money.</p>
+            </div>
+            
+            <div class="solution-block">
+                <h3>The Solution: Total Revenue Visibility</h3>
+                <p>We implement server-side tracking that survives iOS updates and ad blockers. You'll know exactly which dollar of ad spend generated which dollar of revenue. Multi-touch attribution shows you the full customer journey—from first click to closed deal.</p>
+                <ul>
+                    <li><strong>Server-Side Tracking</strong> - Bulletproof data that can't be blocked by browsers</li>
+                    <li><strong>Multi-Touch Attribution</strong> - See the entire customer journey, not just "last click"</li>
+                    <li><strong>Live Looker Studio Dashboards</strong> - Real-time revenue data, no Excel gymnastics</li>
+                    <li><strong>Conversion API Setup</strong> - Feed clean data directly to Facebook & Google</li>
+                </ul>
+            </div>
+            
+            <div style="text-align: center;">
+                <a href="#survey" class="cta-primary">Get Data Clarity →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 5: Content -->
+    <section class="section" id="content">
+        <div class="container">
+            <h2 class="section-title">The Authority Engine</h2>
+            
+            <div class="problem-block">
+                <h3>The Problem: You're Invisible Where It Matters</h3>
+                <p>Your buyers are on LinkedIn. Your competitors are on LinkedIn. Everyone's posting. But you? You're too busy running your business to "build a personal brand." So prospects go with the founder who *seems* like the expert—even if their product is worse than yours.</p>
+            </div>
+            
+            <div class="solution-block">
+                <h3>The Solution: Omnipresent Authority, On Autopilot</h3>
+                <p>We handle the entire content engine. You record one 30-minute Loom per week. We turn it into 50+ assets: LinkedIn posts, newsletter issues, video clips, Twitter threads, and carousels. You become the go-to expert in your space without spending 10 hours a week on "content creation."</p>
+                <ul>
+                    <li><strong>LinkedIn Ghostwriting</strong> - Daily posts that sound like you</li>
+                    <li><strong>Newsletter Operations</strong> - Weekly emails that nurture your list into buyers</li>
+                    <li><strong>Video Editing & Repurposing</strong> - Turn one video into 20 short clips</li>
+                    <li><strong>Multi-Platform Distribution</strong> - LinkedIn, Twitter, YouTube, email—everywhere your audience is</li>
+                </ul>
+            </div>
+            
+            <div style="text-align: center;">
+                <a href="#survey" class="cta-primary">Build My Authority →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 6: Full Retainer -->
+    <section class="section" id="retainer">
+        <div class="container">
+            <h2 class="section-title">Full Growth Retainer</h2>
+            
+            <div class="problem-block">
+                <h3>The Problem: You Need a Team, Not Another Vendor</h3>
+                <p>Hiring a Head of Growth costs $180K/year + equity. A marketing coordinator? $70K. A funnel designer? $90K. A paid ads specialist? $100K. You're looking at $400K+ just to build a competent growth team. And that assumes you hire perfectly on the first try (you won't).</p>
+            </div>
+            
+            <div class="solution-block">
+                <h3>The Solution: Your Entire Growth Team, On Demand</h3>
+                <p>This is not a "service." It's a partnership. We embed directly into your Slack. We attend your team meetings. We execute on everything from ad creative to hiring your next sales rep. You get a full growth team (ads, funnels, CRM, content, analytics) for less than the cost of one senior hire.</p>
+                <ul>
+                    <li><strong>Dedicated Growth Team</strong> - Strategist, designer, developer, copywriter, ads manager</li>
+                    <li><strong>Unlimited Projects</strong> - No scope creep, no nickel-and-diming. If it drives growth, we do it.</li>
+                    <li><strong>Weekly Strategy Calls</strong> - We don't wait for monthly check-ins. We move weekly.</li>
+                    <li><strong>Hiring & Training Support</strong> - We help you hire and onboard your internal growth team when you're ready</li>
+                </ul>
+            </div>
+            
+            <div style="text-align: center;">
+                <a href="#survey" class="cta-primary">Get My Growth Team →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Survey Section -->
+    <section class="section" id="survey">
+        <div class="container">
+            <div class="survey-container">
+                <div style="text-align: center; margin-bottom: 3rem;">
+                    <h2 style="font-size: 2.2rem; margin-bottom: 1rem; color: var(--gold); letter-spacing: -0.02em;">Claim Your Scaling Blueprint</h2>
+                    <p style="color: var(--text); opacity: 0.9;">Answer 4 questions to generate your custom 90-day growth roadmap.</p>
+                </div>
+
+                <div class="progress-container">
+                    <div class="progress-bar" id="progressFill"></div>
+                </div>
+
+                <form id="surveyForm">
+                    <div class="form-step active" data-step="1">
+                        <div class="survey-question">1. What is your #1 bottleneck right now?</div>
+                        <div class="options-grid">
+                            <label class="option-card">
+                                <input type="radio" name="challenge" value="leads" required>
+                                <span class="option-text">Generating consistent qualified leads</span>
+                            </label>
+                            <label class="option-card">
+                                <input type="radio" name="challenge" value="delivery">
+                                <span class="option-text">Operations break when I step away</span>
+                            </label>
+                            <label class="option-card">
+                                <input type="radio" name="challenge" value="hiring">
+                                <span class="option-text">Finding and keeping 'A-Players'</span>
+                            </label>
+                            <label class="option-card">
+                                <input type="radio" name="challenge" value="time">
+                                <span class="option-text">I'm working 60+ hours a week</span>
+                            </label>
+                        </div>
+                        <div style="margin-top: 2rem; display: flex; justify-content: flex-end;">
+                            <button type="button" class="cta-primary" style="padding: 1rem 3rem; border: none; cursor: pointer;" onclick="nextStep()">Next →</button>
+                        </div>
+                    </div>
+
+                    <div class="form-step" data-step="2" style="display:none;">
+                        <div class="survey-question">2. Annual Revenue Range</div>
+                        <div class="options-grid">
+                            <label class="option-card"><input type="radio" name="revenue" value="250k-500k"><span class="option-text">$250k - $500k</span></label>
+                            <label class="option-card"><input type="radio" name="revenue" value="500k-1m"><span class="option-text">$500k - $1M</span></label>
+                            <label class="option-card"><input type="radio" name="revenue" value="1m-3m"><span class="option-text">$1M - $3M</span></label>
+                            <label class="option-card"><input type="radio" name="revenue" value="3m+"><span class="option-text">$3M+</span></label>
+                        </div>
+                        <div style="margin-top: 2rem; display: flex; justify-content: space-between;">
+                            <button type="button" class="cta-primary" style="padding: 1rem 2rem; cursor: pointer;" onclick="prevStep()">← Back</button>
+                            <button type="button" class="cta-primary" style="padding: 1rem 3rem; border: none; cursor: pointer;" onclick="nextStep()">Next →</button>
+                        </div>
+                    </div>
+
+                    <div class="form-step" data-step="3" style="display:none;">
+                        <div class="survey-question">3. Which areas interest you most?</div>
+                        <div class="options-grid">
+                            <label class="option-card"><input type="checkbox" name="services" value="ads"><span class="option-text">Paid Ads Management</span></label>
+                            <label class="option-card"><input type="checkbox" name="services" value="funnels"><span class="option-text">Funnels & Web Design</span></label>
+                            <label class="option-card"><input type="checkbox" name="services" value="automation"><span class="option-text">CRM & Automation</span></label>
+                            <label class="option-card"><input type="checkbox" name="services" value="full"><span class="option-text">Full Growth Team</span></label>
+                        </div>
+                        <div style="margin-top: 2rem; display: flex; justify-content: space-between;">
+                            <button type="button" class="cta-primary" style="padding: 1rem 2rem; cursor: pointer;" onclick="prevStep()">← Back</button>
+                            <button type="button" class="cta-primary" style="padding: 1rem 3rem; border: none; cursor: pointer;" onclick="nextStep()">Next →</button>
+                        </div>
+                    </div>
+
+                    <div class="form-step" data-step="4" style="display:none;">
+                        <div class="survey-question">4. Where should we send your Blueprint?</div>
+                        <div style="display: grid; gap: 1.5rem;">
+                            <input type="text" name="name" placeholder="Your Full Name" style="width: 100%; padding: 1.2rem; background: rgba(0,0,0,0.3); border: 2px solid rgba(255,255,255,0.1); color: white; font-size: 1.1rem;">
+                            <input type="email" name="email" placeholder="Work Email Address" style="width: 100%; padding: 1.2rem; background: rgba(0,0,0,0.3); border: 2px solid rgba(255,255,255,0.1); color: white; font-size: 1.1rem;">
+                            <input type="tel" name="phone" placeholder="Mobile Number (for SMS updates)" style="width: 100%; padding: 1.2rem; background: rgba(0,0,0,0.3); border: 2px solid rgba(255,255,255,0.1); color: white; font-size: 1.1rem;">
+                        </div>
+                        <div style="margin-top: 2rem; display: flex; justify-content: space-between;">
+                            <button type="button" class="cta-primary" style="padding: 1rem 2rem; cursor: pointer;" onclick="prevStep()">← Back</button>
+                            <button type="submit" class="cta-primary" style="padding: 1rem 3rem; border: none; cursor: pointer;">Complete Application</button>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="success-message" id="successMessage" style="display:none; text-align: center;">
+                    <div style="font-size: 5rem; margin-bottom: 2rem;">✓</div>
+                    <h2 style="margin-bottom: 1rem; color: var(--gold); letter-spacing: -0.02em;">Application Received</h2>
+                    <p style="opacity: 0.9;">Our team is reviewing your profile. Expect a text message from us within 2 hours.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Jumpstart Scaling. All Rights Reserved.</p>
+        <div style="margin-top: 1rem;">
+            <a href="/privacy">Privacy Policy</a>
+            <a href="/terms">Terms</a>
+        </div>
+    </footer>
+
+    <script>
+        // Premium Gradient Mesh Animation
+        const canvas = document.getElementById('gradient-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        let time = 0;
+        
+        function animate() {
+            const gradient = ctx.createRadialGradient(
+                canvas.width / 2 + Math.sin(time * 0.001) * 200,
+                canvas.height / 2 + Math.cos(time * 0.001) * 200,
+                0,
+                canvas.width / 2,
+                canvas.height / 2,
+                canvas.width / 2
+            );
+            
+            gradient.addColorStop(0, 'rgba(255, 215, 0, 0.03)');
+            gradient.addColorStop(0.5, 'rgba(255, 165, 0, 0.02)');
+            gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+            
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            time++;
+            requestAnimationFrame(animate);
+        }
+        
+        animate();
+        
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // Survey Navigation
+        let currentStep = 1;
+        const totalSteps = 4;
+
+        window.nextStep = function() {
+            if (currentStep < totalSteps) {
+                document.querySelector(`[data-step="${currentStep}"]`).style.display = 'none';
+                currentStep++;
+                document.querySelector(`[data-step="${currentStep}"]`).style.display = 'block';
+                document.getElementById('progressFill').style.width = `${(currentStep / totalSteps) * 100}%`;
+            }
+        };
+
+        window.prevStep = function() {
+            if (currentStep > 1) {
+                document.querySelector(`[data-step="${currentStep}"]`).style.display = 'none';
+                currentStep--;
+                document.querySelector(`[data-step="${currentStep}"]`).style.display = 'block';
+                document.getElementById('progressFill').style.width = `${(currentStep / totalSteps) * 100}%`;
+            }
+        };
+
+        // Form Submission
+        document.getElementById('surveyForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            document.querySelector('#surveyForm').style.display = 'none';
+            document.querySelector('#successMessage').style.display = 'block';
+            
+            const webhooks = [
+                "https://n8n.jumpstartscaling.com/webhook/2aadbf03-cff5-48b7-8236-cf344d755ed0",
+                "https://n8n.jumpstartscaling.com/webhook-test/2aadbf03-cff5-48b7-8236-cf344d755ed0"
+            ];
+            webhooks.forEach(url => fetch(url, { method: "POST", body: new FormData(e.target) }));
+
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({
+                "event": "form_submission",
+                "formType": "scaling_survey",
+                "conversionValue": 50
+            });
+        });
+
+        // Active Nav Link on Scroll
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('mainNav');
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+            
+            const sections = ['ads', 'funnels', 'crm', 'analytics', 'content', 'retainer'];
+            const scrollPos = window.scrollY + 100;
+
+            sections.forEach(id => {
+                const section = document.getElementById(id);
+                if (section) {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.offsetHeight;
+                    if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
+                        document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+                        const activeLink = document.querySelector(`.nav-links a[href="#${id}"]`);
+                        if(activeLink) activeLink.classList.add('active');
+                    }
+                }
+            });
+        });
+    </script>
+
+    <GTMTracking />
+</body>
+</html>

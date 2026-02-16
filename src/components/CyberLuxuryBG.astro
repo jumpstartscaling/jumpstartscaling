@@ -1,0 +1,136 @@
+---
+/**
+ * CyberLuxuryBG.astro - OPTIMIZED
+ * Reduced particle count and simplified animations for faster load
+ */
+---
+
+<div class="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-[#020202]">
+  
+  <!-- 1. Deep Gradient -->
+  <div class="absolute inset-0 bg-gradient-to-b from-[#050505] via-[#0a0f12] to-[#020202] opacity-80"></div>
+
+  <!-- 2. CSS-Only Grid (No JS) -->
+  <div class="absolute inset-0 perspective-grid opacity-20">
+    <div class="grid-plane"></div>
+  </div>
+
+  <!-- 3. Lightweight Particles (Reduced from 100 to 30) -->
+  <div id="particles" class="absolute inset-0"></div>
+
+  <!-- 4. Scanlines -->
+  <div class="absolute inset-0 bg-scanlines opacity-[0.03] pointer-events-none"></div>
+
+</div>
+
+<style>
+  .perspective-grid {
+    perspective: 1000px;
+    transform-style: preserve-3d;
+  }
+
+  .grid-plane {
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    bottom: -100%;
+    left: -50%;
+    background-image: 
+      linear-gradient(rgba(234, 179, 8, 0.2) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(234, 179, 8, 0.2) 1px, transparent 1px);
+    background-size: 50px 50px;
+    transform: rotateX(75deg);
+    animation: grid-move 20s linear infinite;
+    mask-image: linear-gradient(to top, black 20%, transparent 80%);
+    will-change: transform;
+  }
+
+  @keyframes grid-move {
+    0% { transform: rotateX(75deg) translateY(0); }
+    100% { transform: rotateX(75deg) translateY(50px); }
+  }
+
+  .bg-scanlines {
+    background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2));
+    background-size: 100% 4px;
+  }
+</style>
+
+<script>
+  // Optimized Particle System - Reduced count
+  const canvas = document.createElement('canvas');
+  canvas.classList.add('absolute', 'inset-0', 'w-full', 'h-full');
+  document.getElementById('particles').appendChild(canvas);
+  
+  const ctx = canvas.getContext('2d', { alpha: true });
+  let width, height;
+  let particles = [];
+  let animationId;
+  
+  function resize() {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+  }
+  
+  class Particle {
+    constructor() {
+      this.reset();
+    }
+    
+    reset() {
+      this.x = Math.random() * width;
+      this.y = Math.random() * height;
+      this.size = Math.random() * 1.5;
+      this.speed = Math.random() * 0.2 + 0.05;
+      this.opacity = Math.random() * 0.5 + 0.1;
+      this.color = Math.random() > 0.8 ? '#EAB308' : '#FFFFFF';
+    }
+    
+    update() {
+      this.y -= this.speed;
+      if (this.y < 0) this.reset();
+    }
+    
+    draw() {
+      ctx.fillStyle = this.color;
+      ctx.globalAlpha = this.opacity;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+  
+  function init() {
+    resize();
+    // Reduced from 100 to 30 particles
+    for(let i = 0; i < 30; i++) particles.push(new Particle());
+    animate();
+  }
+  
+  function animate() {
+    ctx.clearRect(0, 0, width, height);
+    particles.forEach(p => {
+      p.update();
+      p.draw();
+    });
+    animationId = requestAnimationFrame(animate);
+  }
+  
+  // Pause animation when tab is hidden (performance)
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      cancelAnimationFrame(animationId);
+    } else {
+      animate();
+    }
+  });
+  
+  window.addEventListener('resize', resize);
+  
+  // Defer initialization slightly to prioritize page content
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    setTimeout(init, 100);
+  }
+</script>

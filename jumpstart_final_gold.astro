@@ -1,0 +1,824 @@
+---
+import SEOTags from '../components/SEOTags.astro';
+import GTMTracking from '../components/GTMTracking.astro';
+import SchemaOrg from '../components/SchemaOrg.astro';
+
+const title = 'Jumpstart Scaling - Break Through The 7-Figure Ceiling';
+const description = 'The proven methodology that helped 500+ founders automate operations, reclaim 20 hours a week, and build a valuation-ready asset in 90 days.';
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{title}</title>
+    <meta name="description" content={description}>
+    <SEOTags title={title} description={description} />
+    <SchemaOrg />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --bg-dark: #050505;
+            --bg-card: #0F0F10;
+            --gold-main: #D4AF37;
+            --gold-bright: #FDD835;
+            --gold-gradient: linear-gradient(135deg, #BF953F 0%, #FCF6BA 50%, #B38728 100%);
+            --text-white: #FFFFFF;
+            --text-muted: #A3A3A3;
+            --border-gold: 1px solid rgba(212, 175, 55, 0.2);
+        }
+        
+        html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-white);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* Matrix Background */
+        #hero-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: var(--bg-dark);
+            overflow: hidden;
+        }
+        
+        #hero-bg::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, transparent 40%, var(--bg-dark) 90%);
+        }
+        
+        .container { 
+            max-width: 1400px; 
+            margin: 0 auto; 
+            padding: 0 2rem; 
+            position: relative; 
+            z-index: 1; 
+        }
+        
+        /* Gold Highlights */
+        .gold {
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+        
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(5, 5, 5, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+            padding: 1rem 0;
+        }
+        
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--gold-main);
+            text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: var(--text-white);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 0.9rem;
+        }
+        
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--gold-main);
+        }
+        
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding-top: 80px;
+        }
+        
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 6.5rem);
+            font-weight: 900;
+            margin-bottom: 2rem;
+            letter-spacing: -0.03em;
+        }
+        
+        .hero .subtitle {
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            color: var(--text-white);
+            max-width: 900px;
+            margin: 0 auto 3rem;
+            font-weight: 400;
+        }
+        
+        .cta-primary {
+            background: var(--gold-gradient);
+            color: #000;
+            padding: 1.5rem 4rem;
+            font-size: 1.3rem;
+            font-weight: 800;
+            border-radius: 0;
+            text-decoration: none;
+            display: inline-block;
+            border: 1px solid #FBF5B7;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .cta-primary:hover {
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
+            transform: translateY(-2px);
+        }
+        
+        /* Section */
+        .section {
+            padding: 8rem 0;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 900;
+            margin-bottom: 5rem;
+            color: var(--gold-main);
+            letter-spacing: -0.03em;
+        }
+        
+        /* Problem/Solution Blocks */
+        .problem-block, .solution-block {
+            background: var(--bg-card);
+            padding: 4rem;
+            margin-bottom: 3rem;
+            border-left: 2px solid var(--gold-main);
+            padding-left: 1.5rem;
+        }
+        
+        .problem-block h3, .solution-block h3 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+        
+        .solution-block h3 {
+            color: var(--gold-main);
+        }
+        
+        .problem-block p, .solution-block p {
+            color: var(--text-white);
+            line-height: 1.8;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .solution-block ul {
+            list-style: none;
+            margin-top: 2rem;
+        }
+        
+        .solution-block li {
+            color: var(--text-white);
+            margin-bottom: 1.2rem;
+            padding-left: 2rem;
+            position: relative;
+            font-size: 1.2rem;
+        }
+        
+        .solution-block li::before {
+            content: '→';
+            color: var(--gold-main);
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        
+        .solution-block li strong {
+            font-weight: 600;
+        }
+        
+        /* Visual Container */
+        .visual-container {
+            background: radial-gradient(circle at center, rgba(212,175,55,0.05) 0%, transparent 70%);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 300px;
+        }
+        
+        /* Animations */
+        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
+        @keyframes pulse-gold { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.8; } }
+        @keyframes grow-bar { from { height: 0; } to { height: var(--h); } }
+        @keyframes slide { 0% { left: 0; } 100% { left: 100%; } }
+        
+        /* Survey */
+        .survey-container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: var(--bg-card);
+            padding: 4rem;
+            border: var(--border-gold);
+        }
+        
+        .survey-question {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: var(--gold-main);
+        }
+        
+        .options-grid {
+            display: grid;
+            gap: 1rem;
+        }
+        
+        .option-card {
+            background: #111;
+            border: var(--border-gold);
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .option-card:hover {
+            border-color: var(--gold-main);
+            background: rgba(212, 175, 55, 0.1);
+        }
+        
+        .option-card input {
+            width: 20px;
+            height: 20px;
+        }
+        
+        .option-text {
+            font-size: 1.1rem;
+            color: var(--text-white);
+        }
+        
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            margin-bottom: 3rem;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: var(--gold-gradient);
+            width: 25%;
+            transition: width 0.3s;
+        }
+        
+        footer {
+            padding: 4rem 0;
+            border-top: 1px solid rgba(212, 175, 55, 0.1);
+            text-align: center;
+            color: var(--text-white);
+            margin-top: 8rem;
+        }
+        
+        footer a {
+            color: var(--text-white);
+            text-decoration: none;
+            margin: 0 1.5rem;
+            transition: color 0.3s;
+        }
+        
+        footer a:hover {
+            color: var(--gold-main);
+        }
+        
+        @media(max-width: 968px) {
+            .section { padding: 5rem 0; }
+            .problem-block, .solution-block, .survey-container { padding: 2rem; }
+            .nav-links { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Matrix Gold Rain Background -->
+    <div id="hero-bg">
+        <canvas id="goldMatrix"></canvas>
+    </div>
+
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">Jumpstart</a>
+            <ul class="nav-links">
+                <li><a href="#ads">Ads</a></li>
+                <li><a href="#funnels">Funnels</a></li>
+                <li><a href="#crm">CRM</a></li>
+                <li><a href="#analytics">Analytics</a></li>
+                <li><a href="#content">Content</a></li>
+                <li><a href="#retainer">Team</a></li>
+                <li><a href="#survey" class="cta-primary" style="padding: 0.75rem 2rem; font-size: 0.9rem;">Apply Now</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Scale From 7 to 8 Figures<br><span class="gold">Without The Burnout</span></h1>
+            <p class="subtitle">
+                Stop Leaving Money on the Table. Systematize Your Growth. Remove The Guesswork.
+            </p>
+            <a href="#survey" class="cta-primary">Get Your Free Scaling Blueprint</a>
+        </div>
+    </section>
+
+    <!-- Section 1: Paid Ads -->
+    <section class="section" id="ads">
+        <div class="container">
+            <h2 class="section-title">Paid Acquisition Engine</h2>
+            
+            <div class="problem-block">
+                <h3>The Problem: You're Trapped in the Referral Hamster Wheel</h3>
+                <p>Referrals are great—until they're not. Your growth is completely at the mercy of your existing client's schedules and moods. One bad quarter? Your pipeline dries up. You can't forecast. You can't plan hires. You're constantly white-knuckling it, hoping someone sends business your way.</p>
+            </div>
+            
+            <!-- Animated Visual: Dashboard -->
+            <div class="visual-container">
+                <div style="position: relative; width: 300px; height: 200px;">
+                    <svg viewBox="0 0 300 200" style="overflow: visible;">
+                        <path d="M0,180 Q50,150 100,160 T200,80 T300,20" fill="none" stroke="url(#goldGrad)" stroke-width="4" filter="drop-shadow(0 0 5px gold)"/>
+                        <defs>
+                            <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#B38728" />
+                                <stop offset="100%" style="stop-color:#FCF6BA" />
+                            </linearGradient>
+                        </defs>
+                        <circle cx="100" cy="160" r="4" fill="#D4AF37"><animate attributeName="r" values="4;6;4" dur="2s" repeatCount="indefinite"/></circle>
+                        <circle cx="300" cy="20" r="6" fill="#FFF"><animate attributeName="opacity" values="1;0.5;1" dur="1.5s" repeatCount="indefinite"/></circle>
+                    </svg>
+                    <div style="position: absolute; top: 0; right: -20px; background: #111; border: 1px solid #D4AF37; padding: 10px 15px; border-radius: 8px; animation: float 3s ease-in-out infinite;">
+                        <div style="font-size: 12px; color: #888;">ROAS</div>
+                        <div style="font-size: 24px; color: #D4AF37; font-weight: bold;">4.8x</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="solution-block">
+                <h3>Turn Cold Traffic Into Hyper-Active Buyers</h3>
+                <p>We build and manage a self-sustaining acquisition system that turns $1 into $5. Algorithmic Bidding: ACTIVATED. Every day, we're optimizing your ad spend, killing underperformers, and scaling winners.</p>
+                <ul>
+                    <li><strong>Daily Ads Management</strong> - We monitor performance hourly, not monthly</li>
+                    <li><strong>Creative Testing</strong> - New ad angles every week to beat fatigue</li>
+                    <li><strong>Multi-Platform Scaling</strong> - Google, Facebook, LinkedIn—wherever your buyers are</li>
+                    <li><strong>ROI Dashboards</strong> - Real-time tracking so you know exactly what's working</li>
+                </ul>
+            </div>
+            
+            <div style="text-align: center;">
+                <a href="#survey" class="cta-primary">Start With Paid Ads →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 2: Funnels -->
+    <section class="section" id="funnels">
+        <div class="container">
+            <h2 class="section-title">Funnel Architecture</h2>
+            
+            <div class="problem-block">
+                <h3>The #1 Reason Most Funnels Fail (And How We Fix It)</h3>
+                <p>You're driving traffic to your site. People are clicking. And then... nothing. They bounce. They ghost. Your sales team is stuck chasing lukewarm leads who "need to think about it." Why? Because your funnel is a leaky bucket.</p>
+            </div>
+            
+            <!-- Animated Visual: Funnel -->
+            <div class="visual-container">
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 5px; animation: float 4s ease-in-out infinite;">
+                    <div style="width: 250px; height: 60px; background: linear-gradient(to bottom, #333, #111); border: 1px solid #555; border-radius: 4px; display: grid; place-items: center; color: #888;">Traffic</div>
+                    <div style="color: #D4AF37; font-size: 20px;">↓</div>
+                    <div style="width: 180px; height: 60px; background: linear-gradient(to bottom, #554400, #111); border: 1px solid #D4AF37; border-radius: 4px; display: grid; place-items: center; color: #D4AF37;">Leads</div>
+                    <div style="color: #D4AF37; font-size: 20px;">↓</div>
+                    <div style="width: 120px; height: 60px; background: var(--gold-gradient); box-shadow: 0 0 20px rgba(212,175,55,0.4); border-radius: 4px; display: grid; place-items: center; color: black; font-weight: bold;">$$ Deals</div>
+                </div>
+            </div>
+            
+            <div class="solution-block">
+                <h3>Frictionless Lead Capture Architecture</h3>
+                <p>We design, build, and optimize complete sales funnels that do the heavy lifting for you. Deploying The 'Perfect Webinar' Sequence... From the first ad click to the booked call, every step is optimized to filter out tire-kickers and fast-track serious buyers.</p>
+                <ul>
+                    <li><strong>Conversion Copywriting</strong> - Psychology-backed messaging that resonates with your ICP</li>
+                    <li><strong>UX/UI Design</strong> - Clean, fast, mobile-optimized pages</li>
+                    <li><strong>Technical Integration</strong> - CRM, email, SMS, Calendly—everything talks to each other</li>
+                    <li><strong>A/B Testing Setup</strong> - Continuous optimization to improve conversion rates</li>
+                </ul>
+            </div>
+            
+            <div style="text-align: center;">
+                <a href="#survey" class="cta-primary">Build My Funnel →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: CRM -->
+    <section class="section" id="crm">
+        <div class="container">
+            <h2 class="section-title">CRM Transformation</h2>
+            
+            <div class="problem-block">
+                <h3>The Problem: Your CRM is a Digital Junk Drawer</h3>
+                <p>Be honest: when was the last time your CRM actually *helped* you close a deal? Right now, it's just a contact graveyard. Leads fall through the cracks. Your team forgets to follow up. Deals sit in "Proposal Sent" for 90 days because no one knows who's supposed to do what.</p>
+            </div>
+            
+            <!-- Animated Visual: Automation Flow -->
+            <div class="visual-container">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <div style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid #333; display: grid; place-items: center; font-size: 24px;">📩</div>
+                    <div style="width: 50px; height: 2px; background: #333; position: relative;">
+                        <div style="position: absolute; top: -2px; left: 0; width: 10px; height: 6px; background: #D4AF37; animation: slide 2s infinite linear;"></div>
+                    </div>
+                    <div style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid #D4AF37; box-shadow: 0 0 15px rgba(212,175,55,0.2); display: grid; place-items: center; font-size: 24px;">⚙️</div>
+                    <div style="width: 50px; height: 2px; background: #333; position: relative;">
+                        <div style="position: absolute; top: -2px; left: 0; width: 10px; height: 6px; background: #D4AF37; animation: slide 2s infinite linear 1s;"></div>
+                    </div>
+                    <div style="width: 60px; height: 60px; border-radius: 50%; background: var(--gold-gradient); display: grid; place-items: center; font-size: 24px; color: black;">✓</div>
+                </div>
+            </div>
+            
+            <div class="solution-block">
+                <h3>From 'Feast or Famine' To Predictable Scale</h3>
+                <p>We turn your CRM from a glorified Rolodex into a revenue machine. Leads are automatically enriched, scored, and routed. Follow-ups happen on autopilot. Contracts get sent at the perfect time.</p>
+                <ul>
+                    <li><strong>Custom Pipelines</strong> - Stages that match your actual sales process</li>
+                    <li><strong>Auto-Follow Up</strong> - Email & SMS sequences triggered by behavior</li>
+                    <li><strong>Contract Automation</strong> - Proposals sent automatically when deals hit "Qualified"</li>
+                    <li><strong>Lead Scoring</strong> - AI-powered prioritization so your team calls the hottest leads first</li>
+                </ul>
+            </div>
+            
+            <div style="text-align: center;">
+                <a href="#survey" class="cta-primary">Fix My CRM →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 4: Analytics -->
+    <section class="section" id="analytics">
+        <div class="container">
+            <h2 class="section-title">Data & Attribution</h2>
+            
+            <div class="problem-block">
+                <h3>The 'Stealth' Strategy Your Competitors Missed</h3>
+                <p>Quick question: which marketing channel drove your last 3 deals? If you can't answer that in 5 seconds, you're guessing. And guessing is expensive. You're probably over-investing in channels that don't convert and under-investing in the ones that print money.</p>
+            </div>
+            
+            <!-- Animated Visual: Bar Chart -->
+            <div class="visual-container">
+                <div style="display: flex; align-items: flex-end; gap: 15px; height: 150px; border-bottom: 2px solid #333; padding-bottom: 10px;">
+                    <div style="width: 30px; background: #222; height: 40px;"></div>
+                    <div style="width: 30px; background: #333; height: 60px;"></div>
+                    <div style="width: 30px; background: #444; height: 80px;"></div>
+                    <div style="width: 30px; background: var(--gold-gradient); --h: 140px; animation: grow-bar 2s ease-out forwards; box-shadow: 0 0 20px rgba(212,175,55,0.5);"></div>
+                </div>
+            </div>
+            
+            <div class="solution-block">
+                <h3>Optimizing For Average Cart Value (ACV)...</h3>
+                <p>We implement server-side tracking that survives iOS updates and ad blockers. You'll know exactly which dollar of ad spend generated which dollar of revenue. Multi-touch attribution shows you the full customer journey—from first click to closed deal.</p>
+                <ul>
+                    <li><strong>Server-Side Tracking</strong> - Bulletproof data that can't be blocked by browsers</li>
+                    <li><strong>Multi-Touch Attribution</strong> - See the entire customer journey, not just "last click"</li>
+                    <li><strong>Live Looker Studio Dashboards</strong> - Real-time revenue data, no Excel gymnastics</li>
+                    <li><strong>Conversion API Setup</strong> - Feed clean data directly to Facebook & Google</li>
+                </ul>
+            </div>
+            
+            <div style="text-align: center;">
+                <a href="#survey" class="cta-primary">Get Data Clarity →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 5: Content -->
+    <section class="section" id="content">
+        <div class="container">
+            <h2 class="section-title">The Authority Engine</h2>
+            
+            <div class="problem-block">
+                <h3>Dominate Your Niche Without The Burnout</h3>
+                <p>Your buyers are on LinkedIn. Your competitors are on LinkedIn. Everyone's posting. But you? You're too busy running your business to "build a personal brand." So prospects go with the founder who *seems* like the expert—even if their product is worse than yours.</p>
+            </div>
+            
+            <!-- Animated Visual: Content Distribution -->
+            <div class="visual-container">
+                <div style="position: relative; width: 200px; text-align: center;">
+                    <div style="width: 60px; height: 40px; background: #D4AF37; margin: 0 auto 30px; border-radius: 6px; display: grid; place-items: center; color: black; font-weight: bold;">REC</div>
+                    <div style="display: flex; justify-content: space-between; position: relative;">
+                        <div style="position: absolute; top: -15px; left: 10px; right: 10px; height: 1px; background: #D4AF37;"></div>
+                        <div style="width: 40px; height: 40px; background: #111; border: 1px solid #333; border-radius: 50%; display: grid; place-items: center; color: #FFF;">in</div>
+                        <div style="width: 40px; height: 40px; background: #111; border: 1px solid #333; border-radius: 50%; display: grid; place-items: center; color: #FFF;">𝕏</div>
+                        <div style="width: 40px; height: 40px; background: #111; border: 1px solid #333; border-radius: 50%; display: grid; place-items: center; color: #FFF;">✉️</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="solution-block">
+                <h3>Wake Up To New Stripe Notifications</h3>
+                <p>We handle the entire content engine. You record one 30-minute Loom per week. We turn it into 50+ assets: LinkedIn posts, newsletter issues, video clips, Twitter threads, and carousels. You become the go-to expert in your space without spending 10 hours a week on "content creation."</p>
+                <ul>
+                    <li><strong>LinkedIn Ghostwriting</strong> - Daily posts that sound like you</li>
+                    <li><strong>Newsletter Operations</strong> - Weekly emails that nurture your list into buyers</li>
+                    <li><strong>Video Editing & Repurposing</strong> - Turn one video into 20 short clips</li>
+                    <li><strong>Multi-Platform Distribution</strong> - LinkedIn, Twitter, YouTube, email—everywhere your audience is</li>
+                </ul>
+            </div>
+            
+            <div style="text-align: center;">
+                <a href="#survey" class="cta-primary">Build My Authority →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 6: Full Retainer -->
+    <section class="section" id="retainer">
+        <div class="container">
+            <h2 class="section-title">Full Growth Retainer</h2>
+            
+            <div class="problem-block">
+                <h3>Scale Your Revenue, Not Your Headaches</h3>
+                <p>Hiring a Head of Growth costs $180K/year + equity. A marketing coordinator? $70K. A funnel designer? $90K. A paid ads specialist? $100K. You're looking at $400K+ just to build a competent growth team. And that assumes you hire perfectly on the first try (you won't).</p>
+            </div>
+            
+            <!-- Animated Visual: Team -->
+            <div class="visual-container">
+                <div style="display: flex; align-items: center;">
+                    <div style="width: 60px; height: 60px; border-radius: 50%; background: #222; border: 2px solid #D4AF37; margin-right: -15px; z-index: 1;"></div>
+                    <div style="width: 60px; height: 60px; border-radius: 50%; background: #333; border: 2px solid #D4AF37; margin-right: -15px; z-index: 2;"></div>
+                    <div style="width: 60px; height: 60px; border-radius: 50%; background: var(--gold-gradient); border: 2px solid #FFF; z-index: 3; display: grid; place-items: center; color: black; font-weight: bold;">YOU</div>
+                </div>
+                <div style="margin-left: 20px; font-family: monospace; color: #D4AF37;">
+                    > TEAM DEPLOYED<br>
+                    > READY TO SCALE
+                </div>
+            </div>
+            
+            <div class="solution-block">
+                <h3>Your Entire Growth Team, On Demand</h3>
+                <p>This is not a "service." It's a partnership. We embed directly into your Slack. We attend your team meetings. We execute on everything from ad creative to hiring your next sales rep. You get a full growth team (ads, funnels, CRM, content, analytics) for less than the cost of one senior hire.</p>
+                <ul>
+                    <li><strong>Dedicated Growth Team</strong> - Strategist, designer, developer, copywriter, ads manager</li>
+                    <li><strong>Unlimited Projects</strong> - No scope creep, no nickel-and-diming. If it drives growth, we do it.</li>
+                    <li><strong>Weekly Strategy Calls</strong> - We don't wait for monthly check-ins. We move weekly.</li>
+                    <li><strong>Hiring & Training Support</strong> - We help you hire and onboard your internal growth team when you're ready</li>
+                </ul>
+            </div>
+            
+            <div style="text-align: center;">
+                <a href="#survey" class="cta-primary">Get My Growth Team →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Survey Section -->
+    <section class="section" id="survey">
+        <div class="container">
+            <div class="survey-container">
+                <div style="text-align: center; margin-bottom: 3rem;">
+                    <h2 style="font-size: 2.2rem; margin-bottom: 1rem; color: var(--gold-main); letter-spacing: -0.02em;">Claim Your Scaling Blueprint</h2>
+                    <p style="color: var(--text-white);">Answer 4 questions to generate your custom 90-day growth roadmap.</p>
+                </div>
+
+                <div class="progress-container">
+                    <div class="progress-bar" id="progressFill"></div>
+                </div>
+
+                <form id="surveyForm">
+                    <div class="form-step active" data-step="1">
+                        <div class="survey-question">1. What is your #1 bottleneck right now?</div>
+                        <div class="options-grid">
+                            <label class="option-card">
+                                <input type="radio" name="challenge" value="leads" required>
+                                <span class="option-text">Generating consistent qualified leads</span>
+                            </label>
+                            <label class="option-card">
+                                <input type="radio" name="challenge" value="delivery">
+                                <span class="option-text">Operations break when I step away</span>
+                            </label>
+                            <label class="option-card">
+                                <input type="radio" name="challenge" value="hiring">
+                                <span class="option-text">Finding and keeping 'A-Players'</span>
+                            </label>
+                            <label class="option-card">
+                                <input type="radio" name="challenge" value="time">
+                                <span class="option-text">I'm working 60+ hours a week</span>
+                            </label>
+                        </div>
+                        <div style="margin-top: 2rem; display: flex; justify-content: flex-end;">
+                            <button type="button" class="cta-primary" style="padding: 1rem 3rem; border: none; cursor: pointer;" onclick="nextStep()">Next →</button>
+                        </div>
+                    </div>
+
+                    <div class="form-step" data-step="2" style="display:none;">
+                        <div class="survey-question">2. Annual Revenue Range</div>
+                        <div class="options-grid">
+                            <label class="option-card"><input type="radio" name="revenue" value="250k-500k"><span class="option-text">$250k - $500k</span></label>
+                            <label class="option-card"><input type="radio" name="revenue" value="500k-1m"><span class="option-text">$500k - $1M</span></label>
+                            <label class="option-card"><input type="radio" name="revenue" value="1m-3m"><span class="option-text">$1M - $3M</span></label>
+                            <label class="option-card"><input type="radio" name="revenue" value="3m+"><span class="option-text">$3M+</span></label>
+                        </div>
+                        <div style="margin-top: 2rem; display: flex; justify-content: space-between;">
+                            <button type="button" class="cta-primary" style="padding: 1rem 2rem; cursor: pointer;" onclick="prevStep()">← Back</button>
+                            <button type="button" class="cta-primary" style="padding: 1rem 3rem; border: none; cursor: pointer;" onclick="nextStep()">Next →</button>
+                        </div>
+                    </div>
+
+                    <div class="form-step" data-step="3" style="display:none;">
+                        <div class="survey-question">3. Which areas interest you most?</div>
+                        <div class="options-grid">
+                            <label class="option-card"><input type="checkbox" name="services" value="ads"><span class="option-text">Paid Ads Management</span></label>
+                            <label class="option-card"><input type="checkbox" name="services" value="funnels"><span class="option-text">Funnels & Web Design</span></label>
+                            <label class="option-card"><input type="checkbox" name="services" value="automation"><span class="option-text">CRM & Automation</span></label>
+                            <label class="option-card"><input type="checkbox" name="services" value="full"><span class="option-text">Full Growth Team</span></label>
+                        </div>
+                        <div style="margin-top: 2rem; display: flex; justify-content: space-between;">
+                            <button type="button" class="cta-primary" style="padding: 1rem 2rem; cursor: pointer;" onclick="prevStep()">← Back</button>
+                            <button type="button" class="cta-primary" style="padding: 1rem 3rem; border: none; cursor: pointer;" onclick="nextStep()">Next →</button>
+                        </div>
+                    </div>
+
+                    <div class="form-step" data-step="4" style="display:none;">
+                        <div class="survey-question">4. Where should we send your Blueprint?</div>
+                        <div style="display: grid; gap: 1.5rem;">
+                            <input type="text" name="name" placeholder="Your Full Name" style="width: 100%; padding: 1.2rem; background: #111; border: 1px solid #333; color: var(--gold-main); font-size: 1.1rem;">
+                            <input type="email" name="email" placeholder="Work Email Address" style="width: 100%; padding: 1.2rem; background: #111; border: 1px solid #333; color: var(--gold-main); font-size: 1.1rem;">
+                            <input type="tel" name="phone" placeholder="Mobile Number (for SMS updates)" style="width: 100%; padding: 1.2rem; background: #111; border: 1px solid #333; color: var(--gold-main); font-size: 1.1rem;">
+                        </div>
+                        <div style="margin-top: 2rem; display: flex; justify-content: space-between;">
+                            <button type="button" class="cta-primary" style="padding: 1rem 2rem; cursor: pointer;" onclick="prevStep()">← Back</button>
+                            <button type="submit" class="cta-primary" style="padding: 1rem 3rem; border: none; cursor: pointer;">Complete Application</button>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="success-message" id="successMessage" style="display:none; text-align: center;">
+                    <div style="font-size: 5rem; margin-bottom: 2rem;">✓</div>
+                    <h2 style="margin-bottom: 1rem; color: var(--gold-main);">Application Received</h2>
+                    <p>Our team is reviewing your profile. Expect a text message from us within 2 hours.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Jumpstart Scaling. All Rights Reserved.</p>
+        <div style="margin-top: 1rem;">
+            <a href="/privacy">Privacy Policy</a>
+            <a href="/terms">Terms</a>
+        </div>
+    </footer>
+
+    <script>
+        /* MATRIX GOLD RAIN BACKGROUND */
+        const canvas = document.getElementById('goldMatrix');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        const chars = '01$$<>{}%XY';
+        const fontSize = 14;
+        const columns = canvas.width / fontSize;
+        const drops = Array(Math.floor(columns)).fill(1);
+        
+        function draw() {
+            ctx.fillStyle = 'rgba(5, 5, 5, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.font = fontSize + 'px monospace';
+            
+            for (let i = 0; i < drops.length; i++) {
+                const text = chars[Math.floor(Math.random() * chars.length)];
+                if(Math.random() > 0.98) {
+                    ctx.fillStyle = '#FFF';
+                } else {
+                    ctx.fillStyle = '#D4AF37';
+                }
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+        
+        setInterval(draw, 50);
+        
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // Survey Navigation
+        let currentStep = 1;
+        const totalSteps = 4;
+
+        window.nextStep = function() {
+            if (currentStep < totalSteps) {
+                document.querySelector(`[data-step="${currentStep}"]`).style.display = 'none';
+                currentStep++;
+                document.querySelector(`[data-step="${currentStep}"]`).style.display = 'block';
+                document.getElementById('progressFill').style.width = `${(currentStep / totalSteps) * 100}%`;
+            }
+        };
+
+        window.prevStep = function() {
+            if (currentStep > 1) {
+                document.querySelector(`[data-step="${currentStep}"]`).style.display = 'none';
+                currentStep--;
+                document.querySelector(`[data-step="${currentStep}"]`).style.display = 'block';
+                document.getElementById('progressFill').style.width = `${(currentStep / totalSteps) * 100}%`;
+            }
+        };
+
+        document.getElementById('surveyForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            document.querySelector('#surveyForm').style.display = 'none';
+            document.querySelector('#successMessage').style.display = 'block';
+            
+            const webhooks = [
+                "https://n8n.jumpstartscaling.com/webhook/2aadbf03-cff5-48b7-8236-cf344d755ed0",
+                "https://n8n.jumpstartscaling.com/webhook-test/2aadbf03-cff5-48b7-8236-cf344d755ed0"
+            ];
+            webhooks.forEach(url => fetch(url, { method: "POST", body: new FormData(e.target) }));
+
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({
+                "event": "form_submission",
+                "formType": "scaling_survey",
+                "conversionValue": 50
+            });
+        });
+
+        window.addEventListener('scroll', () => {
+            const sections = ['ads', 'funnels', 'crm', 'analytics', 'content', 'retainer'];
+            const scrollPos = window.scrollY + 100;
+
+            sections.forEach(id => {
+                const section = document.getElementById(id);
+                if (section) {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.offsetHeight;
+                    if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
+                        document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+                        const activeLink = document.querySelector(`.nav-links a[href="#${id}"]`);
+                        if(activeLink) activeLink.classList.add('active');
+                    }
+                }
+            });
+        });
+    </script>
+
+    <GTMTracking />
+</body>
+</html>

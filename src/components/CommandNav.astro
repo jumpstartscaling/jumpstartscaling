@@ -1,0 +1,130 @@
+---
+/**
+ * CommandNav.astro
+ * 
+ * High-performance navigation bar with aerospace aesthetic.
+ * Features:
+ * - Carbon fiber texture background
+ * - Precision borders
+ * - Dropdown for Systems (Services)
+ */
+
+interface Props {
+  ctaText?: string;
+  ctaHref?: string;
+}
+
+const { ctaText = "Initialize", ctaHref = "#survey" } = Astro.props;
+
+const systems = [
+  { name: 'Acquisition', href: '/services/paid-acquisition', icon: 'M13 10V3L4 14h7v7l9-11h-7z' },
+  { name: 'Funnels', href: '/services/funnel-architecture', icon: 'M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z' },
+  { name: 'CRM Logic', href: '/services/crm-transformation', icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' },
+  { name: 'Data Radar', href: '/services/data-attribution', icon: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z' },
+  { name: 'Authority', href: '/services/authority-engine', icon: 'M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3' },
+  { name: 'Growth Ops', href: '/services/growth-retainer', icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z' }
+];
+
+const mainLinks = [
+  { name: 'Mission', href: '/#mission' },
+  { name: 'Results', href: '/#telemetry' }
+];
+---
+
+<nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 transform translate-y-0">
+  <div class="absolute inset-0 bg-[#050505]/90 backdrop-blur-xl border-b border-white/10"></div>
+  
+  <div class="container mx-auto px-4 relative">
+    <div class="flex items-center justify-between h-20">
+      
+      <!-- Logo -->
+      <a href="/" class="flex items-center gap-2 group">
+        <div class="w-8 h-8 bg-gold-500 rounded-sm flex items-center justify-center">
+          <svg class="w-5 h-5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+        </div>
+        <span class="font-orbitron font-bold text-lg tracking-widest text-white group-hover:text-gold-400 transition-colors">JUMPSTART</span>
+      </a>
+
+      <!-- Desktop Links -->
+      <div class="hidden md:flex items-center gap-8">
+        <!-- Systems Dropdown -->
+        <div class="relative group">
+          <button class="flex items-center gap-2 text-sm font-medium text-gray-300 hover:text-white transition-colors py-2 uppercase tracking-wide">
+            Systems
+            <svg class="w-4 h-4 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+          </button>
+          
+          <!-- Dropdown Menu -->
+          <div class="absolute top-full left-1/2 -translate-x-1/2 pt-4 w-[600px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform group-hover:translate-y-0 translate-y-2">
+            <div class="bg-[#0A0A0A] border border-white/10 rounded-xl shadow-2xl p-6 grid grid-cols-2 gap-4 backdrop-blur-3xl">
+              {systems.map(sys => (
+                <a href={sys.href} class="flex items-start gap-4 p-3 rounded-lg hover:bg-white/5 transition-colors group/item">
+                  <div class="w-10 h-10 rounded-md bg-gold-900/20 flex items-center justify-center border border-gold-500/20 group-hover/item:border-gold-500/50 transition-colors">
+                    <svg class="w-5 h-5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d={sys.icon}></path></svg>
+                  </div>
+                  <div>
+                    <div class="font-bold text-white text-sm mb-1">{sys.name}</div>
+                    <div class="text-xs text-gray-500 leading-tight">View System Architecture →</div>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {mainLinks.map(link => (
+          <a href={link.href} class="text-sm font-medium text-gray-300 hover:text-white transition-colors uppercase tracking-wide">
+            {link.name}
+          </a>
+        ))}
+      </div>
+
+      <!-- CTA -->
+      <div class="flex items-center gap-4">
+        <a 
+          href={ctaHref}
+          class="hidden md:inline-flex items-center gap-2 px-6 py-2.5 bg-gold-600 hover:bg-gold-500 text-black font-bold text-sm tracking-wide rounded-sm transition-all"
+        >
+          {ctaText}
+        </a>
+
+        <!-- Mobile Menu Button -->
+        <button id="mobile-menu-btn" class="md:hidden text-white p-2">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Menu Overlay -->
+  <div id="mobile-menu" class="fixed inset-0 bg-black/95 z-[60] translate-x-full transition-transform duration-300 md:hidden flex flex-col pt-24 px-8">
+    <button id="close-menu-btn" class="absolute top-6 right-6 text-white p-2">
+      <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+    </button>
+    
+    <div class="flex flex-col gap-6">
+      <div class="text-gold-500 text-xs font-mono mb-2">SYSTEMS</div>
+      {systems.map(sys => (
+        <a href={sys.href} class="text-2xl text-white font-bold">{sys.name}</a>
+      ))}
+      <div class="h-px bg-white/10 my-4"></div>
+      {mainLinks.map(link => (
+        <a href={link.href} class="text-xl text-gray-400">{link.name}</a>
+      ))}
+    </div>
+  </div>
+</nav>
+
+<script>
+  const mobileBtn = document.getElementById('mobile-menu-btn');
+  const closeBtn = document.getElementById('close-menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+
+  function toggleMenu() {
+    mobileMenu.classList.toggle('translate-x-full');
+    document.body.classList.toggle('overflow-hidden');
+  }
+
+  mobileBtn?.addEventListener('click', toggleMenu);
+  closeBtn?.addEventListener('click', toggleMenu);
+</script>

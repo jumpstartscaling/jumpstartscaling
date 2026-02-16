@@ -1,53 +1,60 @@
-import { Canvas, useFrame } from "@react-three/fiber";
-import { Points, PointMaterial } from "@react-three/drei";
-import { useState, useRef, useMemo } from "react";
+import React from 'react';
 
-function ParticleField(props) {
-    const ref = useRef();
-
-    // Generate random sphere positions
-    const [sphere] = useState(() => {
-        const positions = new Float32Array(2000 * 3);
-        for (let i = 0; i < 2000; i++) {
-            const radius = 1.5;
-            const theta = Math.random() * Math.PI * 2;
-            const phi = Math.acos(2 * Math.random() - 1);
-
-            positions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
-            positions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
-            positions[i * 3 + 2] = radius * Math.cos(phi);
-        }
-        return positions;
-    });
-
-    useFrame((state, delta) => {
-        if (ref.current) {
-            ref.current.rotation.x -= delta / 10;
-            ref.current.rotation.y -= delta / 15;
-        }
-    });
-
+// Replaces heavy 3D canvas with performant CSS Holographic Grid
+const AtmosphereParticles = () => {
     return (
-        <group rotation={[0, 0, Math.PI / 4]}>
-            <Points ref={ref} positions={sphere} stride={3} frustumCulled={false} {...props}>
-                <PointMaterial
-                    transparent
-                    color="#4f46e5"
-                    size={0.005}
-                    sizeAttenuation={true}
-                    depthWrite={false}
-                />
-            </Points>
-        </group>
-    );
-}
+        <div className="fixed inset-0 z-[-1] pointer-events-none bg-black overflow-hidden">
+            {/* Holographic Grid Overlay */}
+            <div style={{
+                position: 'absolute',
+                inset: 0,
+                backgroundImage: `
+                    linear-gradient(rgba(201, 169, 97, 0.05) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(201, 169, 97, 0.05) 1px, transparent 1px)
+                `,
+                backgroundSize: '50px 50px',
+                maskImage: 'radial-gradient(circle at 50% 50%, black 30%, transparent 80%)',
+                WebkitMaskImage: 'radial-gradient(circle at 50% 50%, black 30%, transparent 80%)',
+                opacity: 0.6
+            }} />
 
-export default function AtmosphereParticles() {
-    return (
-        <div className="fixed inset-0 z-[-1] pointer-events-none opacity-40">
-            <Canvas camera={{ position: [0, 0, 1] }}>
-                <ParticleField />
-            </Canvas>
+            {/* Ambient Gold Glow */}
+            <div style={{
+                position: 'absolute',
+                top: '0',
+                left: '50%',
+                transform: 'translate(-50%, -20%)',
+                width: '80vw',
+                height: '80vw',
+                background: 'radial-gradient(circle, rgba(201, 169, 97, 0.08) 0%, transparent 70%)',
+                filter: 'blur(80px)',
+                opacity: 0.8
+            }} />
+
+            {/* Floating Dust Particles (CSS Animation) */}
+            <div className="dust-particles" />
+            <style>{`
+                .dust-particles {
+                    position: absolute; inset: 0;
+                    background-image: radial-gradient(#fff 1px, transparent 1px);
+                    background-size: 50px 50px;
+                    opacity: 0.1;
+                    animation: float 20s linear infinite;
+                }
+                @keyframes float {
+                    0% { transform: translateY(0); }
+                    100% { transform: translateY(-50px); }
+                }
+                /* Reduced intensity on mobile */
+                @media (max-width: 768px) {
+                    .dust-particles {
+                        opacity: 0.05;
+                        background-size: 80px 80px; /* Fewer particles */
+                    }
+                }
+            `}</style>
         </div>
     );
-}
+};
+
+export default AtmosphereParticles;

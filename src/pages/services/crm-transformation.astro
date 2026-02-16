@@ -1,0 +1,102 @@
+---
+import ServiceLayout from '../../layouts/ServiceLayout.astro';
+import GoldenList from '../../components/GoldenList.astro';
+import GlassCard from '../../components/GlassCard.astro';
+---
+
+<ServiceLayout
+  title="CRM Logic Circuits"
+  subtitle="The Brain of Your Operation. Automated Nurture. Zero Leakage."
+  metaDescription="Stop losing leads to 'follow-up failure'. We build headless CRM pipelines that automate lead scoring, routing, and long-term nurture."
+>
+
+  <h2>The "Leaky Bucket" Phenomenon</h2>
+  <p>
+    You spend $50,000 on ads. You generate 200 leads. Your sales team calls them... maybe once. Or they call 4 hours late. Or they email them manually three days later. 
+  </p>
+  <p>
+    <strong>50% of your ad spend is wasted the moment the lead hits your database.</strong>
+  </p>
+  <p>
+    Human discipline is not a strategy. Salespeople are great at closing, but they are terrible at "admin." They forget. They get busy. They cherry-pick the "easy" leads and let the difficult ones rot.
+  </p>
+  <p>
+    We remove the human element from the "Maintenance" phase. We build a <strong>Logic Circuit</strong> that manages your pipeline for you.
+  </p>
+
+  <hr class="border-white/10 my-12" />
+
+  <h2>System Architecture: The "Speed-to-Lead" Protocol</h2>
+  <p>
+    Speed is the single greatest predictor of conversion. A lead contacted within <strong>5 minutes</strong> is 9x more likely to convert than one contacted after 30 minutes.
+  </p>
+  <p>
+    You cannot achieve 5-minute response times with humans. You need automation.
+  </p>
+
+  <div class="grid md:grid-cols-2 gap-8 my-12 not-prose">
+    <GlassCard title="Step 1: Instant Capture" accent="gold">
+      <p class="text-sm mt-4 text-gray-400">
+        The moment a form is submitted, a Webhook fires. It does not "email" you. It injects the data directly into your CRM via API. Latency: 400ms.
+      </p>
+    </GlassCard>
+    <GlassCard title="Step 2: Omni-Channel Strike" accent="gold">
+      <p class="text-sm mt-4 text-gray-400">
+        Simultaneously, the system executes: 
+        1. An SMS text (personal intro).
+        2. An Email (value delivery).
+        3. A Voicemail Drop (social proof).
+        The lead's phone lights up instantly.
+      </p>
+    </GlassCard>
+  </div>
+
+  <h2>Behavioral Lead Scoring</h2>
+  <p>
+    Not all leads are equal. Why treat them the same?
+  </p>
+  <p>
+    We implement <strong>Lead Scoring Logic</strong>. The system watches your leads.
+  </p>
+  <ul class="list-disc pl-6 space-y-2 marker:text-gold-500">
+    <li>If they open an email: <strong>+5 Points</strong>.</li>
+    <li>If they click a link: <strong>+10 Points</strong>.</li>
+    <li>If they visit the pricing page: <strong>+50 Points</strong>.</li>
+  </ul>
+  <p>
+    When a lead crosses a "Hot Threshold" (e.g., 80 points), the systems fires a Slack/Teams notification to your sales team: <em>"HOT LEAD ACTIVE: CALL NOW."</em> Your reps stop cold calling and start closing low-hanging fruit.
+  </p>
+
+  <h2>Long-Term Nurture: The "Infinity Loop"</h2>
+  <p>
+    Only 3% of your market is ready to buy *today*. The other 97% will buy in 3-18 months. If you ignore them, you lose.
+  </p>
+  <p>
+    We deploy the <strong>Infinity Nurture Sequence</strong>. A 52-week automated email protocol that delivers value, case studies, and insights every single week. You stay top-of-mind *automatically*. When they are finally ready to buy, you are the only name they know.
+  </p>
+
+  <hr class="border-white/10 my-12" />
+
+  <h2>Technical Specifications</h2>
+  <div class="my-8">
+    <GoldenList 
+      iconType="circuit"
+      items={[
+        "<strong>Platform Agnostic:</strong> We engineer this in HubSpot, Salesforce, GoHighLevel, or ActiveCampaign.",
+        "<strong>Two-Way SMS Sync:</strong> Sales reps can reply to automated texts from their mobile app.",
+        "<strong>Calendar Logic:</strong> Round-robin booking distribution to ensure fair lead spread among reps."
+      ]}
+    />
+  </div>
+
+  <div class="mt-16 p-8 border border-gold-500/30 bg-gold-900/5 rounded-lg text-center">
+    <h3 class="text-2xl font-bold text-white mb-4">Stop The Leakage</h3>
+    <p class="text-gray-300 mb-8">
+      Automate your pipeline and double your close rate without hiring a single new rep.
+    </p>
+    <a href="/#audit" class="inline-block px-8 py-4 bg-gold-500 hover:bg-gold-400 text-black font-bold uppercase tracking-widest rounded-sm transition-colors">
+      Audit My Pipeline
+    </a>
+  </div>
+
+</ServiceLayout>

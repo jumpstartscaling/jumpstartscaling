@@ -1,0 +1,180 @@
+---
+/**
+ * Chris Amaya - Homepage
+ * Developer-First Aesthetic
+ */
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+import FloatingNav from '../components/FloatingNav.astro';
+import TechHero from '../components/TechHero.astro'; // NEW
+import ProblemSolution from '../components/ProblemSolution.astro';
+import FeatureCards from '../components/FeatureCards.astro';
+import StatsCounter from '../components/StatsCounter.astro';
+
+const navItems = [
+  { name: 'Architecture', href: '#architecture' },
+  { name: 'Stack', href: '#stack' },
+  { name: 'Manifesto', href: '#manifesto' },
+  { name: 'Calculator', href: '#calculator' }
+];
+
+const codeSnippet = [
+  `<span class="text-gray-500">#!/bin/n8n-workflow</span>`,
+  `<span class="text-purple-400">const</span> automation = {`,
+  `  source: <span class="text-green-400">'webhook_received'</span>,`,
+  `  data_transform: <span class="text-blue-400">(payload)</span> => {`,
+  `    <span class="text-purple-400">return</span> enrich(payload.email);`,
+  `  },`,
+  `  destination: [<span class="text-green-400">'postgres'</span>, <span class="text-green-400">'crm'</span>, <span class="text-green-400">'slack'</span>]`,
+  `};`,
+  ``,
+  `<span class="text-gray-500">// Executing at 0ms latency</span>`,
+  `<span class="text-blue-400">process</span>.execute(automation);`,
+  `<span class="text-green-400">✓ Workflow Completed ($0.0001 cost)</span>`
+];
+
+const servicesData = {
+  sectionTitle: "Engineering Capabilities",
+  sectionSubtitle: "I build production-grade infrastructure, not just 'zaps'.",
+  features: [
+    {
+      icon: "M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z",
+      title: "Automation Engineering",
+      description: "Migration from fragile Zapier chains to robust, self-hosted n8n workflows.",
+      benefits: [
+        { text: "Error handling & retries" },
+        { text: "Git version control" },
+        { text: "Unit testing" }
+      ],
+      link: "#"
+    },
+    {
+      icon: "M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4",
+      title: "Full-Stack Development",
+      description: "Custom Astro/Next.js frontend with Python/Node backends.",
+      benefits: [
+        { text: "Type-safe schemas" },
+        { text: "Server-side rendering" },
+        { text: "Database design" }
+      ],
+      link: "#"
+    },
+    {
+      icon: "M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z",
+      title: "AI & Vector Search",
+      description: "Implementing RAG (Retrieval Augmented Generation) and LLM agents.",
+      benefits: [
+        { text: "pgvector implementation" },
+        { text: "Agent orchestration" },
+        { text: "Context window optimization" }
+      ],
+      link: "#"
+    }
+  ]
+};
+
+const manifestoData = {
+  problemTitle: "Rental vs Ownership",
+  problemDescription: "Zapier is renting. Code is owning. When you rent, you pay a premium for convenience until the rent becomes extortion. When you own, you build equity in your infrastructure.",
+  problems: [
+    { text: "Zapier Tax: Paying $2k/mo for basic loops" },
+    { text: "Black Box: No visibility into execution logic" },
+    { text: "API Limits: Artificial constraints on growth" }
+  ],
+  solutionTitle: "Sovereign Infrastructure",
+  solutionDescription: "I build systems that run on your servers, your database, your rules. Zero per-task pricing. Unlimited throughput.",
+  solutions: [
+    { text: "Execution Cost: $0.00 (Self-hosted)" },
+    { text: "Full Observability (Logging/Monitoring)" },
+    { text: "Infinite Scalability (Vertical/Horizontal)" }
+  ],
+  ctaText: "Audit Your Stack →",
+  ctaHref: "#calculator"
+};
+---
+
+<BaseLayout 
+  title="Chris Amaya - Sovereign Automation Engineer"
+  description="Stop renting your automation. Owning your infrastructure saves 90% and grants infinite scale."
+>
+  <FloatingNav navItems={navItems} ctaText="Hack the System" ctaHref="#contact" />
+  
+  <TechHero 
+    title="Stop Renting Your Automation"
+    subtitle="Own the Code. Own the Infrastructure. Cut costs by 90%."
+    primaryCTA={{ text: "View Stack →", href: "#stack" }}
+    codeSnippet={codeSnippet}
+  />
+  
+  <div id="manifesto">
+    <ProblemSolution {...manifestoData} />
+  </div>
+  
+  <div id="architecture">
+    <FeatureCards {...servicesData} />
+  </div>
+  
+  <!-- Tech Stack / Terminal Aesthetic -->
+  <section id="stack" class="py-20 px-4 bg-[#0d1117] relative overflow-hidden">
+    <div class="absolute inset-0 bg-grid-pattern opacity-[0.05]"></div>
+    <div class="max-w-6xl mx-auto relative z-10">
+      <h2 class="text-4xl md:text-5xl font-bold text-center mb-16 font-mono text-white">
+        <span class="text-gold-500">./</span>stack_inventory
+      </h2>
+      
+      <div class="grid md:grid-cols-2 gap-8">
+        <!-- Frontend -->
+        <div class="p-6 border border-gray-800 rounded-xl bg-black/50 hover:border-gold-500/30 transition-colors">
+          <div class="text-gold-400 font-mono text-sm mb-4">frontend_layer</div>
+          <div class="space-y-4 font-mono text-gray-400">
+            <div class="flex justify-between border-b border-gray-800 pb-2">
+              <span>Framework</span>
+              <span class="text-white">Astro / Next.js</span>
+            </div>
+            <div class="flex justify-between border-b border-gray-800 pb-2">
+              <span>Styling</span>
+              <span class="text-white">Tailwind CSS</span>
+            </div>
+            <div class="flex justify-between border-b border-gray-800 pb-2">
+              <span>State</span>
+              <span class="text-white">React / Nano Stores</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Backend -->
+        <div class="p-6 border border-gray-800 rounded-xl bg-black/50 hover:border-gold-500/30 transition-colors">
+          <div class="text-purple-400 font-mono text-sm mb-4">backend_layer</div>
+          <div class="space-y-4 font-mono text-gray-400">
+            <div class="flex justify-between border-b border-gray-800 pb-2">
+              <span>Runtime</span>
+              <span class="text-white">Node.js / Python</span>
+            </div>
+            <div class="flex justify-between border-b border-gray-800 pb-2">
+              <span>Database</span>
+              <span class="text-white">PostgreSQL (Supabase)</span>
+            </div>
+            <div class="flex justify-between border-b border-gray-800 pb-2">
+              <span>Orchestration</span>
+              <span class="text-white">n8n (Self-Hosted)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Calculator Section (Keeping it, fits the theme) -->
+  <section id="calculator" class="py-20 px-4 bg-black">
+    <div class="max-w-4xl mx-auto">
+      <div class="p-8 bg-gradient-to-br from-gray-900 to-black border border-gold-900/30 rounded-xl">
+        <h2 class="text-3xl font-bold mb-8 font-mono text-center">ROI Calculator</h2>
+        <!-- Same calculator Logic -->
+        <form id="calculator-form" class="space-y-6">
+           <!-- ... inputs ... -->
+        </form>
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>

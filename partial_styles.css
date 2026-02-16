@@ -1,0 +1,20 @@
+        .feature-section:nth-child(even) { background: var(--dark-2); }
+        .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+        .feature-section:nth-child(odd) .feature-grid .feature-content { order: 1; }
+        .feature-section:nth-child(odd) .feature-grid .feature-visual { order: 2; }
+        .feature-section:nth-child(even) .feature-grid .feature-content { order: 2; }
+        .feature-section:nth-child(even) .feature-grid .feature-visual { order: 1; }
+        .feature-content h2 { font-size: 3rem; margin-bottom: 1.5rem; }
+        .feature-price { font-size: 1.5rem; color: var(--primary); font-family: monospace; margin-bottom: 1.5rem; display: block; }
+        .feature-desc { font-size: 1.1rem; color: #ccc; margin-bottom: 2rem; line-height: 1.8; }
+        .feature-list { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .feature-list li { display: flex; align-items: center; color: var(--text-muted); }
+        .feature-list li:before { content: '→'; color: var(--secondary); margin-right: 10px; font-weight: bold; }
+        .feature-visual { background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 2rem; min-height: 400px; display: flex; align-items: center; justify-content: center; opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
+        .feature-visual.visible { opacity: 1; transform: translateY(0); }
+        .code-window { background: #1e1e1e; border-radius: 8px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); width: 100%; font-family: monospace; font-size: 0.9rem; overflow: hidden; border: 1px solid #333; }
+        .window-header { background: #252526; padding: 10px 15px; display: flex; gap: 8px; border-bottom: 1px solid #333; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; }
+        .red { background: #ff5f56; } .yellow { background: #ffbd2e; } .green { background: #27c93f; }
+        .window-body { padding: 20px; color: #d4d4d4; line-height: 1.6; }
+        .k { color: #569cd6; } .s { color: #ce9178; } .f { color: #dcdcaa; } .c { color: #6a9955; } .n { color: #b5cea8; }

@@ -1,0 +1,352 @@
+---
+import SEOTags from '../components/SEOTags.astro';
+import GTMTracking from '../components/GTMTracking.astro';
+import SchemaOrg from '../components/SchemaOrg.astro';
+
+const title = 'Jumpstart Scaling - Break Through The 7-Figure Ceiling';
+const description = 'The proven methodology that helped 500+ founders automate operations, reclaim 20 hours a week, and build a valuation-ready asset in 90 days.';
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{title}</title>
+    <meta name="description" content={description}>
+    <SEOTags title={title} description={description} />
+    <SchemaOrg />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #FF6B35;
+            --primary-dark: #E85A2A;
+            --secondary: #4ECDC4;
+            --dark: #050505;
+            --dark-2: #0F0F12;
+            --dark-3: #1A1A20;
+            --text: #ffffff;
+            --text-muted: #9CA3AF;
+            --accent: #FFD93D;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dark);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+        h1, h2, h3 { line-height: 1.2; letter-spacing: -0.02em; }
+        
+        .hero {
+            min-height: 90vh;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; padding: 4rem 0;
+            background: radial-gradient(circle at center, rgba(255, 107, 53, 0.05) 0%, transparent 60%);
+        }
+        .hero h1 { font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 900; margin-bottom: 2rem; max-width: 1000px; }
+        .hero .subtitle { font-size: clamp(1.2rem, 3vw, 1.5rem); color: var(--text-muted); max-width: 800px; margin-bottom: 3rem; }
+        .cta-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white; padding: 1.5rem 3.5rem; font-size: 1.25rem; font-weight: 700;
+            border-radius: 50px; text-decoration: none; transition: all 0.3s ease;
+            box-shadow: 0 10px 40px rgba(255, 107, 53, 0.3); display: inline-block;
+            border: 2px solid rgba(255,255,255,0.1); cursor: pointer;
+        }
+        .cta-primary:hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 20px 60px rgba(255, 107, 53, 0.5); }
+
+        .section { padding: 6rem 0; border-top: 1px solid rgba(255,255,255,0.05); }
+        .section:nth-child(even) { background: rgba(255,255,255,0.02); }
+        
+        .service-section { max-width: 1100px; margin: 0 auto; }
+        .service-header { text-align: center; margin-bottom: 3rem; }
+        .service-header h2 { font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem; }
+        .service-price { font-size: 2rem; font-weight: 800; color: white; }
+        .price-sub { font-size: 1rem; color: var(--text-muted); font-weight: 500; }
+        
+        .service-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; margin-top: 2rem; }
+        .service-image { border-radius: 20px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        .service-image img { width: 100%; height: auto; display: block; }
+        
+        .card {
+            background: rgba(26, 26, 32, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 2rem;
+            border-radius: 20px;
+            margin-bottom: 1.5rem;
+        }
+        .card h3 { margin-bottom: 1rem; font-size: 1.5rem; }
+        .card p { color: #ccc; line-height: 1.8; }
+        .card ul { list-style: none; margin-top: 1rem; }
+        .card li { color: #ccc; margin-bottom: 0.75rem; padding-left: 1.5rem; position: relative; }
+        .card li:before { content: '→'; color: var(--secondary); position: absolute; left: 0; font-weight: bold; }
+        
+        .testimonial { background: rgba(255, 107, 53, 0.05); border-color: var(--primary); font-style: italic; }
+        
+        @media(max-width: 768px) {
+            .service-grid { grid-template-columns: 1fr; }
+            .hero { padding-top: 4rem; min-height: 80vh; }
+            .section { padding: 4rem 0; }
+        }
+    </style>
+</head>
+<body>
+    <section class="hero">
+        <div class="container">
+            <span style="display:inline-block; padding: 0.5rem 1.5rem; background: rgba(255,107,53,0.1); color: var(--primary); border-radius: 50px; font-weight: 600; font-size: 0.9rem; margin-bottom: 1.5rem;">
+                FOR 7-FIGURE FOUNDERS
+            </span>
+            <h1>Scale From 7 to 8 Figures<br><span style="color: var(--primary);">Without The Burnout</span></h1>
+            <p class="subtitle">
+                The Jumpstart Methodology: Automate operations, install self-managing teams, 
+                and build a valuation-ready asset in 90 days or less.
+            </p>
+            <a href="#survey" class="cta-primary">Get Your Free Scaling Blueprint</a>
+        </div>
+    </section>
+
+    <!-- Service 1: Paid Ads -->
+    <section class="section">
+        <div class="container service-section">
+            <div class="service-header">
+                <h2>Paid Acquisition Engine</h2>
+                <p class="service-price">$2,250<span class="price-sub">/month</span></p>
+            </div>
+            
+            <div class="service-grid">
+                <div>
+                    <div class="card">
+                        <h3>The Problem: You're Trapped in the Referral Hamster Wheel</h3>
+                        <p>Referrals are great—until they're not. Your growth is completely at the mercy of your existing client's schedules and moods. One bad quarter? Your pipeline dries up. You can't forecast. You can't plan hires. You're constantly white-knuckling it, hoping someone sends business your way.</p>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 style="color: var(--secondary);">The Solution: A Predictable Lead Machine</h3>
+                        <p>We build and manage a self-sustaining acquisition system that turns $1 into $5. Every day, we're optimizing your ad spend, killing underperformers, and scaling winners.</p>
+                        <ul>
+                            <li><strong>Daily Ads Management</strong> - We monitor performance hourly, not monthly</li>
+                            <li><strong>Creative Testing</strong> - New ad angles every week to beat fatigue</li>
+                            <li><strong>Multi-Platform Scaling</strong> - Google, Facebook, LinkedIn—wherever your buyers are</li>
+                            <li><strong>ROI Dashboards</strong> - Real-time tracking so you know exactly what's working</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="card testimonial">
+                        <p>"We went from 2-3 inbound leads per month to 40+ qualified SQLs. For the first time in 5 years, I can actually forecast revenue." - Agency Owner, $2.8M ARR</p>
+                    </div>
+                </div>
+                
+                <div class="service-image">
+                    <img src="/rocket.png" alt="Paid Acquisition" />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Service 2: Funnels -->
+    <section class="section">
+        <div class="container service-section">
+            <div class="service-header">
+                <h2>Funnel Architecture</h2>
+                <p class="service-price">$3,500<span class="price-sub">/project</span></p>
+            </div>
+            
+            <div class="service-grid">
+                <div class="service-image">
+                    <img src="/funnel.png" alt="Sales Funnel" />
+                </div>
+                
+                <div>
+                    <div class="card">
+                        <h3>The Problem: Traffic Doesn't Equal Revenue</h3>
+                        <p>You're driving traffic to your site. People are clicking. And then... nothing. They bounce. They ghost. Your sales team is stuck chasing lukewarm leads who "need to think about it." Why? Because your funnel is a leaky bucket.</p>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 style="color: var(--secondary);">The Solution: A Funnel That Qualifies & Converts On Autopilot</h3>
+                        <p>We design, build, and optimize complete sales funnels that do the heavy lifting for you. From the first ad click to the booked call, every step is optimized to filter out tire-kickers and fast-track serious buyers.</p>
+                        <ul>
+                            <li><strong>Conversion Copywriting</strong> - Psychology-backed messaging that resonates with your ICP</li>
+                            <li><strong>UX/UI Design</strong> - Clean, fast, mobile-optimized pages</li>
+                            <li><strong>Technical Integration</strong> - CRM, email, SMS, Calendly—everything talks to each other</li>
+                            <li><strong>A/B Testing Setup</strong> - Continuous optimization to improve conversion rates</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="card testimonial">
+                        <p>"Our funnel went from 8% conversion to 31% in 60 days. Same traffic, 4x the bookings. This paid for itself in week one." - SaaS Founder, $1.2M ARR</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Service 3: CRM -->
+    <section class="section">
+        <div class="container service-section">
+            <div class="service-header">
+                <h2>CRM Transformation</h2>
+                <p class="service-price">$2,500<span class="price-sub">/setup</span></p>
+            </div>
+            
+            <div class="service-grid">
+                <div>
+                    <div class="card">
+                        <h3>The Problem: Your CRM is a Digital Junk Drawer</h3>
+                        <p>Be honest: when was the last time your CRM actually *helped* you close a deal? Right now, it's just a contact graveyard. Leads fall through the cracks. Your team forgets to follow up. Deals sit in "Proposal Sent" for 90 days because no one knows who's supposed to do what.</p>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 style="color: var(--secondary);">The Solution: A Self-Driving CRM</h3>
+                        <p>We turn your CRM from a glorified Rolodex into a revenue machine. Leads are automatically enriched, scored, and routed. Follow-ups happen on autopilot. Contracts get sent at the perfect time.</p>
+                        <ul>
+                            <li><strong>Custom Pipelines</strong> - Stages that match your actual sales process</li>
+                            <li><strong>Auto-Follow Up</strong> - Email & SMS sequences triggered by behavior</li>
+                            <li><strong>Contract Automation</strong> - Proposals sent automatically when deals hit "Qualified"</li>
+                            <li><strong>Lead Scoring</strong> - AI-powered prioritization so your team calls the hottest leads first</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="card testimonial">
+                        <p>"We cut our sales cycle from 45 days to 18 days. Our close rate doubled because nothing falls through the cracks anymore." - B2B SaaS VP of Sales</p>
+                    </div>
+                </div>
+                
+                <div class="service-image">
+                    <img src="/crm.png" alt="CRM Automation" />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Service 4: Analytics -->
+    <section class="section">
+        <div class="container service-section">
+            <div class="service-header">
+                <h2>Data & Attribution</h2>
+                <p class="service-price">$1,500<span class="price-sub">/month</span></p>
+            </div>
+            
+            <div class="service-grid">
+                <div class="service-image">
+                    <img src="/factory.png" alt="Analytics Factory" />
+                </div>
+                
+                <div>
+                    <div class="card">
+                        <h3>The Problem: You're Flying Blind</h3>
+                        <p>Quick question: which marketing channel drove your last 3 deals? If you can't answer that in 5 seconds, you're guessing. And guessing is expensive. You're probably over-investing in channels that don't convert and under-investing in the ones that print money.</p>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 style="color: var(--secondary);">The Solution: Total Revenue Visibility</h3>
+                        <p>We implement server-side tracking that survives iOS updates and ad blockers. You'll know exactly which dollar of ad spend generated which dollar of revenue. Multi-touch attribution shows you the full customer journey—from first click to closed deal.</p>
+                        <ul>
+                            <li><strong>Server-Side Tracking</strong> - Bulletproof data that can't be blocked by browsers</li>
+                            <li><strong>Multi-Touch Attribution</strong> - See the entire customer journey, not just "last click"</li>
+                            <li><strong>Live Looker Studio Dashboards</strong> - Real-time revenue data, no Excel gymnastics</li>
+                            <li><strong>Conversion API Setup</strong> - Feed clean data directly to Facebook & Google</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="card testimonial">
+                        <p>"We discovered LinkedIn was driving 60% of our revenue despite only getting 10% of our ad spend. Reallocated budget and 3x'd ROI in 90 days." - Agency Owner, $4M ARR</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Service 5: Content -->
+    <section class="section">
+        <div class="container service-section">
+            <div class="service-header">
+                <h2>The Authority Engine</h2>
+                <p class="service-price">$4,000<span class="price-sub">/month</span></p>
+            </div>
+            
+            <div class="service-grid">
+                <div>
+                    <div class="card">
+                        <h3>The Problem: You're Invisible Where It Matters</h3>
+                        <p>Your buyers are on LinkedIn. Your competitors are on LinkedIn. Everyone's posting. But you? You're too busy running your business to "build a personal brand." So prospects go with the founder who *seems* like the expert—even if their product is worse than yours.</p>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 style="color: var(--secondary);">The Solution: Omnipresent Authority, On Autopilot</h3>
+                        <p>We handle the entire content engine. You record one 30-minute Loom per week. We turn it into 50+ assets: LinkedIn posts, newsletter issues, video clips, Twitter threads, and carousels. You become the go-to expert in your space without spending 10 hours a week on "content creation."</p>
+                        <ul>
+                            <li><strong>LinkedIn Ghostwriting</strong> - Daily posts that sound like you</li>
+                            <li><strong>Newsletter Operations</strong> - Weekly emails that nurture your list into buyers</li>
+                            <li><strong>Video Editing & Repurposing</strong> - Turn one video into 20 short clips</li>
+                            <li><strong>Multi-Platform Distribution</strong> - LinkedIn, Twitter, YouTube, email—everywhere your audience is</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="card testimonial">
+                        <p>"I went from 2,000 LinkedIn followers to 18,000 in 6 months. Now I get 10-15 qualified DMs per week asking to work together. Zero outbound." - Consultant, $800K ARR</p>
+                    </div>
+                </div>
+                
+                <div class="service-image">
+                    <img src="/content.png" alt="Content Distribution" />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Service 6: Full Retainer -->
+    <section class="section" style="background: radial-gradient(circle at center, rgba(255,107,53,0.1) 0%, #050505 100%); border-top: 2px solid var(--primary);">
+        <div class="container service-section">
+            <div class="service-header">
+                <h2>Full Growth Retainer</h2>
+                <p class="service-price" style="color: white;">$5,200<span class="price-sub">/week</span></p>
+            </div>
+            
+            <div class="service-grid">
+                <div class="service-image">
+                    <img src="/team.png" alt="Growth Team" />
+                </div>
+                
+                <div>
+                    <div class="card" style="border-color: var(--primary);">
+                        <h3>The Problem: You Need a Team, Not Another Vendor</h3>
+                        <p>Hiring a Head of Growth costs $180K/year + equity. A marketing coordinator? $70K. A funnel designer? $90K. A paid ads specialist? $100K. You're looking at $400K+ just to build a competent growth team. And that assumes you hire perfectly on the first try (you won't).</p>
+                    </div>
+                    
+                    <div class="card" style="border-color: var(--primary);">
+                        <h3 style="color: var(--secondary);">The Solution: Your Entire Growth Team, On Demand</h3>
+                        <p>This is not a "service." It's a partnership. We embed directly into your Slack. We attend your team meetings. We execute on everything from ad creative to hiring your next sales rep. You get a full growth team (ads, funnels, CRM, content, analytics) for less than the cost of one senior hire.</p>
+                        <ul>
+                            <li><strong>Dedicated Growth Team</strong> - Strategist, designer, developer, copywriter, ads manager</li>
+                            <li><strong>Unlimited Projects</strong> - No scope creep, no nickel-and-diming. If it drives growth, we do it.</li>
+                            <li><strong>Weekly Strategy Calls</strong> - We don't wait for monthly check-ins. We move weekly.</li>
+                            <li><strong>Hiring & Training Support</strong> - We help you hire and onboard your internal growth team when you're ready</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="card testimonial" style="background: rgba(255, 107, 53, 0.15); border-color: var(--accent);">
+                        <p>"I tried hiring a Head of Growth 3 times. All failed. These guys are embedded in our business like they're equity partners. We 4x'd in 18 months." - SaaS CEO, $6M ARR</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer style="padding: 4rem 0; border-top: 1px solid rgba(255,255,255,0.1); text-align: center; color: var(--text-muted);">
+        <p>&copy; 2026 Jumpstart Scaling. All Rights Reserved.</p>
+        <div style="margin-top: 1rem;">
+            <a href="/privacy" style="color: var(--text-muted); margin: 0 1rem;">Privacy Policy</a>
+            <a href="/terms" style="color: var(--text-muted); margin: 0 1rem;">Terms</a>
+        </div>
+    </footer>
+
+    <GTMTracking />
+</body>
+</html>

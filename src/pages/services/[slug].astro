@@ -1,0 +1,134 @@
+---
+import { getPages, getPageBySlug } from '../../lib/payload';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CommandHero from '../../components/CommandHero.astro';
+import GoldenList from '../../components/GoldenList.astro';
+import ConsultativeAudit from '../../components/ConsultativeAudit.astro';
+
+// Fetch all pages to generate static paths
+export async function getStaticPaths() {
+  const pages = await getPages();
+  // Filter only published pages or all? Usually published.
+  return pages.map((page) => ({
+    params: { slug: page.slug },
+    props: { page },
+  }));
+}
+
+const { page } = Astro.props;
+
+// Simple Rich Text Serializer (recursive)
+const serialize = (children) => {
+  if (!children) return '';
+  return children.map((node) => {
+    if (node.text) {
+      let text = node.text;
+      if (node.bold) text = `<strong>${text}</strong>`;
+      if (node.italic) text = `<em>${text}</em>`;
+      return text;
+    }
+    
+    if (!node.children) return '';
+
+    switch (node.type) {
+      case 'h1': return `<h1>${serialize(node.children)}</h1>`;
+      case 'h2': return `<h2>${serialize(node.children)}</h2>`;
+      case 'ul': return `<ul>${serialize(node.children)}</ul>`;
+      case 'li': return `<li>${serialize(node.children)}</li>`;
+      default: return `<p>${serialize(node.children)}</p>`;
+    }
+  }).join('');
+};
+---
+
+<BaseLayout title={page.title + " | Jumpstart Scaling"} description={page.metaDescription || "Revenue Infrastructure"}>
+  
+  {page.layout && page.layout.map((block) => {
+    
+    // --- HERO BLOCK ---
+    if (block.blockType === 'hero') {
+      return (
+        <CommandHero 
+          title={block.headline}
+          subtitle={block.subheadline}
+          primaryCTA={{ text: block.ctaText || "Start Audit", href: block.ctaLink || "#audit" }}
+          backgroundImage={block.backgroundImage?.url} 
+        />
+      );
+    }
+
+    // --- FEATURE GRID BLOCK ---
+    if (block.blockType === 'features') {
+      // Convert feature objects to simpler string array for GoldenList if applicable,
+      // or build a custom layout. GoldenList uses strings.
+      // We'll create a nice grid layout here manually.
+      return (
+        <section class="py-24 bg-black border-t border-white/10">
+          <div class="container mx-auto px-4">
+            {block.sectionTitle && <h2 class="text-3xl text-white font-bold mb-12 text-center tracking-tight">{block.sectionTitle}</h2>}
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+               {block.features.map(feature => (
+                 <div class="p-6 border border-white/10 bg-white/5 rounded hover:border-gold-500/50 transition-colors group">
+                    <div class="text-gold-500 mb-4 text-2xl group-hover:scale-110 transition-transform duration-300">
+                      {/* Icon placeholder or fetch */}
+                      ✦
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">{feature.title}</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">{feature.description}</p>
+                 </div>
+               ))}
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    // --- CONTENT BLOCK ---
+    if (block.blockType === 'content') {
+       const htmlContent = serialize(block.richText);
+       return (
+         <section class="py-16 bg-[#050505] border-t border-white/5">
+            <div class="container mx-auto px-4 max-w-4xl prose prose-invert prose-lg prose-gold">
+               <Fragment set:html={htmlContent} />
+            </div>
+         </section>
+       );
+    }
+    
+    // --- CTA BLOCK ---
+    if (block.blockType === 'cta') {
+        const bgClass = block.theme === 'light' ? 'bg-white text-black' : 'bg-black text-white';
+        // We stick to dark theme mostly for this brand
+        return (
+            <section class="py-24 bg-gradient-to-br from-gray-900 to-black border-t border-white/20 text-center relative overflow-hidden">
+                <div class="absolute inset-0 bg-grid-pattern opacity-5"></div>
+                <div class="container mx-auto px-4 relative z-10">
+                    <h2 class="text-4xl md:text-5xl font-bold mb-8 font-serif">{block.headline}</h2>
+                    <a href={block.buttonLink} class="inline-flex items-center justify-center bg-gold-500 text-black font-bold py-4 px-10 rounded text-lg hover:bg-gold-400 transition-all hover:scale-105 shadow-glow">
+                        {block.buttonText}
+                    </a>
+                </div>
+            </section>
+        )
+    }
+
+    return null;
+  })}
+
+  <!-- Global Footer Audit -->
+  <section id="audit" class="py-24 bg-black relative border-t border-white/20">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl md:text-5xl font-bold mb-4 text-white font-serif tracking-tight">
+          Apply for Protocol Access
+        </h2>
+        <p class="text-gray-400 max-w-2xl mx-auto">
+          We only work with companies we can mathematically scale.
+        </p>
+      </div>
+      <ConsultativeAudit />
+    </div>
+  </section>
+
+</BaseLayout>

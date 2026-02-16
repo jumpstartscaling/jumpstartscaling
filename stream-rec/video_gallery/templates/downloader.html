@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📥 TikTok Profile Downloader</title>
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #1a1a25;
+            --accent: #ec4899;
+            --accent-hover: #f472b6;
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --success: #22c55e;
+            --warning: #f59e0b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+            border-bottom: 1px solid rgba(236, 72, 153, 0.2);
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            background: linear-gradient(135deg, var(--accent) 0%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 15px;
+            color: var(--text-secondary);
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            color: var(--accent);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .card h2 {
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 14px 18px;
+            background: var(--bg-secondary);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .btn {
+            padding: 14px 28px;
+            background: var(--accent);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .feature {
+            background: var(--bg-secondary);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .feature-icon {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+
+        .feature-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .feature-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .queue {
+            margin-top: 20px;
+        }
+
+        .queue-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .queue-item .status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status.pending {
+            background: rgba(148, 163, 184, 0.2);
+            color: var(--text-secondary);
+        }
+
+        .status.running {
+            background: rgba(34, 197, 94, 0.2);
+            color: var(--success);
+        }
+
+        .status.done {
+            background: var(--success);
+            color: white;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: var(--bg-secondary);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), #8b5cf6);
+            border-radius: 3px;
+            transition: width 0.3s;
+        }
+
+        .info-box {
+            background: rgba(236, 72, 153, 0.1);
+            border: 1px solid rgba(236, 72, 153, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        .info-box h4 {
+            margin-bottom: 10px;
+            color: var(--accent);
+        }
+
+        .info-box code {
+            background: var(--bg-secondary);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 600px) {
+            .input-group {
+                flex-direction: column;
+            }
+
+            header h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>📥 TikTok Profile Downloader</h1>
+        <p style="color: var(--text-secondary);">Download all videos from any TikTok profile</p>
+        <a href="/" class="back-link">← Back to Recordings</a>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <h2>🔗 Add Profile to Download</h2>
+            <div class="input-group">
+                <input type="text" id="username" placeholder="Enter TikTok username (e.g., @username or profile URL)">
+                <button class="btn" id="addBtn" onclick="addDownload()">Add to Queue</button>
+            </div>
+
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">🚫</div>
+                    <div class="feature-title">No Watermark</div>
+                    <div class="feature-desc">Clean videos without TikTok logo</div>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">📦</div>
+                    <div class="feature-title">Full Profile</div>
+                    <div class="feature-desc">Download all videos automatically</div>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🔄</div>
+                    <div class="feature-title">Incremental</div>
+                    <div class="feature-desc">Skip already downloaded</div>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">📝</div>
+                    <div class="feature-title">Metadata</div>
+                    <div class="feature-desc">Saves captions & hashtags</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📋 Download Queue</h2>
+            <div class="queue" id="queue">
+                <p style="color: var(--text-secondary); text-align: center; padding: 20px;">
+                    No downloads in queue. Add a TikTok username above to get started.
+                </p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>ℹ️ How It Works</h2>
+            <div class="info-box">
+                <h4>Powered by TikTokDownloader</h4>
+                <p style="color: var(--text-secondary); font-size: 0.9rem;">
+                    This uses <a href="https://github.com/JoeanAmier/TikTokDownloader" target="_blank"
+                        style="color: var(--accent);">JoeanAmier/TikTokDownloader</a>
+                    to fetch videos directly from TikTok without watermarks.
+                </p>
+                <br>
+                <p style="color: var(--text-secondary); font-size: 0.9rem;">
+                    <strong>Note:</strong> Downloaded videos will appear in the
+                    <a href="/" style="color: var(--accent);">Recordings Gallery</a>
+                    under the username's tab.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let queue = [];
+
+        function addDownload() {
+            const input = document.getElementById('username');
+            let inputValue = input.value.trim();
+
+            if (!inputValue) {
+                alert('Please enter a TikTok username or URL');
+                return;
+            }
+
+            let username = inputValue;
+            let url = '';
+
+            // Handle TikTok URL
+            if (inputValue.includes('tiktok.com')) {
+                const match = inputValue.match(/tiktok\.com\/@?([^\/\?]+)/);
+                if (match) username = match[1];
+                url = inputValue;
+            }
+            // Handle Douyin URL
+            else if (inputValue.includes('douyin.com')) {
+                // Extract ID or just use "douyin_user" as placeholder since we send full URL
+                const match = inputValue.match(/douyin\.com\/user\/([^\/\?]+)/);
+                if (match) username = match[1].substring(0, 15) + '...';
+                else username = 'douyin_user';
+                url = inputValue;
+            }
+            else {
+                // Assume direct username
+                username = inputValue.replace(/^@/, '');
+            }
+
+            // Add to queue
+            queue.push({
+                username,
+                url: url, // Store the full URL if present
+                status: 'pending',
+                progress: 0,
+                videos: 0
+            });
+
+            renderQueue();
+            input.value = '';
+
+            // Start download
+            startDownload(queue.length - 1);
+        }
+
+        function renderQueue() {
+            const queueEl = document.getElementById('queue');
+
+            if (queue.length === 0) {
+                queueEl.innerHTML = `
+                    <p style="color: var(--text-secondary); text-align: center; padding: 20px;">
+                        No downloads in queue. Add a TikTok username above to get started.
+                    </p>
+                `;
+                return;
+            }
+
+            queueEl.innerHTML = queue.map((item, i) => `
+                <div class="queue-item">
+                    <div>
+                        <strong>@${item.username}</strong>
+                        ${item.videos > 0 ? `<span style="color: var(--text-secondary); font-size: 0.9rem;"> - ${item.videos} videos</span>` : ''}
+                    </div>
+                    <span class="status ${item.status}">${item.status === 'running' ? '⏳ Downloading...' : item.status === 'done' ? '✅ Complete' : '⏸️ Pending'}</span>
+                </div>
+                ${item.status === 'running' ? `
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${item.progress}%"></div>
+                    </div>
+                ` : ''}
+            `).join('');
+        }
+
+        async function startDownload(index) {
+            const item = queue[index];
+            item.status = 'running';
+            renderQueue();
+
+            try {
+                // Send both username in path and optional URL in body
+                const res = await fetch(`/api/download/${item.username}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url: item.url })
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    // Poll for progress
+                    pollProgress(index);
+                } else {
+                    item.status = 'error';
+                    renderQueue();
+                    alert(`Failed to start download: ${data.error}`);
+                }
+            } catch (err) {
+                console.error(err);
+                item.status = 'error';
+                renderQueue();
+            }
+        }
+
+        function simulateDownload(index) {
+            const item = queue[index];
+            let progress = 0;
+
+            const interval = setInterval(() => {
+                progress += Math.random() * 15;
+                item.progress = Math.min(progress, 100);
+                item.videos = Math.floor(progress / 10);
+
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    item.status = 'done';
+                    item.progress = 100;
+                }
+
+                renderQueue();
+            }, 500);
+        }
+
+        function pollProgress(index) {
+            // Would poll /api/download/status/:id in real implementation
+        }
+    </script>
+</body>
+
+</html>

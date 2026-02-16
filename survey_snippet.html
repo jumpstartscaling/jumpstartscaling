@@ -1,0 +1,193 @@
+<!-- HIGH INTENT AUDIT FORM (Restored Survey) -->
+<section id="audit" class="py-24 bg-gradient-to-b from-black to-dark-900 relative">
+    <div class="max-w-4xl mx-auto px-6 relative z-10">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl md:text-6xl font-black text-white mb-6">INITIALIZE AUDIT</h2>
+            <p class="text-gray-400 text-lg max-w-xl mx-auto mb-8">
+                We only partner with 4 companies per month. This diagnostic determines if your infrastructure is ready
+                for our system.
+            </p>
+        </div>
+
+        <!-- SURVEY CONTAINER (Vanilla JS) -->
+        <div id="survey-container"
+            class="bg-gradient-to-br from-[#0a0a0a] to-black border border-white/10 rounded-3xl p-8 md:p-12 relative overflow-hidden shadow-2xl">
+            <!-- Progress Bar -->
+            <div class="absolute top-0 left-0 w-full h-1 bg-gray-800">
+                <div id="progress-fill" class="h-full bg-gold transition-all duration-500" style="width: 20%">
+                </div>
+            </div>
+
+            <!-- Step 1: Industry -->
+            <div class="survey-step" data-step="0">
+                <div class="flex justify-between items-center mb-8">
+                    <span class="text-gray-500 font-mono text-xs tracking-widest">01 / 05</span>
+                </div>
+                <h3 class="text-3xl font-bold mb-8 text-white">What type of business are you scaling?</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <button onclick="selectOption('industry', 'Shopify Brand')"
+                        class="p-6 bg-white/5 border border-white/10 rounded-xl hover:border-gold hover:bg-gold/5 transition-all text-left text-white group">
+                        <div class="text-3xl mb-2">🛍️</div>
+                        <div class="font-semibold group-hover:text-gold">Shopify Brand</div>
+                    </button>
+                    <button onclick="selectOption('industry', 'B2B SaaS')"
+                        class="p-6 bg-white/5 border border-white/10 rounded-xl hover:border-gold hover:bg-gold/5 transition-all text-left text-white group">
+                        <div class="text-3xl mb-2">💻</div>
+                        <div class="font-semibold group-hover:text-gold">B2B SaaS</div>
+                    </button>
+                    <button onclick="selectOption('industry', 'Agency')"
+                        class="p-6 bg-white/5 border border-white/10 rounded-xl hover:border-gold hover:bg-gold/5 transition-all text-left text-white group">
+                        <div class="text-3xl mb-2">🚀</div>
+                        <div class="font-semibold group-hover:text-gold">Agency / Service</div>
+                    </button>
+                    <button onclick="selectOption('industry', 'Local Business')"
+                        class="p-6 bg-white/5 border border-white/10 rounded-xl hover:border-gold hover:bg-gold/5 transition-all text-left text-white group">
+                        <div class="text-3xl mb-2">📍</div>
+                        <div class="font-semibold group-hover:text-gold">Local Business</div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 2: Revenue -->
+            <div class="survey-step hidden" data-step="1">
+                <div class="flex justify-between items-center mb-8">
+                    <span class="text-gray-500 font-mono text-xs tracking-widest">02 / 05</span>
+                    <button onclick="prevStep()" class="text-gray-500 hover:text-white transition-colors">←
+                        Back</button>
+                </div>
+                <h3 class="text-3xl font-bold mb-8 text-white">Current monthly revenue?</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <button onclick="selectOption('revenue', '< $10k/mo')"
+                        class="p-6 bg-white/5 border border-white/10 rounded-xl hover:border-gold hover:bg-gold/5 transition-all text-left text-white group">
+                        <div class="text-3xl mb-2">🌱</div>
+                        <div class="font-semibold group-hover:text-gold">&lt; $10k/mo</div>
+                    </button>
+                    <button onclick="selectOption('revenue', '$10k - $50k')"
+                        class="p-6 bg-white/5 border border-white/10 rounded-xl hover:border-gold hover:bg-gold/5 transition-all text-left text-white group">
+                        <div class="text-3xl mb-2">🚀</div>
+                        <div class="font-semibold group-hover:text-gold">$10k - $50k</div>
+                    </button>
+                    <button onclick="selectOption('revenue', '$50k - $200k')"
+                        class="p-6 bg-white/5 border border-white/10 rounded-xl hover:border-gold hover:bg-gold/5 transition-all text-left text-white group">
+                        <div class="text-3xl mb-2">🏢</div>
+                        <div class="font-semibold group-hover:text-gold">$50k - $200k</div>
+                    </button>
+                    <button onclick="selectOption('revenue', '$200k+')"
+                        class="p-6 bg-white/5 border border-white/10 rounded-xl hover:border-gold hover:bg-gold/5 transition-all text-left text-white group">
+                        <div class="text-3xl mb-2">🦄</div>
+                        <div class="font-semibold group-hover:text-gold">$200k+</div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 3: Team -->
+            <div class="survey-step hidden" data-step="2">
+                <div class="flex justify-between items-center mb-8">
+                    <span class="text-gray-500 font-mono text-xs tracking-widest">03 / 05</span>
+                    <button onclick="prevStep()" class="text-gray-500 hover:text-white transition-colors">←
+                        Back</button>
+                </div>
+                <h3 class="text-3xl font-bold mb-8 text-white">Team Structure?</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <button onclick="selectOption('team', 'Just Me')"
+                        class="p-6 bg-white/5 border border-white/10 rounded-xl hover:border-gold hover:bg-gold/5 transition-all text-left text-white group">
+                        <div class="text-3xl mb-2">👤</div>
+                        <div class="font-semibold group-hover:text-gold">Just Me (Founder)</div>
+                    </button>
+                    <button onclick="selectOption('team', 'Freelancers')"
+                        class="p-6 bg-white/5 border border-white/10 rounded-xl hover:border-gold hover:bg-gold/5 transition-all text-left text-white group">
+                        <div class="text-3xl mb-2">🎨</div>
+                        <div class="font-semibold group-hover:text-gold">Freelancers</div>
+                    </button>
+                    <button onclick="selectOption('team', 'Small In-House')"
+                        class="p-6 bg-white/5 border border-white/10 rounded-xl hover:border-gold hover:bg-gold/5 transition-all text-left text-white group">
+                        <div class="text-3xl mb-2">👥</div>
+                        <div class="font-semibold group-hover:text-gold">Small In-House</div>
+                    </button>
+                    <button onclick="selectOption('team', 'Full Department')"
+                        class="p-6 bg-white/5 border border-white/10 rounded-xl hover:border-gold hover:bg-gold/5 transition-all text-left text-white group">
+                        <div class="text-3xl mb-2">🏢</div>
+                        <div class="font-semibold group-hover:text-gold">Full Department</div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 4: Bottleneck -->
+            <div class="survey-step hidden" data-step="3">
+                <div class="flex justify-between items-center mb-8">
+                    <span class="text-gray-500 font-mono text-xs tracking-widest">04 / 05</span>
+                    <button onclick="prevStep()" class="text-gray-500 hover:text-white transition-colors">←
+                        Back</button>
+                </div>
+                <h3 class="text-3xl font-bold mb-8 text-white">Biggest Blocker?</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <button onclick="selectOption('bottleneck', 'Lead Quality')"
+                        class="p-6 bg-white/5 border border-white/10 rounded-xl hover:border-gold hover:bg-gold/5 transition-all text-left text-white group">
+                        <div class="text-3xl mb-2">📉</div>
+                        <div class="font-semibold group-hover:text-gold">Lead Quality</div>
+                    </button>
+                    <button onclick="selectOption('bottleneck', 'Ad Performance')"
+                        class="p-6 bg-white/5 border border-white/10 rounded-xl hover:border-gold hover:bg-gold/5 transition-all text-left text-white group">
+                        <div class="text-3xl mb-2">💸</div>
+                        <div class="font-semibold group-hover:text-gold">Ad Performance</div>
+                    </button>
+                    <button onclick="selectOption('bottleneck', 'Tech / CRM')"
+                        class="p-6 bg-white/5 border border-white/10 rounded-xl hover:border-gold hover:bg-gold/5 transition-all text-left text-white group">
+                        <div class="text-3xl mb-2">⚙️</div>
+                        <div class="font-semibold group-hover:text-gold">Tech / CRM</div>
+                    </button>
+                    <button onclick="selectOption('bottleneck', 'Sales Process')"
+                        class="p-6 bg-white/5 border border-white/10 rounded-xl hover:border-gold hover:bg-gold/5 transition-all text-left text-white group">
+                        <div class="text-3xl mb-2">📞</div>
+                        <div class="font-semibold group-hover:text-gold">Sales Process</div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 5: Contact -->
+            <div class="survey-step hidden" data-step="4">
+                <div class="flex justify-between items-center mb-8">
+                    <span class="text-gray-500 font-mono text-xs tracking-widest">05 / 05</span>
+                    <button onclick="prevStep()" class="text-gray-500 hover:text-white transition-colors">←
+                        Back</button>
+                </div>
+                <h3 class="text-3xl font-bold mb-8 text-white">Where should we send your Growth Audit?</h3>
+                <div class="space-y-4 max-w-md mx-auto">
+                    <div>
+                        <label class="block text-gray-400 text-sm mb-2 text-left">Full Name</label>
+                        <input type="text" id="input-name" placeholder="John Doe"
+                            class="w-full px-4 py-3 bg-black border border-white/20 rounded-lg focus:border-gold focus:outline-none text-white focus:ring-1 focus:ring-gold transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-gray-400 text-sm mb-2 text-left">Work Email</label>
+                        <input type="email" id="input-email" placeholder="name@company.com"
+                            class="w-full px-4 py-3 bg-black border border-white/20 rounded-lg focus:border-gold focus:outline-none text-white focus:ring-1 focus:ring-gold transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-gray-400 text-sm mb-2 text-left">Mobile Phone</label>
+                        <input type="tel" id="input-phone" placeholder="(555) 123-4567"
+                            class="w-full px-4 py-3 bg-black border border-white/20 rounded-lg focus:border-gold focus:outline-none text-white focus:ring-1 focus:ring-gold transition-all">
+                        <p class="text-xs text-gray-600 mt-1 text-left">🔒 Data sent securely.</p>
+                    </div>
+                    <button onclick="submitForm()"
+                        class="w-full px-8 py-4 bg-gold text-black font-bold rounded-lg hover:bg-gold/90 transition-all mt-4 transform hover:scale-[1.02]">
+                        Get My Free Audit →
+                    </button>
+                </div>
+            </div>
+
+            <!-- Success Message -->
+            <div id="success-message" class="hidden text-center py-12">
+                <div
+                    class="w-24 h-24 bg-gold/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-gold/30 animate-pulse">
+                    <span class="text-5xl">✨</span>
+                </div>
+                <h3 class="text-3xl font-bold mb-4 text-white">Request Received</h3>
+                <p class="text-gray-400 mb-2">Thanks <span class="text-gold font-semibold" id="success-name"></span>.
+                    We've started your file.</p>
+                <p class="text-gray-500 text-sm mt-4">We will call you at <strong id="success-phone"></strong>
+                    shortly to verify details.</p>
+            </div>
+        </div>
+    </div>
+</section>

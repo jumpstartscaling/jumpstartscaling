@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>🎬 TikTok Recordings</title>
+
+    <!-- Video.js CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/video.js@8/dist/video-js.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/video.js@8/dist/video.min.js"></script>
+
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #1a1a25;
+            --accent: #8b5cf6;
+            --accent-hover: #a78bfa;
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --danger: #ef4444;
+            --success: #22c55e;
+            --warning: #f59e0b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding: 30px 20px;
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+            border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, var(--accent) 0%, #ec4899 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .header-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .header-btn {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #ec4899 0%, var(--accent) 100%);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .header-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(139, 92, 246, 0.4);
+        }
+
+        .stats {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        /* Streamer Tabs */
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 25px;
+            padding: 15px;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .tab:hover {
+            background: rgba(139, 92, 246, 0.2);
+            border-color: var(--accent);
+        }
+
+        .tab.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .tab .count {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            margin-left: 8px;
+        }
+
+        /* Day Group */
+        .day-group {
+            margin-bottom: 30px;
+        }
+
+        .day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: var(--bg-secondary);
+            border-radius: 12px 12px 0 0;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: none;
+        }
+
+        .day-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .day-title .count {
+            background: var(--accent);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+        }
+
+        .day-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .play-all-btn {
+            padding: 8px 16px;
+            background: var(--success);
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .play-all-btn:hover {
+            background: #16a34a;
+            transform: scale(1.05);
+        }
+
+        /* Video Grid */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+            padding: 15px;
+            background: var(--bg-card);
+            border-radius: 0 0 12px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-top: none;
+        }
+
+        .video-card {
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .video-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(139, 92, 246, 0.15);
+        }
+
+        .video-card.now-playing {
+            border: 2px solid var(--success);
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+        }
+
+        .video-thumbnail {
+            position: relative;
+            aspect-ratio: 16/9;
+            background: #000;
+            cursor: pointer;
+        }
+
+        .video-thumbnail video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .play-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.4);
+            transition: opacity 0.2s;
+        }
+
+        .play-overlay:hover {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .play-btn {
+            width: 50px;
+            height: 50px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+        }
+
+        .play-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .play-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: white;
+            margin-left: 3px;
+        }
+
+        .video-info {
+            padding: 12px;
+        }
+
+        .video-title {
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+
+        .video-meta {
+            display: flex;
+            gap: 12px;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+        }
+
+        .video-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn {
+            padding: 6px 12px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+        }
+
+        .btn-danger {
+            background: transparent;
+            border: 1px solid var(--danger);
+            color: var(--danger);
+        }
+
+        .btn-danger:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: black;
+        }
+
+        .needs-conversion {
+            background: rgba(245, 158, 11, 0.1);
+            border-color: var(--warning);
+        }
+
+        /* Modal Player */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 15px;
+        }
+
+        .modal-title {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+        }
+
+        .playlist-info {
+            color: var(--success);
+            font-size: 0.9rem;
+            margin-left: 15px;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        .modal-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 0 10px;
+        }
+
+        .player-container {
+            width: 100%;
+            max-width: 95vw;
+            max-height: 80vh;
+            position: relative;
+        }
+
+        .video-js {
+            width: 100% !important;
+            height: 100% !important;
+            max-height: 75vh;
+        }
+
+        .video-js .vjs-tech {
+            object-fit: contain;
+        }
+
+        /* Player Controls */
+        .player-controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .control-group {
+            display: flex;
+            gap: 5px;
+            padding: 5px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+        }
+
+        .control-btn {
+            padding: 8px 14px;
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-secondary);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.85rem;
+        }
+
+        .control-btn:hover,
+        .control-btn.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .nav-btn {
+            padding: 10px 20px;
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .nav-btn:hover {
+            background: var(--accent);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        /* Delete Confirmation */
+        .confirm-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1001;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .confirm-modal.active {
+            display: flex;
+        }
+
+        .confirm-box {
+            background: var(--bg-card);
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            max-width: 400px;
+        }
+
+        .confirm-box h3 {
+            margin-bottom: 15px;
+            color: var(--danger);
+        }
+
+        .confirm-box p {
+            margin-bottom: 20px;
+            color: var(--text-secondary);
+        }
+
+        .confirm-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 60px;
+            color: var(--text-secondary);
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--bg-card);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+
+            .tabs {
+                padding: 10px;
+            }
+
+            .tab {
+                padding: 8px 14px;
+                font-size: 0.9rem;
+            }
+
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .day-header {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .modal {
+                padding: 10px;
+            }
+
+            .player-controls {
+                flex-direction: column;
+            }
+        }
+
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--bg-card);
+            padding: 15px 25px;
+            border-radius: 8px;
+            border-left: 4px solid var(--success);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            transform: translateX(120%);
+            transition: transform 0.3s;
+            z-index: 1002;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.error {
+            border-color: var(--danger);
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>🎬 TikTok Recordings</h1>
+        <p class="stats" id="stats">Loading...</p>
+        <div class="header-actions">
+            <a href="/downloader" class="header-btn">📥 Download Profiles</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="tabs" id="tabs"></div>
+        <div id="videoContainer">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Loading videos...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Video Player Modal -->
+    <div class="modal" id="playerModal">
+        <div class="modal-header">
+            <div style="display:flex;align-items:center;">
+                <span class="modal-title" id="modalTitle"></span>
+                <span class="playlist-info" id="playlistInfo"></span>
+            </div>
+            <button class="modal-close" onclick="closePlayer()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="player-container">
+                <video id="mainPlayer" class="video-js vjs-big-play-centered" controls preload="auto">
+                </video>
+            </div>
+            <div class="player-controls">
+                <button class="nav-btn" id="prevBtn" onclick="playPrev()">⏮️ Previous</button>
+
+                <div class="control-group">
+                    <button class="control-btn active" data-aspect="default">Default</button>
+                    <button class="control-btn" data-aspect="16:9">16:9</button>
+                    <button class="control-btn" data-aspect="4:3">4:3</button>
+                    <button class="control-btn" data-aspect="fill">Fill</button>
+                </div>
+
+                <button class="nav-btn" id="nextBtn" onclick="playNext()">Next ⏭️</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="confirm-modal" id="confirmModal">
+        <div class="confirm-box">
+            <h3>🗑️ Delete Video?</h3>
+            <p id="confirmText">This will move the video to trash.</p>
+            <div class="confirm-actions">
+                <button class="btn btn-primary" onclick="closeConfirm()">Cancel</button>
+                <button class="btn btn-danger" id="confirmDelete">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        let player = null;
+        let videos = {};
+        let currentStreamer = 'all';
+        let deleteTarget = null;
+        
+        // Playlist state
+        let currentPlaylist = [];
+        let currentPlaylistIndex = 0;
+        let isPlaylistMode = false;
+
+        // Initialize Video.js player
+        function initPlayer() {
+            player = videojs('mainPlayer', {
+                controls: true,
+                preload: 'auto',
+                fluid: true,
+                playbackRates: [0.5, 0.75, 1, 1.25, 1.5, 2],
+                controlBar: {
+                    pictureInPictureToggle: true
+                }
+            });
+
+            // Auto-advance to next video in playlist
+            player.on('ended', () => {
+                if (isPlaylistMode && currentPlaylistIndex < currentPlaylist.length - 1) {
+                    playNext();
+                }
+            });
+
+            // Touch zoom for mobile
+            let scale = 1;
+            const videoEl = document.querySelector('.player-container');
+
+            videoEl.addEventListener('touchstart', handleTouchStart, { passive: false });
+            videoEl.addEventListener('touchmove', handleTouchMove, { passive: false });
+
+            let initialDistance = 0;
+
+            function handleTouchStart(e) {
+                if (e.touches.length === 2) {
+                    initialDistance = getDistance(e.touches);
+                }
+            }
+
+            function handleTouchMove(e) {
+                if (e.touches.length === 2) {
+                    e.preventDefault();
+                    const currentDistance = getDistance(e.touches);
+                    const delta = currentDistance / initialDistance;
+                    scale = Math.min(Math.max(scale * delta, 1), 3);
+                    player.el().style.transform = `scale(${scale})`;
+                    initialDistance = currentDistance;
+                }
+            }
+
+            function getDistance(touches) {
+                return Math.hypot(
+                    touches[0].clientX - touches[1].clientX,
+                    touches[0].clientY - touches[1].clientY
+                );
+            }
+        }
+
+        // Fetch videos from API
+        async function loadVideos() {
+            try {
+                const res = await fetch('/api/videos');
+                const data = await res.json();
+
+                if (data.success) {
+                    videos = data.streamers;
+                    document.getElementById('stats').textContent = `Total: ${data.total} videos`;
+                    renderTabs();
+                    renderVideosByDay();
+                }
+            } catch (err) {
+                console.error('Failed to load videos:', err);
+                document.getElementById('videoContainer').innerHTML =
+                    '<p class="loading">Failed to load videos. Please refresh.</p>';
+            }
+        }
+
+        // Render streamer tabs
+        function renderTabs() {
+            const tabs = document.getElementById('tabs');
+            const streamers = Object.keys(videos).sort();
+
+            let html = `<button class="tab active" data-streamer="all">
+                All <span class="count">${Object.values(videos).flat().length}</span>
+            </button>`;
+
+            streamers.forEach(streamer => {
+                html += `<button class="tab" data-streamer="${streamer}">
+                    @${streamer} <span class="count">${videos[streamer].length}</span>
+                </button>`;
+            });
+
+            tabs.innerHTML = html;
+
+            tabs.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    currentStreamer = tab.dataset.streamer;
+                    renderVideosByDay();
+                });
+            });
+        }
+
+        // Group videos by day
+        function groupByDay(videoList) {
+            const days = {};
+            videoList.forEach(video => {
+                const day = video.date || 'Unknown';
+                if (!days[day]) days[day] = [];
+                days[day].push(video);
+            });
+            // Sort days descending
+            return Object.entries(days).sort((a, b) => b[0].localeCompare(a[0]));
+        }
+
+        // Render videos grouped by day
+        function renderVideosByDay() {
+            const container = document.getElementById('videoContainer');
+            let videoList = [];
+
+            if (currentStreamer === 'all') {
+                videoList = Object.values(videos).flat();
+            } else {
+                videoList = videos[currentStreamer] || [];
+            }
+
+            if (videoList.length === 0) {
+                container.innerHTML = '<p class="loading">No videos found.</p>';
+                return;
+            }
+
+            const dayGroups = groupByDay(videoList);
+
+            container.innerHTML = dayGroups.map(([day, dayVideos]) => `
+                <div class="day-group" data-day="${day}">
+                    <div class="day-header">
+                        <div class="day-title">
+                            📅 ${day}
+                            <span class="count">${dayVideos.length} videos</span>
+                        </div>
+                        <div class="day-actions">
+                            ${dayVideos.some(v => v.playable) ? `
+                                <button class="play-all-btn" onclick="playAllDay('${day}')">
+                                    ▶️ Play All
+                                </button>
+                            ` : ''}
+                        </div>
+                    </div>
+                    <div class="video-grid">
+                        ${dayVideos.map(video => renderVideoCard(video)).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Render single video card
+        function renderVideoCard(video) {
+            return `
+                <div class="video-card ${video.needs_conversion ? 'needs-conversion' : ''}" data-filename="${video.filename}">
+                    <div class="video-thumbnail" onclick="playVideo('${video.filename}')">
+                        ${video.playable ? `
+                            <video preload="metadata" muted>
+                                <source src="/video/${video.filename}#t=5" type="video/mp4">
+                            </video>
+                            <div class="play-overlay">
+                                <div class="play-btn">
+                                    <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                </div>
+                            </div>
+                        ` : `
+                            <div style="display:flex;align-items:center;justify-content:center;height:100%;background:#1a1a25;">
+                                <span style="color:var(--warning);">⚠️ ${video.size_mb > 100 ? video.size_mb + 'MB - ' : ''}Needs Conversion</span>
+                            </div>
+                        `}
+                    </div>
+                    <div class="video-info">
+                        <div class="video-title">@${video.streamer} - ${video.timestamp || video.date}</div>
+                        <div class="video-meta">
+                            <span>📁 ${video.size_mb} MB</span>
+                        </div>
+                        <div class="video-actions">
+                            ${video.playable ? `
+                                <a class="btn btn-primary" href="/video/${video.filename}" download>⬇️</a>
+                            ` : `
+                                <button class="btn btn-warning" onclick="convertVideo('${video.filename}')">🔄 Convert</button>
+                            `}
+                            <button class="btn btn-danger" onclick="confirmDelete('${video.filename}')">🗑️</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Play all videos from a specific day
+        function playAllDay(day) {
+            let videoList = [];
+            if (currentStreamer === 'all') {
+                videoList = Object.values(videos).flat();
+            } else {
+                videoList = videos[currentStreamer] || [];
+            }
+            
+            currentPlaylist = videoList
+                .filter(v => v.date === day && v.playable)
+                .sort((a, b) => a.timestamp?.localeCompare(b.timestamp) || 0);
+            
+            if (currentPlaylist.length === 0) {
+                showToast('No playable videos for this day', true);
+                return;
+            }
+            
+            isPlaylistMode = true;
+            currentPlaylistIndex = 0;
+            playCurrentInPlaylist();
+        }
+
+        // Play current video in playlist
+        function playCurrentInPlaylist() {
+            const video = currentPlaylist[currentPlaylistIndex];
+            if (!video) return;
+            
+            document.getElementById('modalTitle').textContent = `@${video.streamer} - ${video.date}`;
+            document.getElementById('playlistInfo').textContent = 
+                isPlaylistMode ? `(${currentPlaylistIndex + 1}/${currentPlaylist.length})` : '';
+            document.getElementById('playerModal').classList.add('active');
+            
+            // Update nav buttons
+            document.getElementById('prevBtn').disabled = currentPlaylistIndex === 0;
+            document.getElementById('nextBtn').disabled = currentPlaylistIndex >= currentPlaylist.length - 1;
+            
+            // Highlight current card
+            document.querySelectorAll('.video-card').forEach(c => c.classList.remove('now-playing'));
+            const currentCard = document.querySelector(`[data-filename="${video.filename}"]`);
+            if (currentCard) currentCard.classList.add('now-playing');
+
+            player.src({ type: 'video/mp4', src: `/video/${video.filename}` });
+            player.play();
+        }
+
+        // Play next/previous in playlist
+        function playNext() {
+            if (currentPlaylistIndex < currentPlaylist.length - 1) {
+                currentPlaylistIndex++;
+                playCurrentInPlaylist();
+            }
+        }
+
+        function playPrev() {
+            if (currentPlaylistIndex > 0) {
+                currentPlaylistIndex--;
+                playCurrentInPlaylist();
+            }
+        }
+
+        // Play single video
+        function playVideo(filename) {
+            const video = Object.values(videos).flat().find(v => v.filename === filename);
+            if (!video || !video.playable) return;
+
+            // Set up single-video "playlist"
+            isPlaylistMode = false;
+            currentPlaylist = [video];
+            currentPlaylistIndex = 0;
+            playCurrentInPlaylist();
+        }
+
+        // Close player modal
+        function closePlayer() {
+            document.getElementById('playerModal').classList.remove('active');
+            player.pause();
+            player.el().style.transform = 'scale(1)';
+            document.querySelectorAll('.video-card').forEach(c => c.classList.remove('now-playing'));
+            isPlaylistMode = false;
+        }
+
+        // Aspect ratio controls
+        document.querySelectorAll('.control-btn[data-aspect]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.control-btn[data-aspect]').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const aspect = btn.dataset.aspect;
+                const videoEl = player.el();
+
+                switch (aspect) {
+                    case 'default':
+                        videoEl.style.aspectRatio = '';
+                        videoEl.style.height = '';
+                        break;
+                    case '16:9':
+                        videoEl.style.aspectRatio = '16/9';
+                        videoEl.style.height = '';
+                        break;
+                    case '4:3':
+                        videoEl.style.aspectRatio = '4/3';
+                        videoEl.style.height = '';
+                        break;
+                    case 'fill':
+                        videoEl.style.aspectRatio = '';
+                        videoEl.style.height = '75vh';
+                        break;
+                }
+            });
+        });
+
+        // Delete functionality
+        function confirmDelete(filename) {
+            deleteTarget = filename;
+            document.getElementById('confirmText').textContent =
+                `Move "${filename}" to trash?`;
+            document.getElementById('confirmModal').classList.add('active');
+        }
+
+        function closeConfirm() {
+            document.getElementById('confirmModal').classList.remove('active');
+            deleteTarget = null;
+        }
+
+        document.getElementById('confirmDelete').addEventListener('click', async () => {
+            if (!deleteTarget) return;
+
+            try {
+                const res = await fetch(`/api/videos/${deleteTarget}`, { method: 'DELETE' });
+                const data = await res.json();
+
+                if (data.success) {
+                    showToast('Video moved to trash');
+                    loadVideos();
+                } else {
+                    showToast(data.error, true);
+                }
+            } catch (err) {
+                showToast('Failed to delete video', true);
+            }
+
+            closeConfirm();
+        });
+
+        // Convert video
+        async function convertVideo(filename) {
+            try {
+                const res = await fetch(`/api/convert/${filename}`, { method: 'POST' });
+                const data = await res.json();
+
+                if (data.success) {
+                    showToast('Conversion started! This may take a while...');
+                } else {
+                    showToast(data.error, true);
+                }
+            } catch (err) {
+                showToast('Failed to start conversion', true);
+            }
+        }
+
+        // Toast notifications
+        function showToast(message, isError = false) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.toggle('error', isError);
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // Close modal on escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closePlayer();
+                closeConfirm();
+            }
+            // Arrow keys for playlist navigation
+            if (document.getElementById('playerModal').classList.contains('active')) {
+                if (e.key === 'ArrowRight') playNext();
+                if (e.key === 'ArrowLeft') playPrev();
+            }
+        });
+
+        // Initialize
+        initPlayer();
+        loadVideos();
+    </script>
+</body>
+
+</html>

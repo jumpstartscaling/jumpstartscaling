@@ -1,0 +1,100 @@
+---
+/**
+ * AnimatedHero.astro
+ * 
+ * Premium hero section with:
+ * - Animated grid background
+ * - Golden nebula effect
+ * - Gradient text
+ * - Fade-in animations
+ * - Scroll indicator
+ */
+
+interface Props {
+  title: string;
+  subtitle: string;
+  primaryCTA: {
+    text: string;
+    href: string;
+  };
+  secondaryCTA?: {
+    text: string;
+    href: string;
+  };
+}
+
+const { title, subtitle, primaryCTA, secondaryCTA } = Astro.props;
+---
+
+<section class="relative h-screen w-full bg-black overflow-hidden">
+  <!-- Animated Grid Background -->
+  <div class="absolute inset-0 bg-grid-pattern bg-grid opacity-20"></div>
+  
+  <!-- Golden Nebula Animation -->
+  <div class="absolute inset-0 pointer-events-none">
+    <div class="absolute top-[-10%] left-[-10%] w-[60vw] h-[60vw] bg-gold-500/8 rounded-full blur-3xl animate-float-slow"></div>
+    <div class="absolute bottom-[-10%] right-[-10%] w-[60vw] h-[60vw] bg-gold-700/8 rounded-full blur-3xl animate-float-slow" style="animation-delay: -7s;"></div>
+  </div>
+  
+  <!-- Radial Gradient Overlay -->
+  <div class="absolute inset-0 bg-gradient-radial from-transparent via-black/50 to-black"></div>
+  
+  <!-- Content -->
+  <div class="relative z-10 flex h-full items-center justify-center px-4">
+    <div class="max-w-5xl text-center">
+      <!-- Title -->
+      <h1 class="text-5xl md:text-7xl lg:text-9xl font-black mb-6 bg-clip-text text-transparent bg-gradient-to-r from-gold-200 via-gold-400 to-gold-600 animate-gradient opacity-0 animate-fade-in-up">
+        {title}
+      </h1>
+      
+      <!-- Subtitle -->
+      <p class="text-xl md:text-2xl lg:text-3xl text-gray-400 mb-8 opacity-0 animate-fade-in-up" style="animation-delay: 0.3s;">
+        {subtitle}
+      </p>
+      
+      <!-- CTAs -->
+      <div class="flex flex-col sm:flex-row gap-4 justify-center opacity-0 animate-fade-in-up" style="animation-delay: 0.6s;">
+        <a 
+          href={primaryCTA.href} 
+          class="group px-8 py-4 bg-gradient-to-r from-gold-600 to-gold-500 rounded-lg text-black font-bold text-lg hover:scale-105 transition-transform shadow-2xl shadow-gold-500/20 relative overflow-hidden"
+        >
+          <span class="relative z-10">{primaryCTA.text} →</span>
+          <div class="absolute inset-0 bg-gradient-to-r from-gold-500 to-gold-400 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+        </a>
+        
+        {secondaryCTA && (
+          <a 
+            href={secondaryCTA.href} 
+            class="px-8 py-4 bg-white/5 backdrop-blur-sm border border-gold-900/30 rounded-lg text-white font-bold text-lg hover:bg-white/10 hover:border-gold-500/50 transition-all"
+          >
+            {secondaryCTA.text}
+          </a>
+        )}
+      </div>
+    </div>
+  </div>
+  
+  <!-- Scroll Indicator -->
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce opacity-0 animate-fade-in" style="animation-delay: 1s;">
+    <svg class="w-6 h-6 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+    </svg>
+  </div>
+</section>
+
+<style>
+  @keyframes gradient {
+    0%, 100% {
+      background-size: 200% 200%;
+      background-position: left center;
+    }
+    50% {
+      background-size: 200% 200%;
+      background-position: right center;
+    }
+  }
+  
+  .bg-gradient-radial {
+    background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.5) 50%, black 100%);
+  }
+</style>

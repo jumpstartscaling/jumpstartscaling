@@ -1,0 +1,37 @@
+---
+/**
+ * GlassCard.astro
+ * Premium Glassmorphism Card for Stats and Comparisons
+ */
+
+interface Props {
+  title?: string;
+  subtitle?: string;
+  icon?: string; // Optional icon name
+  accent?: 'gold' | 'red';
+  className?: string;
+}
+
+const { title, subtitle, icon, accent = 'gold', className = "" } = Astro.props;
+
+const borderColor = accent === 'gold' ? 'border-gold-500/30' : 'border-red-500/30';
+const hoverBorder = accent === 'gold' ? 'group-hover:border-gold-400' : 'group-hover:border-red-400';
+const glowColor = accent === 'gold' ? 'from-gold-600/0 via-gold-600/10 to-gold-600/0' : 'from-red-600/0 via-red-600/10 to-red-600/0';
+---
+
+<div class={`group relative p-6 bg-white/5 backdrop-blur-md border ${borderColor} rounded-xl overflow-hidden transition-all duration-300 hover:-translate-y-1 ${hoverBorder} ${className}`}>
+  <!-- Internal Glow -->
+  <div class={`absolute inset-0 bg-gradient-to-r ${glowColor} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
+  
+  <div class="relative z-10">
+    {icon && (
+      <div class="absolute top-0 right-0 opacity-20 transform scale-150 text-gold-400">
+        <!-- Icon slot or SVG passed as string could go here, for now simpler approach -->
+      </div>
+    )}
+    
+    {title && <h3 class="text-xl font-bold text-white mb-2 font-mono">{title}</h3>}
+    {subtitle && <p class="text-gray-400 text-sm leading-relaxed">{subtitle}</p>}
+    <slot />
+  </div>
+</div>

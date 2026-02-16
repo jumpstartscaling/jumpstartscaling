@@ -1,0 +1,12 @@
+# Downloaded recordings
+downloads/
+
+# Rclone configuration (contains sensitive credentials)
+rclone/
+
+# Environment files
+.env
+.env.local
+
+# Logs
+*.log

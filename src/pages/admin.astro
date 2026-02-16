@@ -1,0 +1,305 @@
+---
+import { getCollection } from 'astro:content';
+
+// This is the admin panel route
+const services = await getCollection('services');
+---
+
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jumpstart CMS - Advanced Editor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- TipTap Editor (Advanced WYSIWYG) -->
+    <link rel="stylesheet" href="https://unpkg.com/@tiptap/pm@latest/style.css">
+    <script src="https://unpkg.com/@tiptap/pm@latest"></script>
+    <script src="https://unpkg.com/@tiptap/core@latest"></script>
+    <script src="https://unpkg.com/@tiptap/starter-kit@latest"></script>
+    <script src="https://unpkg.com/@tiptap/extension-color@latest"></script>
+    <script src="https://unpkg.com/@tiptap/extension-text-style@latest"></script>
+    <script src="https://unpkg.com/@tiptap/extension-link@latest"></script>
+    <script src="https://unpkg.com/@tiptap/extension-image@latest"></script>
+    <script src="https://unpkg.com/@tiptap/extension-table@latest"></script>
+    <script src="https://unpkg.com/@tiptap/extension-table-row@latest"></script>
+    <script src="https://unpkg.com/@tiptap/extension-table-cell@latest"></script>
+    <script src="https://unpkg.com/@tiptap/extension-table-header@latest"></script>
+    
+    <style>
+        body { background: #000; color: #fff; }
+        
+        .ProseMirror {
+            background: #1a1a1a;
+            color: #fff;
+            padding: 20px;
+            min-height: 500px;
+            border: 1px solid #333;
+            border-radius: 8px;
+        }
+        
+        .ProseMirror:focus {
+            outline: none;
+            border-color: #EAB308;
+        }
+        
+        .ProseMirror h1 { font-size: 2.5em; font-weight: bold; margin: 20px 0; }
+        .ProseMirror h2 { font-size: 2em; font-weight: bold; margin: 16px 0; }
+        .ProseMirror h3 { font-size: 1.5em; font-weight: bold; margin: 12px 0; }
+        .ProseMirror p { margin: 12px 0; line-height: 1.6; }
+        .ProseMirror ul, .ProseMirror ol { margin: 12px 0; padding-left: 24px; }
+        .ProseMirror a { color: #EAB308; text-decoration: underline; }
+        .ProseMirror code { background: #2a2a2a; padding: 2px 6px; border-radius: 4px; }
+        .ProseMirror pre { background: #2a2a2a; padding: 12px; border-radius: 8px; overflow-x: auto; }
+        .ProseMirror blockquote { border-left: 4px solid #EAB308; padding-left: 16px; margin: 16px 0; color: #ccc; }
+        
+        .toolbar {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 16px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .toolbar button {
+            background: #2a2a2a;
+            border: 1px solid #444;
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .toolbar button:hover {
+            background: #3a3a3a;
+            border-color: #EAB308;
+        }
+        
+        .toolbar button.is-active {
+            background: #EAB308;
+            color: #000;
+            border-color: #EAB308;
+        }
+    </style>
+</head>
+<body class="p-8">
+    <div class="max-w-7xl mx-auto">
+        <header class="mb-8 border-b border-gray-800 pb-6">
+            <h1 class="text-4xl font-bold text-yellow-500 mb-2">⚡ JUMPSTART CMS</h1>
+            <p class="text-gray-400">Advanced Astro Content Editor with Live Preview</p>
+        </header>
+
+        <div class="grid grid-cols-12 gap-6">
+            <!-- Sidebar -->
+            <div class="col-span-3 bg-gray-900 rounded-lg p-4">
+                <h2 class="text-lg font-bold mb-4 text-gray-300">📄 Pages</h2>
+                <ul id="page-list" class="space-y-2">
+                    {services.map((service) => (
+                        <li>
+                            <button 
+                                onclick={`loadPage('${service.slug}')`}
+                                class="w-full text-left px-4 py-2 rounded hover:bg-gray-800 text-gray-300 transition-colors"
+                            >
+                                {service.data.title}
+                            </button>
+                        </li>
+                    ))}
+                </ul>
+                
+                <div class="mt-8 pt-8 border-t border-gray-800">
+                    <h2 class="text-lg font-bold mb-4 text-gray-300">🎨 Components</h2>
+                    <button onclick="insertComponent('hero')" class="w-full text-left px-4 py-2 rounded hover:bg-gray-800 text-gray-300 mb-2">Hero Section</button>
+                    <button onclick="insertComponent('card')" class="w-full text-left px-4 py-2 rounded hover:bg-gray-800 text-gray-300 mb-2">Card</button>
+                    <button onclick="insertComponent('grid')" class="w-full text-left px-4 py-2 rounded hover:bg-gray-800 text-gray-300 mb-2">Grid Layout</button>
+                    <button onclick="insertComponent('cta')" class="w-full text-left px-4 py-2 rounded hover:bg-gray-800 text-gray-300 mb-2">CTA Button</button>
+                </div>
+            </div>
+
+            <!-- Main Editor -->
+            <div class="col-span-9">
+                <div class="bg-gray-900 rounded-lg p-6 mb-6">
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-400 mb-2">Page Title</label>
+                        <input type="text" id="page-title" class="w-full bg-gray-800 border border-gray-700 rounded px-4 py-2 text-white focus:border-yellow-500 focus:outline-none" placeholder="Enter page title">
+                    </div>
+
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-400 mb-2">Subtitle</label>
+                        <input type="text" id="page-subtitle" class="w-full bg-gray-800 border border-gray-700 rounded px-4 py-2 text-white focus:border-yellow-500 focus:outline-none" placeholder="Enter subtitle">
+                    </div>
+
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-400 mb-2">Content</label>
+                        
+                        <!-- Toolbar -->
+                        <div class="toolbar" id="toolbar"></div>
+                        
+                        <!-- Editor -->
+                        <div id="editor"></div>
+                    </div>
+
+                    <div class="flex gap-4">
+                        <button onclick="savePage()" class="px-6 py-3 bg-yellow-600 hover:bg-yellow-500 text-black font-bold rounded transition-colors">
+                            💾 Save & Rebuild
+                        </button>
+                        <button onclick="previewPage()" class="px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white font-bold rounded transition-colors">
+                            👁️ Live Preview
+                        </button>
+                        <span id="save-status" class="flex items-center text-gray-400"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { Editor } from '@tiptap/core'
+        import StarterKit from '@tiptap/starter-kit'
+        import Link from '@tiptap/extension-link'
+        import Image from '@tiptap/extension-image'
+        import Table from '@tiptap/extension-table'
+        import TableRow from '@tiptap/extension-table-row'
+        import TableCell from '@tiptap/extension-table-cell'
+        import TableHeader from '@tiptap/extension-table-header'
+        import TextStyle from '@tiptap/extension-text-style'
+        import Color from '@tiptap/extension-color'
+
+        let editor;
+        let currentPage = null;
+
+        // Initialize TipTap Editor
+        editor = new Editor({
+            element: document.querySelector('#editor'),
+            extensions: [
+                StarterKit,
+                Link,
+                Image,
+                Table,
+                TableRow,
+                TableCell,
+                TableHeader,
+                TextStyle,
+                Color,
+            ],
+            content: '<p>Select a page to start editing...</p>',
+        })
+
+        // Create Toolbar
+        const toolbar = document.getElementById('toolbar');
+        const buttons = [
+            { label: 'B', command: () => editor.chain().focus().toggleBold().run(), active: 'bold' },
+            { label: 'I', command: () => editor.chain().focus().toggleItalic().run(), active: 'italic' },
+            { label: 'H1', command: () => editor.chain().focus().toggleHeading({ level: 1 }).run(), active: 'heading' },
+            { label: 'H2', command: () => editor.chain().focus().toggleHeading({ level: 2 }).run(), active: 'heading' },
+            { label: 'H3', command: () => editor.chain().focus().toggleHeading({ level: 3 }).run(), active: 'heading' },
+            { label: '• List', command: () => editor.chain().focus().toggleBulletList().run(), active: 'bulletList' },
+            { label: '1. List', command: () => editor.chain().focus().toggleOrderedList().run(), active: 'orderedList' },
+            { label: 'Quote', command: () => editor.chain().focus().toggleBlockquote().run(), active: 'blockquote' },
+            { label: 'Code', command: () => editor.chain().focus().toggleCode().run(), active: 'code' },
+            { label: 'Link', command: () => {
+                const url = prompt('Enter URL:');
+                if (url) editor.chain().focus().setLink({ href: url }).run();
+            }},
+            { label: 'Image', command: () => {
+                const url = prompt('Enter image URL:');
+                if (url) editor.chain().focus().setImage({ src: url }).run();
+            }},
+        ];
+
+        buttons.forEach(btn => {
+            const button = document.createElement('button');
+            button.textContent = btn.label;
+            button.onclick = btn.command;
+            if (btn.active) {
+                editor.on('selectionUpdate', () => {
+                    button.classList.toggle('is-active', editor.isActive(btn.active));
+                });
+            }
+            toolbar.appendChild(button);
+        });
+
+        // API Functions
+        window.loadPage = async function(slug) {
+            currentPage = slug;
+            // Load page content via API
+            updateStatus('Loading...');
+            
+            try {
+                const response = await fetch(`http://150.136.117.198:8201/pages/${slug}`);
+                const data = await response.json();
+                
+                document.getElementById('page-title').value = data.title || '';
+                document.getElementById('page-subtitle').value = data.subtitle || '';
+                editor.commands.setContent(data.html_content || '');
+                
+                updateStatus(`Loaded: ${slug}`);
+            } catch (error) {
+                updateStatus(`Error: ${error.message}`, true);
+            }
+        }
+
+        window.savePage = async function() {
+            if (!currentPage) {
+                alert('Please select a page first');
+                return;
+            }
+
+            updateStatus('Saving...');
+            
+            const data = {
+                title: document.getElementById('page-title').value,
+                subtitle: document.getElementById('page-subtitle').value,
+                html_content: editor.getHTML()
+            };
+
+            try {
+                const response = await fetch(`http://150.136.117.198:8201/pages/${currentPage}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                await response.json();
+                updateStatus('✅ Saved! Rebuilding site...');
+                
+                // Trigger rebuild
+                await fetch('http://150.136.117.198:8201/rebuild', { method: 'POST' });
+                
+                setTimeout(() => updateStatus('Ready'), 2000);
+            } catch (error) {
+                updateStatus(`❌ Error: ${error.message}`, true);
+            }
+        }
+
+        window.previewPage = function() {
+            if (!currentPage) {
+                alert('Please select a page first');
+                return;
+            }
+            window.open(`https://jumpstartscaling.com/services/${currentPage}`, '_blank');
+        }
+
+        window.insertComponent = function(type) {
+            const components = {
+                hero: '<section class="py-32 bg-gradient-to-b from-black to-gray-900"><div class="container mx-auto px-4 text-center"><h1 class="text-6xl font-bold text-white mb-6">Your Headline Here</h1><p class="text-xl text-gray-400 mb-8">Subheadline goes here</p><a class="px-8 py-4 bg-yellow-600 hover:bg-yellow-500 text-black font-bold rounded transition-colors">Get Started</a></div></section>',
+                card: '<div class="bg-gray-900 border border-gray-800 rounded-lg p-6"><h3 class="text-xl font-bold text-white mb-4">Card Title</h3><p class="text-gray-400">Card content goes here...</p></div>',
+                grid: '<div class="grid grid-cols-3 gap-8"><div class="bg-gray-900 p-6 rounded">Column 1</div><div class="bg-gray-900 p-6 rounded">Column 2</div><div class="bg-gray-900 p-6 rounded">Column 3</div></div>',
+                cta: '<a href="#" class="px-8 py-4 bg-yellow-600 hover:bg-yellow-500 text-black font-bold rounded transition-colors">Click Me</a>'
+            };
+            
+            editor.commands.insertContent(components[type] || '');
+        }
+
+        function updateStatus(message, isError = false) {
+            const status = document.getElementById('save-status');
+            status.textContent = message;
+            status.style.color = isError ? '#ef4444' : '#888';
+        }
+    </script>
+</body>
+</html>

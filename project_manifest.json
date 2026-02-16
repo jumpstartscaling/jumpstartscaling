@@ -1,0 +1,132 @@
+{
+  "pages": [
+    {
+      "name": "System-Logs",
+      "path": "/admin/system-logs",
+      "file": "src/pages/admin/system-logs.astro"
+    },
+    {
+      "name": "Jumpstart-Test",
+      "path": "/admin/jumpstart-test",
+      "file": "src/pages/admin/jumpstart-test.astro"
+    },
+    {
+      "name": "Db-Console",
+      "path": "/admin/db-console",
+      "file": "src/pages/admin/db-console.astro"
+    },
+    {
+      "name": "Index",
+      "path": "/admin/index",
+      "file": "src/pages/admin/index.astro"
+    },
+    {
+      "name": "Command-Station",
+      "path": "/admin/command-station",
+      "file": "src/pages/admin/command-station.astro"
+    },
+    {
+      "name": "Locations",
+      "path": "/admin/locations",
+      "file": "src/pages/admin/locations.astro"
+    },
+    {
+      "name": "Substation-Status",
+      "path": "/admin/substation-status",
+      "file": "src/pages/admin/substation-status.astro"
+    },
+    {
+      "name": "Content-Factory",
+      "path": "/admin/content-factory",
+      "file": "src/pages/admin/content-factory.astro"
+    },
+    {
+      "name": "Factory",
+      "path": "/admin/factory",
+      "file": "src/pages/admin/factory.astro"
+    },
+    {
+      "name": "Content-Generator",
+      "path": "/admin/content-generator",
+      "file": "src/pages/admin/content-generator.astro"
+    },
+    {
+      "name": "Generated-Articles",
+      "path": "/admin/generated-articles",
+      "file": "src/pages/admin/generated-articles.astro"
+    },
+    {
+      "name": "Sites",
+      "path": "/admin/sites",
+      "file": "src/pages/admin/sites.astro"
+    },
+    {
+      "name": "Sites-Deployments",
+      "path": "/admin/sites-deployments",
+      "file": "src/pages/admin/sites-deployments.astro"
+    },
+    {
+      "name": "Settings",
+      "path": "/admin/settings",
+      "file": "src/pages/admin/settings.astro"
+    }
+  ],
+  "components": [
+    {
+      "name": "EditorStatus",
+      "file": "src/components/admin/EditorStatus.tsx"
+    },
+    {
+      "name": "CollectionTable",
+      "file": "src/components/admin/CollectionTable.tsx"
+    },
+    {
+      "name": "LocationBrowser",
+      "file": "src/components/admin/LocationBrowser.tsx"
+    },
+    {
+      "name": "ResourceMonitor",
+      "file": "src/components/admin/ResourceMonitor.tsx"
+    },
+    {
+      "name": "SystemControl",
+      "file": "src/components/admin/SystemControl.tsx"
+    },
+    {
+      "name": "ImageTemplateEditor",
+      "file": "src/components/admin/ImageTemplateEditor.tsx"
+    },
+    {
+      "name": "ArticleGenerator",
+      "file": "src/components/admin/ArticleGenerator.tsx"
+    },
+    {
+      "name": "CampaignMap",
+      "file": "src/components/admin/CampaignMap.tsx"
+    },
+    {
+      "name": "SystemStatusBar",
+      "file": "src/components/admin/SystemStatusBar.tsx"
+    },
+    {
+      "name": "SettingsManager",
+      "file": "src/components/admin/SettingsManager.tsx"
+    },
+    {
+      "name": "SystemStatus",
+      "file": "src/components/admin/SystemStatus.tsx"
+    },
+    {
+      "name": "RelationshipStatus",
+      "file": "src/components/admin/RelationshipStatus.tsx"
+    },
+    {
+      "name": "DomainSetupGuide",
+      "file": "src/components/admin/DomainSetupGuide.tsx"
+    },
+    {
+      "name": "CampaignManager",
+      "file": "src/components/admin/CampaignManager.tsx"
+    }
+  ]
+}

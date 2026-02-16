@@ -1,0 +1,45 @@
+---
+// Schema.org Structured Data Component
+// Added as component to avoid Astro frontmatter parser issues
+---
+
+<script type="application/ld+json" is:inline>
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "Jumpstart Scaling",
+  "description": "Methodology to help founders automate operations and scale to 7-figures",
+  "url": "https://jumpstartscaling.com",
+  "priceRange": "$$$",
+  "areaServed": "US",
+  "knowsAbout": [
+    "Paid Acquisition",
+    "CRM Automation", 
+    "Sales Funnels",
+    "Marketing Automation",
+    "B2B Scaling"
+  ],
+  "makesOffer": [
+    {
+      "@type": "Offer",
+      "itemOffered": {
+        "@type": "Service",
+        "name": "Paid Acquisition Engine",
+        "description": "Daily optimization of ad spend for consistent leads"
+      },
+      "price": "2250",
+      "priceCurrency": "USD"
+    },
+    {
+      "@type": "Offer",
+      "itemOffered": {
+        "@type": "Service",
+        "name": "Full Growth Retainer",
+        "description": "Complete Head of Growth replacement"
+      },
+      "price": "5200",
+      "priceCurrency": "USD"
+    }
+  ]
+}
+</script>

@@ -1,0 +1,19 @@
+tunnel: 54f5301e-76b0-48ff-8660-030accf4cfa8
+credentials-file: /home/opc/.cloudflared/54f5301e-76b0-48ff-8660-030accf4cfa8.json
+protocol: quic
+
+ingress:
+  - hostname: api.jumpstartscaling.com
+    service: http://127.0.0.1:8000
+
+  - hostname: jumpstartscaling.com
+    service: http://127.0.0.1:8100
+  - hostname: www.jumpstartscaling.com
+    service: http://127.0.0.1:8100
+  
+  - hostname: chrisamaya.work
+    service: http://127.0.0.1:8101
+  - hostname: www.chrisamaya.work
+    service: http://127.0.0.1:8101
+
+  - service: http_status:404

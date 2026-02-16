@@ -1,0 +1,65 @@
+networks:
+  stream-rec:
+
+
+services:
+  # Backend service
+  backend:
+    # Uses the latest main branch image
+    image: streamrec/stream-rec:latest
+    # Container name
+    container_name: stream-rec-backend
+    restart: unless-stopped
+    # Port mapping - Expose only to localhost
+    ports:
+      - "127.0.0.1:12555:12555"
+    networks:
+      - stream-rec
+    volumes:
+      # Host machine path binding to container path, storage path mapping
+      - "./downloads:/opt/records"
+      # Rclone configuration file path binding
+      - "./rclone:/root/.config/rclone"
+    environment:
+      # Timezone
+      - TZ=America/New_York
+      # Log level
+      - LOG_LEVEL=INFO
+      # CONTAINER database path
+      - DB_PATH=/opt/records
+      # CONTAINER download path for the first initialization
+      - DOWNLOAD_PATH=/opt/records
+      # Group ID
+      - PGID=1000
+      # User ID
+      - PUID=1000
+
+  # Frontend service
+  frontend:
+    # Uses the latest main branch image
+    image: streamrec/stream-rec-front:latest
+    container_name: stream-rec-frontend
+    restart: unless-stopped
+    # Port mapping - Expose only to localhost (Nginx will proxy)
+    ports:
+      - "127.0.0.1:15275:15275"
+    networks:
+      - stream-rec
+    depends_on:
+      - backend
+    environment:
+      # Timezone
+      - TZ=America/New_York
+      # Backend api url, made up of the container name and port.
+      - API_URL=http://backend:12555/api
+      # Secret for next-auth - CHANGE THIS TO A RANDOM STRING
+      - AUTH_SECRET=ChangeThisToASecureRandomString123!
+      # CLIENT url, used by next-auth to redirect to login page.
+      - AUTH_URL=https://rec.jumpstartscaling.com/
+      # Domain base url. Used for next-auth redirect login page.
+      - NEXT_PUBLIC_BASE_URL=https://rec.jumpstartscaling.com
+      # Whether there is a reverse proxy (Nginx in this case)
+      - AUTH_TRUST_HOST=true
+      # WS_API_URL, CLIENT websocket url for live status updates.
+      # This needs to go through the domain for proper SSL
+      - WS_API_URL=wss://rec.jumpstartscaling.com/live/update
