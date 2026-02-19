@@ -23,10 +23,14 @@ On Oracle (150.136.117.198), the **frontend pages worked**; the backend did not.
 
 ---
 
-**Quick configure (if you have Coolify API token):**
+**Quick configure via API (recommended — sets env vars for both JFactory and god-mode-api):**
 ```bash
-COOLIFY_TOKEN=2|gbikFhtojz9EmoVqiLAWZd5X7veh4mTwakTeZitO6c7a06ad ./configure-jfactory-coolify.sh
+# Requires COOLIFY_TOKEN in .env.local (Coolify → Keys & Tokens)
+node scripts/configure-coolify-via-api.mjs          # Configure only
+node scripts/configure-coolify-via-api.mjs --deploy # Configure + trigger deploy
 ```
+
+**Legacy (JFactory only):** `COOLIFY_TOKEN=xxx ./configure-jfactory-coolify.sh`
 
 ---
 
