@@ -40,10 +40,9 @@ COPY router.js ./
 COPY --from=builder-js /app/sites/jumpstartscaling/dist ./sites/jumpstartscaling/dist
 COPY --from=builder-js /app/sites/chrisamaya/dist ./sites/chrisamaya/dist
 
-# Coolify/Traefik health check
-RUN apk add --no-cache wget
+# Health check uses Node (no apk packages - avoids DNS/network issues in isolated build envs)
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD wget -q -O- http://localhost:8100/ || exit 1
+  CMD node -e "require('http').get('http://localhost:8100/',r=>process.exit(r.statusCode===200?0:1)).on('error',()=>process.exit(1))"
 
 EXPOSE 8100
 CMD ["node", "router.js"]
