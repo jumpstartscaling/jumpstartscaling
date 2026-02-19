@@ -2,7 +2,10 @@
 God Mode API - FastAPI backend for Spark Platform.
 Replaces Django. Handles leads, scaling surveys, and future pSEO endpoints.
 """
+import sys
 from contextlib import asynccontextmanager
+
+print("God Mode API loading...", flush=True)
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 import json
@@ -15,10 +18,16 @@ from app.routers import health, leads, admin, locations, pseo_services, content_
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Startup: init DB. Shutdown: close pool."""
-    await init_db()
+    """Startup: init DB (non-fatal). Shutdown: close pool."""
+    try:
+        await init_db()
+    except Exception as e:
+        print(f"⚠️ Startup init_db failed (app continues): {e}")
     yield
-    await close_db()
+    try:
+        await close_db()
+    except Exception as e:
+        print(f"⚠️ Shutdown close_db failed: {e}")
 
 
 app = FastAPI(

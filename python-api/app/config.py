@@ -1,18 +1,18 @@
 """God Mode API configuration. All secrets via environment variables."""
 import os
-from urllib.parse import urlparse
+from urllib.parse import urlparse, quote_plus
 
 
 def _get_db_url() -> str:
     url = os.getenv("DATABASE_URL")
-    if url:
-        return url
+    if url and url.strip():
+        return url.strip()
     host = os.getenv("DB_HOST", "localhost")
     name = os.getenv("DB_NAME", "god_mode")
     user = os.getenv("DB_USER", "god_user")
     password = os.getenv("DB_PASSWORD", "")
     port = os.getenv("DB_PORT", "5432")
-    return f"postgresql://{user}:{password}@{host}:{port}/{name}"
+    return f"postgresql://{quote_plus(user)}:{quote_plus(password)}@{host}:{port}/{name}"
 
 
 class Config:
