@@ -10,6 +10,8 @@ const https = require('https');
 const fs = require('fs');
 const path = require('path');
 const zlib = require('zlib');
+
+console.log('[1/3] JFactory router initializing');
 const { Pool } = require('pg');
 const qs = require('querystring');
 require('dotenv').config();
@@ -102,9 +104,9 @@ const initDB = async () => {
             )
         `).catch(() => {});
 
-        console.log("✅ Postgres tables verified (leads, scaling_survey_submissions, Harris matrix)");
+        console.log("[2/3] ✅ Postgres tables verified");
     } catch (err) {
-        console.error("❌ Postgres connection failed:", err.message);
+        console.log("[2/3] ⚠️ Postgres skipped:", err.message);
     }
 };
 initDB();
@@ -517,5 +519,5 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen(PORT, '0.0.0.0', () => {
-    console.log(`🚀 Multi-Domain Router + Lead Database running on port ${PORT}`);
+    console.log(`[3/3] Router listening on port ${PORT}`);
 });
