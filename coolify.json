@@ -1,0 +1,11 @@
+{
+  "name": "JFactory",
+  "build": {
+    "build_pack": "dockerfile"
+  },
+  "network": {
+    "ports": {
+      "expose": "8100"
+    }
+  }
+}
