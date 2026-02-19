@@ -9,7 +9,7 @@ Check if the following URLs resolve correctly in your browser:
 - [ ] **Main Site**: `https://jumpstartscaling.com` (Should show the production Astro site).
 - [ ] **Portfolio**: `https://chrisamaya.work` (Should show your personal portfolio).
 - [ ] **Automation**: `https://n8n.jumpstartscaling.com` (Should load the n8n login/dashboard).
-- [ ] **Django API**: `https://api.jumpstartscaling.com/health/` (Should return a JSON status or health check response).
+- [ ] **God Mode API (FastAPI)**: `https://api.jumpstartscaling.com/` (Should return `{"status":"active","service":"God Mode API"}`).
 
 ---
 

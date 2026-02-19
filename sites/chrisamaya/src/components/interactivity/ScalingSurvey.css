@@ -2,6 +2,7 @@
 
 /* --- CORE VARIABLES --- */
 :root {
+    /* Colors */
     --gold-primary: #D4B062;
     --gold-hover: #FFE5A0;
     --gold-dim: rgba(212, 176, 98, 0.1);
@@ -11,8 +12,20 @@
     --border-subtle: rgba(255, 255, 255, 0.1);
     --border-focus: rgba(212, 176, 98, 0.5);
     --error-red: #ff4444;
+
+    /* Text Colors (implied but were missing) */
+    --text-primary: #ffffff;
+    --text-secondary: #a1a1aa;
+    --text-muted: #52525b;
+
+    /* Fonts */
     --font-ui: 'Inter', sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
+
+    /* FLUID SPACING & TYPOGRAPHY */
+    /* This 1 line replaces multiple media query overrides */
+    --pad-container: clamp(1.25rem, 5vw, 3rem);
+    --font-h2: clamp(1.75rem, 4vw, 2.5rem);
 }
 
 /* --- MAIN CONTAINER --- */
@@ -20,11 +33,13 @@
     background: linear-gradient(145deg, rgba(20, 20, 25, 0.8) 0%, rgba(8, 8, 10, 0.95) 100%);
     border: 1px solid var(--border-subtle);
     border-radius: 24px;
-    padding: var(--space-lg);
-    /* Use fluid spacing */
-    max-width: 1000px;
-    /* Wider */
-    width: 100%;
+
+    /* FLUID PADDING: No need to change this in media queries anymore */
+    padding: var(--pad-container);
+
+    /* FLUID WIDTH: Caps at 1000px, otherwise 100% */
+    width: min(100%, 1000px);
+
     margin: 0 auto;
     position: relative;
     overflow: hidden;
@@ -86,16 +101,16 @@
 /* --- TYPOGRAPHY --- */
 h2 {
     color: var(--text-primary);
-    font-size: 2.5rem;
-    /* Larger */
+    /* FLUID FONT: Scales smoothly from 1.75rem to 2.5rem */
+    font-size: var(--font-h2);
     font-weight: 700;
     letter-spacing: -0.02em;
-    margin: 0 0 2.5rem 0;
+    margin: 0 0 var(--pad-container) 0;
     line-height: 1.1;
     text-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
 }
 
-/* --- OPTION GRID (DESKTOP) --- */
+/* --- OPTION GRID --- */
 .step-content {
     width: 100%;
     flex-grow: 1;
@@ -105,7 +120,8 @@ h2 {
 
 .options-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    /* SMART GRID: Auto-fits, but ensures columns never squash below 260px */
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
     gap: 1.25rem;
 }
 
@@ -160,8 +176,8 @@ h2 {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
-    width: 100%;
-    max-width: 600px;
+    width: min(100%, 600px);
+    /* Use min() here for responsiveness */
     margin: 0 auto;
 }
 
@@ -229,15 +245,7 @@ input:focus {
     }
 }
 
-/* --- PRIVACY & INFO --- */
-.privacy-note {
-    display: block;
-    color: var(--text-muted);
-    font-size: 0.8rem;
-    margin-top: 1rem;
-    text-align: center;
-}
-
+/* --- ACTION AREA --- */
 .submit-btn {
     background: var(--gold-primary);
     color: #000;
@@ -268,90 +276,23 @@ input:focus {
     box-shadow: none;
 }
 
-.loading-spinner {
-    display: inline-block;
-    position: relative;
-}
-
-/* --- SUCCESS STATE --- */
-.success-state {
-    align-items: center;
-    text-align: center;
-    justify-content: center;
-    min-height: 520px;
-}
-
-.success-icon-wrapper {
-    background: var(--gold-dim);
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 2rem;
-    border: 1px solid var(--gold-dim);
-}
-
-.success-icon {
-    font-size: 3rem;
-    color: var(--gold-primary);
-}
-
-.success-state h3 {
-    font-size: 2.5rem;
-    color: var(--text-primary);
-    margin-bottom: 1rem;
-}
-
-.success-state p {
-    color: var(--text-secondary);
-    line-height: 1.6;
-    font-size: 1.1rem;
-    max-width: 500px;
-}
-
-.text-gold {
-    color: var(--gold-primary);
-    font-weight: 600;
-}
-
-.highlight-text {
-    margin-top: 2rem !important;
-    padding: 1.5rem;
-    background: rgba(255, 255, 255, 0.03);
-    border-radius: 12px;
-    border: 1px dashed var(--border-subtle);
-}
-
-/* --- MOBILE RESPONSIVE --- */
+/* --- MOBILE LAYOUT CHANGES --- */
+/* Notice: Much shorter. We only keep layout shifts (row vs col), not padding fixes */
 @media (max-width: 600px) {
     .survey-container {
-        padding: 1.5rem 1.25rem;
+        /* Only borders/bg changes remain. Padding is now handled by clamp() above */
         border-radius: 0;
         border: none;
         border-bottom: 1px solid var(--border-subtle);
-        min-height: auto;
         background: transparent;
+        min-height: auto;
     }
 
-    h2 {
-        font-size: 1.75rem;
-        margin-bottom: 1.5rem;
-    }
-
-    .header-row {
-        margin-bottom: 1.5rem;
-    }
-
-    .options-grid {
-        grid-template-columns: 1fr;
-        gap: 0.75rem;
-    }
-
+    /* We keep this because it's a structural layout change */
     .option-card {
         flex-direction: row;
         padding: 1rem 1.25rem;
+        /* Minor adjustment for the horizontal layout */
         justify-content: flex-start;
         text-align: left;
         min-height: 70px;
@@ -361,19 +302,5 @@ input:focus {
         font-size: 1.75rem;
         margin-right: 1.25rem;
         margin-bottom: 0;
-    }
-
-    .opt-label {
-        font-size: 1rem;
-    }
-
-    /* Input Adjustments */
-    .input-area {
-        gap: 1.25rem;
-    }
-
-    .submit-btn {
-        padding: 1.1rem;
-        font-size: 1rem;
     }
 }

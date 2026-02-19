@@ -67,14 +67,17 @@ const ContactForm = () => {
                 body: JSON.stringify(submissionData)
             }).catch(err => console.warn('Postgres save fail:', err));
 
-            // 2. Webhook (Optional Fallback)
-            const webhook = 'https://n8n.jumpstartscaling.com/webhook/7e2dae05-1ba8-4d2b-b168-b67de7bbece6';
+            // 2. Webhook (Optional Fallback) - from env or prop
+            const webhook = (typeof import.meta !== 'undefined' && (import.meta as any).env?.PUBLIC_N8N_WEBHOOK)
+                || 'https://n8n.jumpstartscaling.com/webhook/d282e622-9c83-4936-9d93-05c37eaa7b68';
 
-            await fetch(webhook, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(submissionData)
-            }).catch(err => console.warn('Webhook save fail:', err));
+            if (webhook) {
+                await fetch(webhook, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(submissionData)
+                }).catch(err => console.warn('Webhook save fail:', err));
+            }
 
             setStatus('success');
             setFormData(prev => ({ ...prev, name: '', email: '', message: '' })); // Reset display fields

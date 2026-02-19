@@ -1,7 +1,5 @@
 ---
-import ServiceLayout from './ServiceLayout.astro';
-import AtmosphereParticles from '../components/3d/AtmosphereParticles';
-import StickyTOC from '../components/ui/StickyTOC.astro';
+import BaseLayout from './BaseLayout.astro';
 import ServiceSynergy from '../components/content/ServiceSynergy.astro';
 
 interface Props {
@@ -20,37 +18,35 @@ const { content } = Astro.props;
 const { title, description, city = "Global Hubs", serviceTier } = content;
 ---
 
-<ServiceLayout title={title} description={description}>
-  <section class="hero relative overflow-hidden min-h-[70vh] flex items-center">
-    <div class="absolute inset-0 z-0">
-      <AtmosphereParticles client:only="react" />
-    </div>
-    <div class="container relative z-10 text-center lg:text-left">
-      <span class="text-gold font-mono uppercase tracking-widest text-sm mb-4 block">Market Insight: {city}</span>
-      <h1 class="text-5xl md:text-7xl font-black leading-tight mb-6">
+<BaseLayout title={title} description={description} palette="emerald">
+  <!-- Minimalist Hero -->
+  <header class="relative pt-32 pb-20 px-6 border-b border-white/10 bg-gradient-to-b from-black to-zinc-900">
+    <div class="container mx-auto max-w-4xl text-center">
+      <span class="inline-block text-emerald-400 font-mono text-sm tracking-[0.2em] mb-6 uppercase">
+        {city} • {serviceTier || "Deep Dive"}
+      </span>
+      <h1 class="text-4xl md:text-6xl font-black text-white leading-tight mb-8">
         {title}
       </h1>
-      <p class="subhead max-w-2xl text-xl text-slate-400 leading-relaxed">
+      <p class="text-xl text-zinc-400 max-w-2xl mx-auto leading-relaxed">
         {description}
       </p>
     </div>
-  </section>
+  </header>
 
-  <div class="container grid grid-cols-1 lg:grid-cols-12 gap-12 py-20">
-    <aside class="lg:col-span-3 hidden lg:block sticky top-24 h-fit">
-      <StickyTOC />
-    </aside>
+  <!-- Content -->
+  <main class="container mx-auto px-6 py-20">
+    <article class="prose prose-invert prose-lg max-w-3xl mx-auto">
+      <slot />
+    </article>
 
-    <main class="lg:col-span-9 prose prose-invert prose-gold max-w-none">
-      <slot /> 
-      
-      <div class="mt-20 pt-20 border-t border-white/10">
-        <h2 class="text-3xl font-bold mb-8">Maximize Your <span class="gold italic">ROI</span></h2>
-        <ServiceSynergy currentService={serviceTier} />
-      </div>
-    </main>
-  </div>
-</ServiceLayout>
+    <!-- Synergy Footer -->
+    <div class="max-w-4xl mx-auto mt-24 pt-16 border-t border-white/10">
+      <h2 class="text-2xl font-bold text-white mb-8 text-center">Ready to Scale?</h2>
+      <ServiceSynergy currentService={serviceTier} />
+    </div>
+  </main>
+</BaseLayout>
 
 <style is:global>
   /* Enforcing the 3-sentence rule and bolding via CSS for the AI-generated text */

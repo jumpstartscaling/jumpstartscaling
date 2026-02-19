@@ -184,8 +184,10 @@ const ScalingSurvey = ({ webhookUrl }: { webhookUrl?: string }) => {
         body: JSON.stringify(submissionData)
       }).catch(err => console.warn('Postgres save fail:', err));
 
-      // 3. Webhook (Optional Fallback)
-      const webhook = 'https://n8n.jumpstartscaling.com/webhook/7e2dae05-1ba8-4d2b-b168-b67de7bbece6';
+      // 3. Webhook (Optional Fallback) - from env or prop
+      const webhook = webhookUrl
+        || (typeof import.meta !== 'undefined' && (import.meta as any).env?.PUBLIC_N8N_WEBHOOK)
+        || 'https://n8n.jumpstartscaling.com/webhook/d282e622-9c83-4936-9d93-05c37eaa7b68';
 
       if (webhook) {
         await fetch(webhook, {

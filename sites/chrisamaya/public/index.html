@@ -527,9 +527,9 @@
 
             try {
                 // Determine API URL (Local vs Prod)
-                const apiUrl = window.location.hostname === 'localhost' 
-                    ? 'http://localhost:8100/api/submit-lead' 
-                    : 'https://jumpstartscaling.com/api/submit-lead';
+                const apiUrl = window.location.hostname === 'localhost'
+                    ? 'http://localhost:8100/api/submit-lead'
+                    : '/api/submit-lead';
 
                 const response = await fetch(apiUrl, {
                     method: 'POST',

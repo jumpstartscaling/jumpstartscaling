@@ -210,8 +210,10 @@ Use these in:
 ## 📚 File References:
 
 - **Spintax Utility:** `src/utils/spintax.js`
-- **Campaigns:** `god_architect_local/campaigns_and_avatars.json`
-- **Templates:** `god_architect_local/content_templates.json`
-- **Previous Sites:** `god_architect_local/import_full_data.json`
+- **Campaigns:** `god_architect_local/campaigns_and_avatars.json` (deprecated; content now in `spark/exports/`)
+- **Templates:** `god_architect_local/content_templates.json` (deprecated)
+- **Previous Sites:** `god_architect_local/import_full_data.json` (deprecated)
+
+**Note:** `god_architect_local/` is deprecated. For PostgreSQL seeding, use `spark/exports/` (geo_intelligence, generation_jobs) and `python-api/scripts/seed_from_exports.py`.
 
 **Total Content Ready:** 1,000+ pages across 3 sites! 🎉

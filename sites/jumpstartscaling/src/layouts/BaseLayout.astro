@@ -30,7 +30,7 @@ const {
   fluid = false
 } = Astro.props;
 
-const siteUrl = 'https://jumpstartscaling.com';
+const siteUrl = Astro.site ? new URL(Astro.site).origin : 'https://factory.jumpstartscaling.com';
 const fullTitle = title === 'Jumpstart Scaling' ? title : `${title} | Jumpstart Scaling`;
 const canonicalUrl = canonical ? new URL(canonical, siteUrl).href : new URL(Astro.url.pathname, siteUrl).href;
 const ogImageUrl = ogImage.startsWith('http') ? ogImage : new URL(ogImage, siteUrl).href;

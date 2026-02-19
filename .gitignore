@@ -8,8 +8,14 @@ yarn-error.log
 coverage
 .vscode
 
+# Python
+__pycache__/
+*.py[cod]
+*.pyc
+
 # Large files and build artifacts
 *.tar.gz
+*.mp4
 *.zip
 .next/
 **/node_modules/

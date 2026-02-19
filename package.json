@@ -9,10 +9,11 @@
         "deploy": "npm run build && ./deploy.sh"
     },
     "dependencies": {
-        "pg": "^8.11.3",
-        "dotenv": "^16.3.1"
+        "dotenv": "^16.3.1",
+        "pg": "^8.11.3"
     },
     "devDependencies": {
+        "@tailwindcss/typography": "^0.5.19",
         "@types/node": "^22.10.5",
         "typescript": "^5.7.3"
     }

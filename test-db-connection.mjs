@@ -1,6 +1,10 @@
 import pg from 'pg';
 
-const dbUrl = process.env.DATABASE_URL || 'postgres://spark-god-mode:eEQme6YUWIMYP20bUjf6ZE75BX1HrVMXv9Z5TBsWr8NP94JxjsdnW0NB8vvczHlC@localhost:5433/arc-net';
+const dbUrl = process.env.DATABASE_URL;
+if (!dbUrl) {
+    console.error('DATABASE_URL is required. Set it in .env or environment.');
+    process.exit(1);
+}
 
 console.log('Testing connection to:', dbUrl.replace(/:[^:]*@/, ':****@'));
 

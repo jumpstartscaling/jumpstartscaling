@@ -13,7 +13,9 @@ export interface Page {
     updatedAt: string;
 }
 
-const PAYLOAD_URL = 'https://cms.jumpstartscaling.com';
+const PAYLOAD_URL = (typeof import.meta !== 'undefined' && (import.meta as any).env?.PUBLIC_PAYLOAD_URL)
+    || (typeof process !== 'undefined' && (process as any).env?.PUBLIC_PAYLOAD_URL)
+    || 'https://cms.jumpstartscaling.com';
 
 export async function getPages(): Promise<Page[]> {
     try {

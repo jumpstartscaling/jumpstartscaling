@@ -16,26 +16,18 @@ echo "🔱 [0/5] Creating backups..."
 [ -f src/data/campaigns.json ] && cp src/data/campaigns.json src/data/campaigns.json.backup
 echo "✅ Backups created"
 
-echo "🔱 [1/5] Creating .env file..."
-cat > .env << 'EOF'
-# 🔱 POSTGRES BEDROCK
-DATABASE_URL="postgres://spark-god-mode:hjD\$e9SEdT0oRAv@tunnel-usw1prod-sjc1cloudflare-production.cwopd6lgqsmb.us-west-1.rds.amazonaws.com:5432/postgres"
-
-# 🔱 GOD MODE
-GOD_MODE_TOKEN="jmQXoeyxWoBsB7eHzG7FmnH90f22JtaYBxXHoorhfZ-v4tT3VNEr9vvmwHqYHCDoWXHSU4DeZXApCP-Gha-YdA"
-PUBLIC_API_URL="http://localhost:4323/api"
-
-# 🔱 DIRECTUS
-DIRECTUS_ADMIN_TOKEN="your-directus-admin-token-here"
-PUBLIC_DIRECTUS_URL="https://spark.jumpstartscaling.com"
-
-# 🔱 REDIS
-REDIS_URL="redis://localhost:6379"
-REDIS_HOST="localhost"
-
-# 🔱 SITE
-SITE_URL="http://localhost:4323"
-EOF
+echo "🔱 [1/5] Creating .env file from environment..."
+# Use existing .env if present; otherwise create template (no hardcoded secrets)
+if [ -f .env ]; then
+    echo "✅ .env exists - preserving (add DATABASE_URL, GOD_MODE_API_URL, ADMIN_KEY via Coolify)"
+else
+    cat > .env << 'ENVEOF'
+# Copy .env.example and fill in values. Never commit real secrets.
+# Required: DATABASE_URL, ADMIN_KEY
+# Optional: GOD_MODE_API_URL, SITES_BASE_PATH, PUBLIC_N8N_WEBHOOK
+ENVEOF
+    echo "⚠️  Created minimal .env - add DATABASE_URL and other vars (see .env.example)"
+fi
 
 chmod 600 .env
 echo "✅ .env created with secure permissions"

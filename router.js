@@ -1,10 +1,12 @@
 #!/usr/bin/env node
 /**
- * Zero-Latency Multi-Domain Router with Lead Capture (SQLite)
- * Routes requests AND handles form submissions locally.
+ * Zero-Latency Multi-Domain Router with Lead Capture.
+ * When GOD_MODE_API_URL is set, proxies /api/* and /admin/* to FastAPI.
+ * Otherwise falls back to direct Postgres (legacy).
  */
 
 const http = require('http');
+const https = require('https');
 const fs = require('fs');
 const path = require('path');
 const zlib = require('zlib');
@@ -13,19 +15,22 @@ const qs = require('querystring');
 require('dotenv').config();
 
 const PORT = process.env.PORT || 8100;
-const ADMIN_PASS = 'spark';
+const ADMIN_KEY = process.env.ADMIN_KEY || 'spark';
 
-// Initialize Postgres Pool
+// God Mode API (FastAPI) - when set, proxy API routes there
+const GOD_MODE_API_URL = process.env.GOD_MODE_API_URL || '';
+
+// Initialize Postgres Pool (used when GOD_MODE_API_URL not set, or for backward compat)
 const poolConfig = {
     connectionString: process.env.DATABASE_URL,
     ssl: (process.env.DATABASE_URL && process.env.DATABASE_URL.includes('rds.amazonaws.com'))
         ? { rejectUnauthorized: false }
         : false
 };
-const pool = new Pool(poolConfig);
+const pool = process.env.DATABASE_URL ? new Pool(poolConfig) : null;
 
-// Initialize DB (Postgres)
 const initDB = async () => {
+    if (!pool) return;
     try {
         await pool.query(`
             CREATE TABLE IF NOT EXISTS leads (
@@ -43,6 +48,16 @@ const initDB = async () => {
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         `);
+        await pool.query(`
+            CREATE TABLE IF NOT EXISTS scaling_survey_submissions (
+                id SERIAL PRIMARY KEY,
+                name TEXT, email TEXT, company TEXT, role TEXT,
+                current_revenue TEXT, target_revenue TEXT, team_size TEXT,
+                industry TEXT, challenges JSONB, marketing_spend TEXT,
+                channels JSONB, biggest_goal TEXT, raw_data JSONB,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `).catch(() => {});
         console.log("✅ Postgres Leads table verified");
     } catch (err) {
         console.error("❌ Postgres connection failed:", err.message);
@@ -50,13 +65,16 @@ const initDB = async () => {
 };
 initDB();
 
-// Domain Mapping
+// Domain Mapping - use SITES_BASE_PATH for Coolify (e.g. /app)
+const SITES_BASE = process.env.SITES_BASE_PATH || '/app';
 const DOMAIN_MAP = {
-    'jumpstartscaling.com': '/home/opc/sites/jumpstartscaling/dist',
-    'www.jumpstartscaling.com': '/home/opc/sites/jumpstartscaling/dist',
-    'chrisamaya.work': '/home/opc/sites/chrisamaya/dist',
-    'www.chrisamaya.work': '/home/opc/sites/chrisamaya/dist',
-    'localhost': '/home/opc/sites/jumpstartscaling/dist'
+    'factory.jumpstartscaling.com': path.join(SITES_BASE, 'sites/jumpstartscaling/dist'),
+    'www.factory.jumpstartscaling.com': path.join(SITES_BASE, 'sites/jumpstartscaling/dist'),
+    'jumpstartscaling.com': path.join(SITES_BASE, 'sites/jumpstartscaling/dist'),
+    'www.jumpstartscaling.com': path.join(SITES_BASE, 'sites/jumpstartscaling/dist'),
+    'chrisamaya.work': path.join(SITES_BASE, 'sites/chrisamaya/dist'),
+    'www.chrisamaya.work': path.join(SITES_BASE, 'sites/chrisamaya/dist'),
+    'localhost': path.join(SITES_BASE, 'sites/jumpstartscaling/dist')
 };
 
 const MIME_TYPES = {
@@ -81,9 +99,44 @@ function getSiteRoot(hostname) {
     return DOMAIN_MAP[domain] || DOMAIN_MAP['localhost'];
 }
 
-/* --- API HANDLERS --- */
+/* --- PROXY TO GOD MODE API (FastAPI) --- */
+function proxyToGodMode(req, res, urlPath) {
+    if (!GOD_MODE_API_URL) return false;
+    const base = GOD_MODE_API_URL.replace(/\/$/, '');
+    const targetUrl = new URL(urlPath + (req.url?.includes('?') ? req.url.slice(req.url.indexOf('?')) : ''), base);
+    const isHttps = targetUrl.protocol === 'https:';
+    const client = isHttps ? https : http;
+
+    const opts = {
+        hostname: targetUrl.hostname,
+        port: targetUrl.port || (isHttps ? 443 : 80),
+        path: targetUrl.pathname + targetUrl.search,
+        method: req.method,
+        headers: { ...req.headers, host: targetUrl.host }
+    };
+    delete opts.headers['host'];
+    opts.headers['host'] = targetUrl.host;
+
+    const proxyReq = client.request(opts, (proxyRes) => {
+        res.writeHead(proxyRes.statusCode || 200, proxyRes.headers);
+        proxyRes.pipe(res);
+    });
+    proxyReq.on('error', (err) => {
+        console.error('God Mode API proxy error:', err.message);
+        res.writeHead(502, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'API unavailable', detail: err.message }));
+    });
+    req.pipe(proxyReq);
+    return true;
+}
+
+/* --- API HANDLERS (fallback when no GOD_MODE_API_URL) --- */
 
 function handleLeadSubmit(req, res) {
+    if (!pool) {
+        res.writeHead(503, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ error: "DATABASE_URL not set. Use GOD_MODE_API_URL to proxy to FastAPI." }));
+    }
     let body = '';
     req.on('data', chunk => { body += chunk.toString(); });
     req.on('end', async () => {
@@ -127,6 +180,10 @@ function handleLeadSubmit(req, res) {
 }
 
 function handleScalingSurveySubmit(req, res) {
+    if (!pool) {
+        res.writeHead(503, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ error: "DATABASE_URL not set. Use GOD_MODE_API_URL to proxy to FastAPI." }));
+    }
     let body = '';
     req.on('data', chunk => { body += chunk.toString(); });
     req.on('end', async () => {
@@ -174,10 +231,13 @@ function handleScalingSurveySubmit(req, res) {
 }
 
 function handleAdminView(req, res, url) {
-    // Check password query param ?key=spark
+    if (!pool) {
+        res.writeHead(503, { 'Content-Type': 'text/html' });
+        return res.end('<h1>503</h1><p>DATABASE_URL not set. Use GOD_MODE_API_URL to proxy to FastAPI.</p>');
+    }
     const key = new URL(url, `http://${req.headers.host}`).searchParams.get('key');
 
-    if (key !== ADMIN_PASS) {
+    if (key !== ADMIN_KEY) {
         res.writeHead(403, { 'Content-Type': 'text/html' });
         res.end('<h1>403 Forbidden</h1><p>Missing or invalid admin key.</p>');
         return;
@@ -290,6 +350,12 @@ const server = http.createServer((req, res) => {
     }
 
     // Capture API Routes
+    const urlPath = (req.url || '/').split('?')[0];
+
+    if (GOD_MODE_API_URL && (urlPath.startsWith('/api/') || urlPath.startsWith('/admin'))) {
+        if (proxyToGodMode(req, res, req.url || '/')) return;
+    }
+
     if (req.url === '/api/submit-lead' && req.method === 'POST') {
         return handleLeadSubmit(req, res);
     }
@@ -306,14 +372,14 @@ const server = http.createServer((req, res) => {
     const hostname = req.headers.host || 'localhost';
     const siteRoot = getSiteRoot(hostname);
 
-    let urlPath = req.url.split('?')[0];
-    if (urlPath !== '/' && urlPath.endsWith('/')) urlPath = urlPath.slice(0, -1);
+    let pathForFile = urlPath;
+    if (pathForFile !== '/' && pathForFile.endsWith('/')) pathForFile = pathForFile.slice(0, -1);
 
     let filePath;
-    if (urlPath === '/' || urlPath === '') {
+    if (pathForFile === '/' || pathForFile === '') {
         filePath = path.join(siteRoot, 'index.html');
     } else {
-        filePath = path.join(siteRoot, urlPath);
+        filePath = path.join(siteRoot, pathForFile);
         if (!path.extname(filePath)) {
             const htmlPath = filePath + '.html';
             if (fs.existsSync(htmlPath)) filePath = htmlPath;
@@ -330,7 +396,7 @@ const server = http.createServer((req, res) => {
     // Aggressive caching for static assets (1 year for immutable _astro assets)
     let cacheControl = 'public, max-age=0, must-revalidate'; // Default: HTML (no cache)
 
-    if (urlPath.includes('/_astro/')) {
+    if (pathForFile.includes('/_astro/')) {
         // Astro assets are content-hashed, safe to cache forever
         cacheControl = 'public, max-age=31536000, immutable';
     } else if (['.woff', '.woff2'].includes(ext)) {
