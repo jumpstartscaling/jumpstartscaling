@@ -14,8 +14,11 @@ Use this checklist when deploying god-mode to Coolify (86.48.23.38).
 ## 1. PostgreSQL
 
 - [ ] Coolify → **+ Add Resource** → **Database** → **PostgreSQL**
-- [ ] Name: `god-mode-db`
-- [ ] Copy connection string: `postgresql://USER:PASSWORD@HOST:5432/DATABASE`
+- [ ] Name: `god-mode-db` (or similar)
+- [ ] Create database `god_mode` (or use default); Coolify creates DB when adding resource
+- [ ] Copy **internal** connection string (host = Coolify container name/UUID in same project)
+- [ ] Format: `postgresql://USER:PASSWORD@COOLIFY_DB_CONTAINER:5432/god_mode`
+- [ ] god-mode-api and Postgres must be in same Coolify network (same project)
 
 ---
 

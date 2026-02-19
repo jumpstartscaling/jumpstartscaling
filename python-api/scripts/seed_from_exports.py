@@ -33,36 +33,12 @@ except ImportError:
     sys.exit(1)
 
 
-HARRIS_SCHEMA_SQL = """
-CREATE TABLE IF NOT EXISTS locations (
-    id SERIAL PRIMARY KEY,
-    city TEXT NOT NULL,
-    state TEXT NOT NULL,
-    zip TEXT,
-    neighborhood TEXT,
-    slug TEXT UNIQUE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE IF NOT EXISTS pseo_services (
-    id SERIAL PRIMARY KEY,
-    service_type TEXT NOT NULL,
-    sub_niche TEXT,
-    slug TEXT UNIQUE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE IF NOT EXISTS content_matrix (
-    id SERIAL PRIMARY KEY,
-    location_id INT REFERENCES locations(id),
-    service_id INT REFERENCES pseo_services(id),
-    slug TEXT UNIQUE,
-    title TEXT,
-    meta_description TEXT,
-    content_json JSONB,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-"""
+def _load_schema() -> str:
+    """Load shared schema from schema.sql (single source of truth)."""
+    schema_path = Path(__file__).resolve().parent.parent / "app" / "db" / "schema.sql"
+    if not schema_path.exists():
+        raise FileNotFoundError(f"Schema not found: {schema_path}")
+    return schema_path.read_text(encoding="utf-8")
 
 
 def slugify(s: str) -> str:
@@ -227,8 +203,8 @@ async def run(exports_dir: Path, dry_run: bool, create_schema: bool) -> None:
     conn = await asyncpg.connect(url)
     try:
         if create_schema:
-            print("Creating Harris matrix tables...")
-            await conn.execute(HARRIS_SCHEMA_SQL)
+            print("Creating Harris matrix tables (from schema.sql)...")
+            await conn.execute(_load_schema())
 
         print("Seeding locations from geo_intelligence...")
         n_loc = await seed_locations(conn, exports_dir, dry_run)

@@ -5,10 +5,10 @@ services:
     build: .
     restart: always
     ports:
-      - "4321:4321"
+      - "4321:8100"
     environment:
       - NODE_ENV=production
-      - DATABASE_URL=${DATABASE_URL}
+      - DATABASE_URL=${DATABASE_URL:-postgresql://godmode:godmode_local@postgres:5432/god_mode}
       # Default to local redis container if no external URL provided
       - REDIS_URL=${REDIS_URL:-redis://redis:6379}
       - GOD_MODE_TOKEN=${GOD_MODE_TOKEN}
@@ -28,7 +28,29 @@ services:
         max-size: "10m"
         max-file: "3"
     depends_on:
-      - redis
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    networks:
+      - default
+      - coolify
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: god_mode
+      POSTGRES_USER: godmode
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-godmode_local}
+    ports:
+      - "5432:5432"
+    volumes:
+      - god_mode_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U godmode -d god_mode"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     networks:
       - default
       - coolify
@@ -54,6 +76,7 @@ services:
 
 volumes:
   god-mode-redis:
+  god_mode_pgdata:
 
 
 networks:

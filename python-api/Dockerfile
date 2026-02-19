@@ -3,9 +3,9 @@ FROM python:3.12-slim
 
 WORKDIR /app
 
-# System deps for asyncpg
+# System deps for asyncpg + curl for health checks
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    libpq-dev gcc \
+    libpq-dev gcc curl \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .

@@ -4,7 +4,7 @@ Use these values to configure the JFactory app in Coolify.
 
 **Quick configure (if you have Coolify API token):**
 ```bash
-COOLIFY_TOKEN=your_token ./configure-jfactory-coolify.sh
+COOLIFY_TOKEN=2|gbikFhtojz9EmoVqiLAWZd5X7veh4mTwakTeZitO6c7a06ad ./configure-jfactory-coolify.sh
 ```
 
 ---
@@ -16,6 +16,8 @@ COOLIFY_TOKEN=your_token ./configure-jfactory-coolify.sh
 | **Name** | JFactory |
 | **Description** | God-mode router + jumpstartscaling + chrisamaya sites |
 | **Build Pack** | Dockerfile |
+
+**Routing:** `factory.jumpstartscaling.com/` redirects to `/admin/` (God Mode admin). Marketing site: `jumpstartscaling.com`.
 
 ---
 
@@ -104,3 +106,27 @@ Add these (replace placeholders with real values):
 ## Deploy
 
 Click **Deploy** after saving. The first build may take several minutes (builds both Astro sites).
+
+---
+
+## Troubleshooting: 404 on /admin/
+
+If `https://factory.jumpstartscaling.com/admin/` returns 404:
+
+1. **`GOD_MODE_API_URL` not set** — Add `GOD_MODE_API_URL=https://api.jumpstartscaling.com` in JFactory env vars, save, and redeploy. After the change, hitting `/admin/` without it will show a 503 with setup instructions instead of 404.
+2. **God-mode API not deployed** — Deploy the `god-mode-api` app first at `api.jumpstartscaling.com`. Test: `curl -I https://api.jumpstartscaling.com/health` should return 200.
+3. **Admin key** — Access with `?key=...` (same value as `ADMIN_KEY` in Coolify). View the key in Coolify → JFactory → Environment Variables. If auto-configured via `configure-jfactory-coolify.sh`, a random key was generated; copy it from Coolify.
+
+---
+
+## Troubleshooting: "No Available Server" (503)
+
+Traefik can't find healthy containers. Common cause: **god-mode-api crash-looping** (container status "restarting") usually due to `DATABASE_URL` pointing to unreachable Postgres.
+
+**Fix (applied in code):** god-mode-api now starts even when DB connection fails; `/` and `/admin/` work, DB-dependent routes return 503 until `DATABASE_URL` is corrected.
+
+**Steps:**
+1. **Push and redeploy** — Push the `connection.py` change, then Coolify → god-mode-api → Deploy
+2. **Fix DATABASE_URL** — Create a PostgreSQL database in Coolify (Add Resource → Database → PostgreSQL). Name it `god-mode-db`. Copy the internal connection string (host = container name in same project). Use DB name `god_mode`. Format: `postgresql://USER:PASSWORD@COOLIFY_DB_CONTAINER:5432/god_mode`. Set `DATABASE_URL` in god-mode-api env
+3. **Restart proxy** — Coolify → Servers → [Your Server] → Proxy → Restart Proxy (if still 503 after deploy)
+4. **Port match** — JFactory: 8100, god-mode-api: 8200

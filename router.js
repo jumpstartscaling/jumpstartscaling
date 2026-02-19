@@ -51,14 +51,58 @@ const initDB = async () => {
         await pool.query(`
             CREATE TABLE IF NOT EXISTS scaling_survey_submissions (
                 id SERIAL PRIMARY KEY,
-                name TEXT, email TEXT, company TEXT, role TEXT,
-                current_revenue TEXT, target_revenue TEXT, team_size TEXT,
-                industry TEXT, challenges JSONB, marketing_spend TEXT,
-                channels JSONB, biggest_goal TEXT, raw_data JSONB,
+                name TEXT NOT NULL,
+                email TEXT NOT NULL,
+                company TEXT,
+                role TEXT,
+                current_revenue TEXT,
+                target_revenue TEXT,
+                team_size TEXT,
+                industry TEXT,
+                challenges JSONB,
+                marketing_spend TEXT,
+                channels JSONB,
+                biggest_goal TEXT,
+                raw_data JSONB,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         `).catch(() => {});
-        console.log("✅ Postgres Leads table verified");
+
+        // Harris matrix (pSEO) - aligned with schema.sql
+        await pool.query(`
+            CREATE TABLE IF NOT EXISTS locations (
+                id SERIAL PRIMARY KEY,
+                city TEXT NOT NULL,
+                state TEXT NOT NULL,
+                zip TEXT,
+                neighborhood TEXT,
+                slug TEXT UNIQUE,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `).catch(() => {});
+        await pool.query(`
+            CREATE TABLE IF NOT EXISTS pseo_services (
+                id SERIAL PRIMARY KEY,
+                service_type TEXT NOT NULL,
+                sub_niche TEXT,
+                slug TEXT UNIQUE,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `).catch(() => {});
+        await pool.query(`
+            CREATE TABLE IF NOT EXISTS content_matrix (
+                id SERIAL PRIMARY KEY,
+                location_id INT REFERENCES locations(id),
+                service_id INT REFERENCES pseo_services(id),
+                slug TEXT UNIQUE,
+                title TEXT,
+                meta_description TEXT,
+                content_json JSONB,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `).catch(() => {});
+
+        console.log("✅ Postgres tables verified (leads, scaling_survey_submissions, Harris matrix)");
     } catch (err) {
         console.error("❌ Postgres connection failed:", err.message);
     }
@@ -351,9 +395,36 @@ const server = http.createServer((req, res) => {
 
     // Capture API Routes
     const urlPath = (req.url || '/').split('?')[0];
+    const host = req.headers.host || 'localhost';
+    const hostname = host.split(':')[0];
 
-    if (GOD_MODE_API_URL && (urlPath.startsWith('/api/') || urlPath.startsWith('/admin'))) {
-        if (proxyToGodMode(req, res, req.url || '/')) return;
+    // factory.jumpstartscaling.com/ → redirect to /admin/ (God Mode admin, not marketing site)
+    const isFactoryRoot = (hostname === 'factory.jumpstartscaling.com' || hostname === 'www.factory.jumpstartscaling.com')
+        && (urlPath === '/' || urlPath === '');
+    if (isFactoryRoot) {
+        const qs = req.url?.includes('?') ? req.url.slice(req.url.indexOf('?')) : '';
+        res.writeHead(302, { Location: '/admin/' + qs });
+        res.end();
+        return;
+    }
+
+    if (urlPath.startsWith('/api/') || urlPath.startsWith('/admin')) {
+        if (GOD_MODE_API_URL) {
+            if (proxyToGodMode(req, res, req.url || '/')) return;
+        } else if ((hostname === 'factory.jumpstartscaling.com' || hostname === 'www.factory.jumpstartscaling.com') && urlPath.startsWith('/admin')) {
+            // Factory /admin/ requested but GOD_MODE_API_URL not set — show setup instructions
+            res.writeHead(503, { 'Content-Type': 'text/html' });
+            res.end(`<!DOCTYPE html><html><head><title>Admin unavailable</title></head><body style="font-family:sans-serif;background:#111;color:#eee;padding:2rem;max-width:600px">
+<h1>Admin unavailable</h1>
+<p>GOD_MODE_API_URL is not set. Add it in Coolify (JFactory environment variables):</p>
+<ul>
+<li><code>GOD_MODE_API_URL=https://api.jumpstartscaling.com</code></li>
+</ul>
+<p>Ensure <strong>god-mode-api</strong> is deployed at <code>api.jumpstartscaling.com</code> first.</p>
+<p><a href="/admin/?key=spark" style="color:#4da6ff">Retry</a></p>
+</body></html>`);
+            return;
+        }
     }
 
     if (req.url === '/api/submit-lead' && req.method === 'POST') {
@@ -369,7 +440,6 @@ const server = http.createServer((req, res) => {
     }
 
     // --- STATIC FILE SERVING (Original Logic) ---
-    const hostname = req.headers.host || 'localhost';
     const siteRoot = getSiteRoot(hostname);
 
     let pathForFile = urlPath;
