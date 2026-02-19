@@ -2,6 +2,27 @@
 
 Use these values to configure the JFactory app in Coolify.
 
+---
+
+## Oracle Reference (What Was Working)
+
+On Oracle (150.136.117.198), the **frontend pages worked**; the backend did not.
+
+| Oracle (PM2)        | Port | URL                        | Status   |
+|---------------------|------|----------------------------|----------|
+| jumpstart-prod      | 8100 | jumpstartscaling.com       | ✅ Worked |
+| chrisamaya-prod     | 8101 | chrisamaya.work            | ✅ Worked |
+| god-mode-api        | 8200 | api.jumpstartscaling.com   | ❌ Backend didn't work |
+
+**Oracle routing** (Cloudflare Tunnel → localhost):
+- `jumpstartscaling.com` → `http://127.0.0.1:8100`
+- `chrisamaya.work` → `http://127.0.0.1:8101`
+- `api.jumpstartscaling.com` → `http://127.0.0.1:8200`
+
+**Coolify equivalent:** JFactory = jumpstartscaling + chrisamaya in one container (port 8100). god-mode-api is a separate app (port 8200). See `spare-parts/docs-outdated/ORACLE_SERVER_HANDOFF.md` and `ORACLE_SERVER_SETUP.md`.
+
+---
+
 **Quick configure (if you have Coolify API token):**
 ```bash
 COOLIFY_TOKEN=2|gbikFhtojz9EmoVqiLAWZd5X7veh4mTwakTeZitO6c7a06ad ./configure-jfactory-coolify.sh
