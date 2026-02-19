@@ -140,7 +140,7 @@ If `https://factory.jumpstartscaling.com/admin/` returns 404:
 
 1. **`GOD_MODE_API_URL` not set** — Add `GOD_MODE_API_URL=https://api.jumpstartscaling.com` in JFactory env vars, save, and redeploy. After the change, hitting `/admin/` without it will show a 503 with setup instructions instead of 404.
 2. **God-mode API not deployed** — Deploy the `god-mode-api` app first at `api.jumpstartscaling.com`. Test: `curl -I https://api.jumpstartscaling.com/health` should return 200.
-3. **Admin key** — Access with `?key=...` (same value as `ADMIN_KEY` in Coolify). View the key in Coolify → JFactory → Environment Variables. If auto-configured via `configure-jfactory-coolify.sh`, a random key was generated; copy it from Coolify.
+3. **Admin login** — Go to `/admin/login` and log in with `ADMIN_USERNAME` and `ADMIN_PASSWORD` (god-mode-api env vars). `ADMIN_KEY` is for API access only (n8n, scripts).
 
 ---
 

@@ -281,13 +281,6 @@ function handleAdminView(req, res, url) {
         res.writeHead(503, { 'Content-Type': 'text/html' });
         return res.end('<h1>503</h1><p>DATABASE_URL not set. Use GOD_MODE_API_URL to proxy to FastAPI.</p>');
     }
-    const key = new URL(url, `http://${req.headers.host}`).searchParams.get('key');
-
-    if (key !== ADMIN_KEY) {
-        res.writeHead(403, { 'Content-Type': 'text/html' });
-        res.end('<h1>403 Forbidden</h1><p>Missing or invalid admin key.</p>');
-        return;
-    }
 
     pool.query("SELECT * FROM leads ORDER BY created_at DESC", (err, result) => {
         if (err) {
@@ -417,10 +410,13 @@ const server = http.createServer((req, res) => {
         return;
     }
 
-    if (urlPath.startsWith('/api/') || urlPath.startsWith('/admin')) {
-        if (GOD_MODE_API_URL) {
-            if (proxyToGodMode(req, res, req.url || '/')) return;
-        } else if ((hostname === 'factory.jumpstartscaling.com' || hostname === 'www.factory.jumpstartscaling.com') && urlPath.startsWith('/admin')) {
+    const isFactory = hostname === 'factory.jumpstartscaling.com' || hostname === 'www.factory.jumpstartscaling.com';
+
+    if (urlPath.startsWith('/api/') && GOD_MODE_API_URL) {
+        if (proxyToGodMode(req, res, req.url || '/')) return;
+    } else if (urlPath.startsWith('/admin') && !isFactory && GOD_MODE_API_URL) {
+        if (proxyToGodMode(req, res, req.url || '/')) return;
+    } else if (urlPath.startsWith('/admin') && isFactory && !GOD_MODE_API_URL) {
             // Factory /admin/ requested but GOD_MODE_API_URL not set — show setup instructions
             res.writeHead(503, { 'Content-Type': 'text/html' });
             res.end(`<!DOCTYPE html><html><head><title>Admin unavailable</title></head><body style="font-family:sans-serif;background:#111;color:#eee;padding:2rem;max-width:600px">
@@ -430,10 +426,8 @@ const server = http.createServer((req, res) => {
 <li><code>GOD_MODE_API_URL=https://api.jumpstartscaling.com</code></li>
 </ul>
 <p>Ensure <strong>god-mode-api</strong> is deployed at <code>api.jumpstartscaling.com</code> first.</p>
-<p><a href="/admin/?key=spark" style="color:#4da6ff">Retry</a></p>
 </body></html>`);
-            return;
-        }
+        return;
     }
 
     if (req.url === '/api/submit-lead' && req.method === 'POST') {
@@ -444,11 +438,7 @@ const server = http.createServer((req, res) => {
         return handleScalingSurveySubmit(req, res);
     }
 
-    if (req.url.startsWith('/admin/leads')) {
-        return handleAdminView(req, res, req.url);
-    }
-
-    // --- STATIC FILE SERVING (Original Logic) ---
+    // --- STATIC FILE SERVING ---
     const siteRoot = getSiteRoot(hostname);
 
     let pathForFile = urlPath;

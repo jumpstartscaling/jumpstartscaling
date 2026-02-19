@@ -1,0 +1,23 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+---
+<AdminLayout title="Debug">
+  <h2 class="text-xl font-bold mb-4">Debug</h2>
+  <div id="debug"><p class="text-gray-400">Loading...</p></div>
+  <script>
+    async function load() {
+      try {
+        const r = await fetch('/api/health');
+        const health = await r.json();
+        document.getElementById('debug').innerHTML = `
+          <h3 class="font-bold mt-4">Health</h3>
+          <pre class="p-4 bg-gray-900 rounded">${JSON.stringify(health, null, 2)}</pre>
+          <p class="text-gray-500 mt-4">Full debug (env, api_logs) available at API: /admin/debug</p>
+        `;
+      } catch (e) {
+        document.getElementById('debug').innerHTML = `<p class="text-red-400">Error: ${e.message}</p>`;
+      }
+    }
+    load();
+  </script>
+</AdminLayout>

@@ -1,0 +1,54 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "God Mode Admin" } = Astro.props;
+---
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title} | God Mode Admin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: { colors: { gold: '#C9A961' } } }
+    }
+  </script>
+  <style>
+    body { font-family: system-ui, sans-serif; background: #111; color: #eee; }
+    a { color: #C9A961; }
+    a:hover { text-decoration: underline; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { border: 1px solid #333; padding: 10px; text-align: left; }
+    th { background: #222; color: #C9A961; }
+    tr:nth-child(even) { background: #1a1a1a; }
+    input, select, textarea { padding: 6px; background: #222; color: #eee; border: 1px solid #444; border-radius: 4px; }
+    button { padding: 8px 16px; background: #C9A961; color: #000; border: none; cursor: pointer; border-radius: 4px; }
+    button:hover { opacity: 0.9; }
+    button.danger { background: #c33; color: #fff; }
+  </style>
+</head>
+<body class="min-h-screen">
+  <header class="border-b border-gray-800 px-6 py-4">
+    <h1 class="text-2xl font-bold text-gold">God Mode Admin</h1>
+    <nav class="mt-2 flex flex-wrap gap-4">
+      <a href="/admin/">Dashboard</a>
+      <a href="/admin/leads">Leads</a>
+      <a href="/admin/locations">Locations</a>
+      <a href="/admin/pseo-services">Services</a>
+      <a href="/admin/content-matrix">Content Matrix</a>
+      <a href="/admin/scaling-surveys">Surveys</a>
+      <a href="/admin/status">Status</a>
+      <a href="/admin/debug">Debug</a>
+    </nav>
+  </header>
+  <main class="p-6">
+    <slot />
+  </main>
+</body>
+</html>

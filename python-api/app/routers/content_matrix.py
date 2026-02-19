@@ -1,6 +1,6 @@
-"""CRUD and matrix permutation routes for content_matrix."""
+"""CRUD and matrix permutation routes for content_matrix. No auth."""
 import json
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, HTTPException
 from app.db.connection import get_db
 from app.schemas.matrix import (
     ContentMatrixCreate,
@@ -10,13 +10,6 @@ from app.schemas.matrix import (
 )
 
 router = APIRouter(prefix="/api", tags=["content_matrix"])
-
-
-def _admin_key_required(key: str = Query(..., alias="key")):
-    from app.config import config
-    if key != config.ADMIN_KEY:
-        raise HTTPException(403, "Invalid admin key")
-    return key
 
 
 @router.get("/matrix/permutations", response_model=list[MatrixPermutation])
@@ -72,10 +65,7 @@ async def list_content_matrix(skip: int = 0, limit: int = 100):
 
 
 @router.post("/content-matrix", response_model=ContentMatrixRead)
-async def create_content(
-    body: ContentMatrixCreate,
-    _: str = Depends(_admin_key_required),
-):
+async def create_content(body: ContentMatrixCreate):
     content_json = json.dumps(body.content_json) if body.content_json else None
     async with get_db() as conn:
         row = await conn.fetchrow(
@@ -103,11 +93,7 @@ async def get_content(cm_id: int):
 
 
 @router.patch("/content-matrix/{cm_id}", response_model=ContentMatrixRead)
-async def update_content(
-    cm_id: int,
-    body: ContentMatrixUpdate,
-    _: str = Depends(_admin_key_required),
-):
+async def update_content(cm_id: int, body: ContentMatrixUpdate):
     updates = body.model_dump(exclude_unset=True)
     if not updates:
         async with get_db() as conn:
@@ -138,7 +124,7 @@ async def update_content(
 
 
 @router.delete("/content-matrix/{cm_id}", status_code=204)
-async def delete_content(cm_id: int, _: str = Depends(_admin_key_required)):
+async def delete_content(cm_id: int):
     async with get_db() as conn:
         r = await conn.execute("DELETE FROM content_matrix WHERE id = $1", cm_id)
         if r == "DELETE 0":

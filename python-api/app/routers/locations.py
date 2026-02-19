@@ -1,6 +1,6 @@
-"""CRUD routes for locations (Harris matrix)."""
+"""CRUD routes for locations (Harris matrix). No auth."""
 import re
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, HTTPException
 from app.db.connection import get_db
 from app.schemas.matrix import LocationCreate, LocationUpdate, LocationRead
 
@@ -11,13 +11,6 @@ def _slugify(s: str) -> str:
     s = s.lower().strip()
     s = re.sub(r"[^a-z0-9]+", "-", s)
     return s.strip("-")
-
-
-def _admin_key_required(key: str = Query(..., alias="key")):
-    from app.config import config
-    if key != config.ADMIN_KEY:
-        raise HTTPException(403, "Invalid admin key")
-    return key
 
 
 @router.get("/locations", response_model=list[LocationRead])
@@ -31,10 +24,7 @@ async def list_locations(skip: int = 0, limit: int = 100):
 
 
 @router.post("/locations", response_model=LocationRead)
-async def create_location(
-    body: LocationCreate,
-    _: str = Depends(_admin_key_required),
-):
+async def create_location(body: LocationCreate):
     slug = body.slug or _slugify(f"{body.city}-{body.state}-{body.zip or ''}-{body.neighborhood or ''}".strip("-"))
     if not slug:
         slug = _slugify(f"{body.city}-{body.state}")
@@ -61,11 +51,7 @@ async def get_location(loc_id: int):
 
 
 @router.patch("/locations/{loc_id}", response_model=LocationRead)
-async def update_location(
-    loc_id: int,
-    body: LocationUpdate,
-    _: str = Depends(_admin_key_required),
-):
+async def update_location(loc_id: int, body: LocationUpdate):
     updates = {k: v for k, v in body.model_dump(exclude_unset=True).items() if v is not None}
     if not updates:
         async with get_db() as conn:
@@ -85,7 +71,7 @@ async def update_location(
 
 
 @router.delete("/locations/{loc_id}", status_code=204)
-async def delete_location(loc_id: int, _: str = Depends(_admin_key_required)):
+async def delete_location(loc_id: int):
     async with get_db() as conn:
         r = await conn.execute("DELETE FROM locations WHERE id = $1", loc_id)
         if r == "DELETE 0":

@@ -7,6 +7,18 @@ from app.db.connection import get_db
 router = APIRouter(prefix="/api", tags=["leads"])
 
 
+@router.get("/leads")
+async def list_leads(limit: int = 500, offset: int = 0):
+    """List leads (for admin UI). No auth."""
+    async with get_db() as conn:
+        rows = await conn.fetch(
+            "SELECT * FROM leads ORDER BY created_at DESC LIMIT $1 OFFSET $2",
+            min(limit, 500),
+            max(0, offset),
+        )
+    return {"success": True, "leads": [dict(r) for r in rows]}
+
+
 def _infer_source(host: str, data: dict) -> str:
     if data.get("source"):
         return data["source"]
@@ -85,3 +97,18 @@ async def submit_scaling_survey(request: Request):
             json.dumps(data) if data else "{}",
         )
         return ScalingSurveyResponse()
+
+
+@router.get("/scaling-surveys")
+async def list_scaling_surveys(limit: int = 500, offset: int = 0):
+    """List scaling survey submissions (for admin UI). No auth."""
+    async with get_db() as conn:
+        rows = await conn.fetch(
+            """
+            SELECT * FROM scaling_survey_submissions
+            ORDER BY created_at DESC LIMIT $1 OFFSET $2
+            """,
+            min(limit, 500),
+            max(0, offset),
+        )
+    return {"success": True, "surveys": [dict(r) for r in rows]}

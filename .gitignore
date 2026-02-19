@@ -1,6 +1,8 @@
 node_modules
 dist
 .env
+.env.local
+ADMIN_KEY_NOTE.txt
 .DS_Store
 .astro
 npm-debug.log

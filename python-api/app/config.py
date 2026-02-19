@@ -24,8 +24,16 @@ class Config:
     # Database
     DATABASE_URL: str = _get_db_url()
 
-    # Admin (for /admin/leads style access)
+    # Admin: API-only key for programmatic access (n8n, scripts)
     ADMIN_KEY: str = os.getenv("ADMIN_KEY", "spark")
+
+    # Admin: session-based login for human access
+    ADMIN_USERNAME: str = os.getenv("ADMIN_USERNAME", "admin")
+    ADMIN_PASSWORD: str = os.getenv("ADMIN_PASSWORD", "")
+    SESSION_SECRET: str = os.getenv("SESSION_SECRET", "change-me-in-production")
+
+    # Debug: verbose errors, debug panel
+    DEBUG: bool = os.getenv("DEBUG", "false").lower() in ("1", "true", "yes")
 
     # Optional: disable request logging to DB (reduces crashes when DATABASE_URL missing)
     LOG_REQUESTS: bool = os.getenv("LOG_REQUESTS", "false").lower() in ("1", "true", "yes")

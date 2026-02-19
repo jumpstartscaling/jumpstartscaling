@@ -28,7 +28,10 @@ Use this checklist when deploying god-mode to Coolify (86.48.23.38).
 - [ ] Build from `python-api/` or use existing god-mode-api app
 - [ ] **Environment Variables**:
   - `DATABASE_URL` = PostgreSQL connection string
-  - `ADMIN_KEY` = secure random (e.g. `openssl rand -hex 24`)
+  - `ADMIN_KEY` = secure random (for API / n8n / scripts; e.g. `openssl rand -hex 24`)
+  - `ADMIN_USERNAME` = admin login
+  - `ADMIN_PASSWORD` = bcrypt hash or plain (dev)
+  - `SESSION_SECRET` = secure random (e.g. `openssl rand -hex 32`)
   - `LOG_REQUESTS` = `true`
 - [ ] Domain: `api.jumpstartscaling.com`
 - [ ] Verify: `curl https://api.jumpstartscaling.com/` → health JSON
@@ -67,7 +70,7 @@ Use this checklist when deploying god-mode to Coolify (86.48.23.38).
 - [ ] **Router**: `https://factory.jumpstartscaling.com` → JumpStart Scaling site
 - [ ] **Router**: `https://chrisamaya.work` → Chris Amaya site
 - [ ] **Leads**: Submit contact form → check PostgreSQL
-- [ ] **Admin**: `https://api.jumpstartscaling.com/admin/?key=YOUR_ADMIN_KEY` → Admin index with Leads, Locations, Services, Content Matrix
+- [ ] **Admin**: `https://api.jumpstartscaling.com/admin/login` → log in with ADMIN_USERNAME/ADMIN_PASSWORD → Admin index with Leads, Locations, Services, Content Matrix
 
 ---
 

@@ -1,6 +1,6 @@
-"""CRUD routes for pseo_services (Harris matrix)."""
+"""CRUD routes for pseo_services (Harris matrix). No auth."""
 import re
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, HTTPException
 from app.db.connection import get_db
 from app.schemas.matrix import PseoServiceCreate, PseoServiceUpdate, PseoServiceRead
 
@@ -11,13 +11,6 @@ def _slugify(s: str) -> str:
     s = s.lower().strip()
     s = re.sub(r"[^a-z0-9]+", "-", s)
     return s.strip("-")
-
-
-def _admin_key_required(key: str = Query(..., alias="key")):
-    from app.config import config
-    if key != config.ADMIN_KEY:
-        raise HTTPException(403, "Invalid admin key")
-    return key
 
 
 @router.get("/pseo-services", response_model=list[PseoServiceRead])
@@ -31,10 +24,7 @@ async def list_services(skip: int = 0, limit: int = 100):
 
 
 @router.post("/pseo-services", response_model=PseoServiceRead)
-async def create_service(
-    body: PseoServiceCreate,
-    _: str = Depends(_admin_key_required),
-):
+async def create_service(body: PseoServiceCreate):
     slug = body.slug or _slugify(body.service_type)
     async with get_db() as conn:
         row = await conn.fetchrow(
@@ -61,11 +51,7 @@ async def get_service(svc_id: int):
 
 
 @router.patch("/pseo-services/{svc_id}", response_model=PseoServiceRead)
-async def update_service(
-    svc_id: int,
-    body: PseoServiceUpdate,
-    _: str = Depends(_admin_key_required),
-):
+async def update_service(svc_id: int, body: PseoServiceUpdate):
     updates = {k: v for k, v in body.model_dump(exclude_unset=True).items() if v is not None}
     if not updates:
         async with get_db() as conn:
@@ -89,7 +75,7 @@ async def update_service(
 
 
 @router.delete("/pseo-services/{svc_id}", status_code=204)
-async def delete_service(svc_id: int, _: str = Depends(_admin_key_required)):
+async def delete_service(svc_id: int):
     async with get_db() as conn:
         r = await conn.execute("DELETE FROM pseo_services WHERE id = $1", svc_id)
         if r == "DELETE 0":
