@@ -23,11 +23,16 @@ const APPS = {
 function getToken() {
   let token = process.env.COOLIFY_TOKEN;
   if (!token) {
-    try {
-      const env = readFileSync(resolve(ROOT, '.env.local'), 'utf8');
-      const m = env.match(/COOLIFY_TOKEN[=\s]+([^\s#]+)/);
-      if (m) token = m[1].trim();
-    } catch (_) {}
+    for (const f of ['.env.local', '.env']) {
+      try {
+        const env = readFileSync(resolve(ROOT, f), 'utf8');
+        const m = env.match(/COOLIFY_TOKEN[=\s]+([^\s\n#]+)/);
+        if (m) {
+          token = m[1].trim();
+          break;
+        }
+      } catch (_) {}
+    }
   }
   return token;
 }
