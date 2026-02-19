@@ -35,16 +35,7 @@
     }
     </script>
 
-    <!-- Bootstrap 5 -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;600;700;900&display=swap"
-        rel="stylesheet">
+    <!-- No CDN: Bootstrap/icons replaced by inline styles; fonts use system stack -->
 
     <style>
         /* --- CYBERPUNK THEME VARIABLES --- */
@@ -61,7 +52,7 @@
         body {
             background-color: var(--void-black);
             color: #e0e0e0;
-            font-family: 'Inter', sans-serif;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             overflow-x: hidden;
         }
 
@@ -72,7 +63,7 @@
         h5,
         h6,
         .font-mono {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: ui-monospace, 'Cascadia Code', 'Consolas', monospace;
             letter-spacing: -0.05em;
         }
 
@@ -507,7 +498,7 @@
     </footer>
 
     <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- No CDN: Bootstrap JS removed -->
 
     <!-- Submission Script -->
     <script>
@@ -527,10 +518,7 @@
             data.source = 'ChrisAmayaWork';
 
             try {
-                // Determine API URL (Local vs Prod)
-                const apiUrl = window.location.hostname === 'localhost'
-                    ? 'http://localhost:8100/api/submit-lead'
-                    : '/api/submit-lead';
+                const apiUrl = `${window.location.origin}/api/submit-lead`;
 
                 const response = await fetch(apiUrl, {
                     method: 'POST',

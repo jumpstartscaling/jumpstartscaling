@@ -4,10 +4,14 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
 <AdminLayout title="Mission Control">
   <h2 class="text-xl font-bold mb-4">Mission Control</h2>
   <p class="text-gray-400 mb-6">pSEO Factory admin. Select a section from the nav.</p>
-  <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="stats">
+  <div class="grid grid-cols-2 md:grid-cols-5 gap-4" id="stats">
     <div class="bg-gray-900 rounded-lg p-4 border border-gray-800">
       <div class="text-3xl font-bold text-gold" id="leads-count">-</div>
       <div class="text-sm text-gray-400">Leads</div>
+    </div>
+    <div class="bg-gray-900 rounded-lg p-4 border border-gray-800">
+      <div class="text-3xl font-bold text-gold" id="surveys-count">-</div>
+      <div class="text-sm text-gray-400">Surveys</div>
     </div>
     <div class="bg-gray-900 rounded-lg p-4 border border-gray-800">
       <div class="text-3xl font-bold text-gold" id="locations-count">-</div>
@@ -25,18 +29,20 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
   <script>
     async function loadStats() {
       try {
-        const [leads, locs, svcs, matrix] = await Promise.all([
+        const [leads, surveys, locs, svcs, matrix] = await Promise.all([
           fetch('/api/leads').then(r => r.json()),
+          fetch('/api/scaling-surveys').then(r => r.json()),
           fetch('/api/locations').then(r => r.json()),
           fetch('/api/pseo-services').then(r => r.json()),
           fetch('/api/content-matrix?limit=1000').then(r => r.json())
         ]);
         document.getElementById('leads-count').textContent = leads?.leads?.length ?? 0;
+        document.getElementById('surveys-count').textContent = surveys?.surveys?.length ?? 0;
         document.getElementById('locations-count').textContent = Array.isArray(locs) ? locs.length : 0;
         document.getElementById('services-count').textContent = Array.isArray(svcs) ? svcs.length : 0;
         document.getElementById('matrix-count').textContent = Array.isArray(matrix) ? matrix.length : 0;
       } catch (e) {
-        ['leads-count','locations-count','services-count','matrix-count'].forEach(id => {
+        ['leads-count','surveys-count','locations-count','services-count','matrix-count'].forEach(id => {
           const el = document.getElementById(id);
           if (el) el.textContent = '?';
         });

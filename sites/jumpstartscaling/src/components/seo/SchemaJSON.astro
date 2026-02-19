@@ -8,7 +8,8 @@ interface Props {
 }
 
 const { title, description, image, date, slug } = Astro.props;
-const canonicalURL = new URL(slug, Astro.site || 'https://jumpstartscaling.com');
+const siteBase = Astro.site ? new URL(Astro.site).origin : 'https://jumpstartscaling.com';
+const canonicalURL = new URL(slug, siteBase);
 
 const schema = {
   "@context": "https://schema.org",

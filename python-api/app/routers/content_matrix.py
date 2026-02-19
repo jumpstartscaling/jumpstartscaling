@@ -1,6 +1,8 @@
 """CRUD and matrix permutation routes for content_matrix. No auth."""
 import json
+import html
 from fastapi import APIRouter, HTTPException
+from fastapi.responses import HTMLResponse
 from app.db.connection import get_db
 from app.schemas.matrix import (
     ContentMatrixCreate,
@@ -49,6 +51,54 @@ async def get_by_slug(slug: str):
         if not row:
             raise HTTPException(404, "Content not found")
         return ContentMatrixRead(**dict(row))
+
+
+@router.get("/preview/{slug}", response_class=HTMLResponse)
+async def preview_content(slug: str):
+    """Return minimal HTML preview — headless, page-speed optimized. Shows tenants how content looks on a fast site."""
+    async with get_db() as conn:
+        row = await conn.fetchrow(
+            "SELECT slug, title, meta_description, content_json FROM content_matrix WHERE slug = $1",
+            slug,
+        )
+        if not row:
+            raise HTTPException(404, "Content not found")
+
+    title = row["title"] or slug
+    meta_desc = row["meta_description"] or ""
+    content_json = row["content_json"] or {}
+    html_content = (content_json.get("html") if isinstance(content_json, dict) else None) or "<p>Content coming soon.</p>"
+    escaped_title = html.escape(title)
+    escaped_desc = html.escape(meta_desc)
+
+    # Minimal HTML — no external deps, inline critical CSS, perfect for PageSpeed
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{escaped_title}</title>
+<meta name="description" content="{escaped_desc}">
+<style>
+*{{box-sizing:border-box}}body{{margin:0;font-family:system-ui,sans-serif;font-size:1.125rem;line-height:1.7;color:#111;background:#fff;padding:2rem 1.5rem}}
+main{{max-width:720px;margin:0 auto}}
+h1{{font-size:2rem;font-weight:700;margin:0 0 1.5rem;line-height:1.2}}
+article{{color:#333}}
+article p{{margin:0 0 1rem}}
+article h2{{font-size:1.5rem;margin:2rem 0 0.75rem}}
+article h3{{font-size:1.25rem;margin:1.5rem 0 0.5rem}}
+article ul,article ol{{margin:0 0 1rem;padding-left:1.5rem}}
+.badge{{display:inline-block;font-size:.75rem;background:#f0f0f0;padding:.25rem .5rem;border-radius:4px;margin-bottom:1rem;color:#666}}
+</style>
+</head>
+<body>
+<main>
+<span class="badge">Preview — Headless pSEO</span>
+<h1>{escaped_title}</h1>
+<article>{html_content}</article>
+</main>
+</body>
+</html>"""
 
 
 @router.get("/content-matrix", response_model=list[ContentMatrixRead])

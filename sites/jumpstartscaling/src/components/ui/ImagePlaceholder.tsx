@@ -6,9 +6,41 @@ interface ImagePlaceholderProps {
     minHeight?: string;
     description: string;
     suggestion: string;
+    /** When set, render image instead of placeholder */
+    src?: string;
+    /** When set, render video (autoplay, loop, muted) instead of placeholder */
+    videoSrc?: string;
 }
 
-export default function ImagePlaceholder({ minHeight = "300px", description, suggestion }: ImagePlaceholderProps) {
+export default function ImagePlaceholder({ minHeight = "300px", description, suggestion, src, videoSrc }: ImagePlaceholderProps) {
+    if (videoSrc) {
+        return (
+            <div className="w-full relative overflow-hidden rounded-2xl border border-white/10 bg-black" style={{ minHeight }}>
+                <video
+                    className="absolute inset-0 w-full h-full object-cover"
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    aria-label={description}
+                >
+                    <source src={videoSrc} type="video/mp4" />
+                </video>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
+            </div>
+        );
+    }
+    if (src) {
+        return (
+            <div className="w-full relative overflow-hidden rounded-2xl border border-white/10 bg-black" style={{ minHeight }}>
+                <img
+                    src={src}
+                    alt={description}
+                    className="w-full h-full object-cover"
+                />
+            </div>
+        );
+    }
     return (
         <div
             className="w-full relative overflow-hidden rounded-2xl border-2 border-dashed border-white/10 bg-white/5 flex flex-col items-center justify-center p-8 text-center group hover:border-[#E8C677]/30 transition-colors"

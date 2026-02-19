@@ -1,4 +1,6 @@
 ---
+import '../styles/global.css';
+
 interface Props {
   title: string;
   description?: string;
@@ -7,35 +9,29 @@ interface Props {
 const { title, description = "God Mode Admin" } = Astro.props;
 ---
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en" class="dark admin-page">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>{title} | God Mode Admin</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: { extend: { colors: { gold: '#C9A961' } } }
-    }
-  </script>
-  <style>
-    body { font-family: system-ui, sans-serif; background: #111; color: #eee; }
-    a { color: #C9A961; }
-    a:hover { text-decoration: underline; }
-    table { width: 100%; border-collapse: collapse; }
-    th, td { border: 1px solid #333; padding: 10px; text-align: left; }
-    th { background: #222; color: #C9A961; }
-    tr:nth-child(even) { background: #1a1a1a; }
-    input, select, textarea { padding: 6px; background: #222; color: #eee; border: 1px solid #444; border-radius: 4px; }
-    button { padding: 8px 16px; background: #C9A961; color: #000; border: none; cursor: pointer; border-radius: 4px; }
-    button:hover { opacity: 0.9; }
-    button.danger { background: #c33; color: #fff; }
+  <style is:global>
+    /* Admin-specific overrides - uses project Tailwind via global.css */
+    .admin-page body { font-family: system-ui, sans-serif; background: #111; color: #eee; }
+    .admin-page a { color: #C9A961; }
+    .admin-page a:hover { text-decoration: underline; }
+    .admin-page table { width: 100%; border-collapse: collapse; }
+    .admin-page th, .admin-page td { border: 1px solid #333; padding: 10px; text-align: left; }
+    .admin-page th { background: #222; color: #C9A961; }
+    .admin-page tr:nth-child(even) { background: #1a1a1a; }
+    .admin-page input, .admin-page select, .admin-page textarea { padding: 6px; background: #222; color: #eee; border: 1px solid #444; border-radius: 4px; }
+    .admin-page button { padding: 8px 16px; background: #C9A961; color: #000; border: none; cursor: pointer; border-radius: 4px; }
+    .admin-page button:hover { opacity: 0.9; }
+    .admin-page button.danger { background: #c33; color: #fff; }
   </style>
 </head>
 <body class="min-h-screen">
   <header class="border-b border-gray-800 px-6 py-4">
-    <h1 class="text-2xl font-bold text-gold">God Mode Admin</h1>
+    <h1 class="text-2xl font-bold text-[#C9A961]">God Mode Admin</h1>
     <nav class="mt-2 flex flex-wrap gap-4">
       <a href="/admin/">Dashboard</a>
       <a href="/admin/leads">Leads</a>

@@ -1,5 +1,7 @@
 """Admin routes - lead list, Harris matrix CRUD, etc. No auth."""
 import json
+import os
+from urllib.parse import urlparse
 
 from fastapi import APIRouter, Request, Query
 from fastapi.responses import HTMLResponse, JSONResponse
@@ -8,6 +10,47 @@ from app.config import config
 from app.db.connection import get_db
 
 router = APIRouter(prefix="/admin", tags=["admin"])
+api_router = APIRouter(prefix="/api", tags=["admin"])
+
+
+async def _get_debug_data():
+    """Shared debug data: config, health, api_logs. Used by HTML and JSON endpoints."""
+    env_safe = {}
+    for k in ("DATABASE_URL", "ADMIN_KEY", "ADMIN_USERNAME", "ADMIN_PASSWORD", "DEBUG", "LOG_REQUESTS", "HOST", "PORT"):
+        v = os.getenv(k, "")
+        if k == "DATABASE_URL" and v:
+            try:
+                u = urlparse(v)
+                env_safe[k] = f"{u.scheme}://{u.hostname}:{u.port or 5432}/{u.path.lstrip('/')}" if u.hostname else "[set]"
+            except Exception:
+                env_safe[k] = "[set]" if v else ""
+        elif k == "ADMIN_KEY":
+            env_safe[k] = "***" if v else "[empty]"
+        elif k == "ADMIN_PASSWORD":
+            env_safe[k] = "***" if os.getenv("ADMIN_PASSWORD") else "[empty]"
+        elif k in ("DEBUG", "LOG_REQUESTS"):
+            env_safe[k] = str(config.DEBUG if k == "DEBUG" else config.LOG_REQUESTS)
+        else:
+            env_safe[k] = v or "[empty]"
+
+    api_logs = []
+    try:
+        async with get_db() as conn:
+            rows = await conn.fetch(
+                "SELECT id, endpoint, method, status, created_at FROM api_logs ORDER BY created_at DESC LIMIT 50"
+            )
+            api_logs = [dict(r) for r in rows]
+    except Exception as e:
+        api_logs = [{"error": str(e)}]
+
+    health_status = "ok"
+    try:
+        async with get_db() as conn:
+            await conn.fetchval("SELECT 1")
+    except Exception as e:
+        health_status = f"db error: {e}"
+
+    return {"config": env_safe, "health": health_status, "api_logs": api_logs}
 
 
 @router.get("/leads", response_class=HTMLResponse)
@@ -211,46 +254,17 @@ async def admin_content_matrix():
     """)
 
 
+@api_router.get("/debug")
+async def api_debug():
+    """JSON debug endpoint: config, health, api_logs. Used by Astro admin Debug page."""
+    return await _get_debug_data()
+
+
 @router.get("/debug", response_class=HTMLResponse)
 async def admin_debug():
-    """Debug panel: env info, api_logs, health. Session-protected."""
-    import os
-    from urllib.parse import urlparse
-
-    env_safe = {}
-    for k in ("DATABASE_URL", "ADMIN_KEY", "ADMIN_USERNAME", "ADMIN_PASSWORD", "DEBUG", "LOG_REQUESTS", "HOST", "PORT"):
-        v = os.getenv(k, "")
-        if k == "DATABASE_URL" and v:
-            try:
-                u = urlparse(v)
-                env_safe[k] = f"{u.scheme}://{u.hostname}:{u.port or 5432}/{u.path.lstrip('/')}" if u.hostname else "[set]"
-            except Exception:
-                env_safe[k] = "[set]" if v else ""
-        elif k == "ADMIN_KEY":
-            env_safe[k] = "***" if v else "[empty]"
-        elif k == "ADMIN_PASSWORD":
-            env_safe[k] = "***" if os.getenv("ADMIN_PASSWORD") else "[empty]"
-        elif k in ("DEBUG", "LOG_REQUESTS"):
-            env_safe[k] = str(config.DEBUG if k == "DEBUG" else config.LOG_REQUESTS)
-        else:
-            env_safe[k] = v or "[empty]"
-
-    api_logs = []
-    try:
-        async with get_db() as conn:
-            rows = await conn.fetch(
-                "SELECT id, endpoint, method, status, created_at FROM api_logs ORDER BY created_at DESC LIMIT 50"
-            )
-            api_logs = [dict(r) for r in rows]
-    except Exception as e:
-        api_logs = [{"error": str(e)}]
-
-    health_status = "ok"
-    try:
-        async with get_db() as conn:
-            await conn.fetchval("SELECT 1")
-    except Exception as e:
-        health_status = f"db error: {e}"
+    """Debug panel: env info, api_logs, health. No auth."""
+    data = await _get_debug_data()
+    api_logs = data["api_logs"]
 
     rows_html = ""
     if api_logs and "error" not in api_logs[0]:
@@ -269,9 +283,9 @@ async def admin_debug():
         <h1>Debug Panel</h1>
         <nav class="nav"><a href="/admin/">← Admin</a></nav>
         <h2>Config (safe)</h2>
-        <pre>{json.dumps(env_safe, indent=2)}</pre>
+        <pre>{json.dumps(data["config"], indent=2)}</pre>
         <h2>Health</h2>
-        <p>{health_status}</p>
+        <p>{data["health"]}</p>
         <h2>Recent api_logs (last 50)</h2>
         <table><thead><tr><th>ID</th><th>Endpoint</th><th>Method</th><th>Status</th><th>Created</th></tr></thead>
         <tbody>{rows_html}</tbody></table>

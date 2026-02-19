@@ -47,8 +47,9 @@ Use this checklist when deploying god-mode to Coolify (86.48.23.38).
   - `SITES_BASE_PATH` = `/app`
   - `ADMIN_KEY` = same as god-mode-api
   - `PUBLIC_N8N_WEBHOOK` = `https://n8n.jumpstartscaling.com/webhook/d282e622-9c83-4936-9d93-05c37eaa7b68` (or your webhook)
-- [ ] **Domains**: `factory.jumpstartscaling.com`, `www.factory.jumpstartscaling.com`, `chrisamaya.work`, `www.chrisamaya.work`
+- [ ] **Domains**: `factory.jumpstartscaling.com`, `www.factory.jumpstartscaling.com` (preview); add `chrisamaya.work` when tenant goes live
 - [ ] **Build args** (optional): `PUBLIC_GOD_MODE_API_URL` for pSEO pre-render
+- [ ] **Content Preview**: `/api/preview/[slug]` shows content in headless, page-speed layout (for tenants). Admin Content Matrix has "Preview" links.
 
 ---
 
@@ -67,10 +68,11 @@ Use this checklist when deploying god-mode to Coolify (86.48.23.38).
 ## 5. Verify
 
 - [ ] **API**: `curl https://api.jumpstartscaling.com/` → `{"status":"active",...}`
-- [ ] **Router**: `https://factory.jumpstartscaling.com` → JumpStart Scaling site
-- [ ] **Router**: `https://chrisamaya.work` → Chris Amaya site
-- [ ] **Leads**: Submit contact form → check PostgreSQL
-- [ ] **Admin**: `https://api.jumpstartscaling.com/admin/login` → log in with ADMIN_USERNAME/ADMIN_PASSWORD → Admin index with Leads, Locations, Services, Content Matrix
+- [ ] **Factory root**: `https://factory.jumpstartscaling.com` → redirects to `/jumpstart/admin`
+- [ ] **Main preview**: `https://factory.jumpstartscaling.com/jumpstart` → Jumpstart Scaling site
+- [ ] **Tenant preview**: `https://factory.jumpstartscaling.com/chrisamaya` → Chris Amaya site
+- [ ] **Admin**: `https://factory.jumpstartscaling.com/jumpstart/admin` → Mission Control, Leads, Locations, Surveys, Debug
+- [ ] **Leads**: Submit contact form on `/jumpstart` → check PostgreSQL
 
 ---
 

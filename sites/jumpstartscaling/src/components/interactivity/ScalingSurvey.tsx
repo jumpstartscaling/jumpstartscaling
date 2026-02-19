@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { submitLead } from '../../lib/api';
 import './ScalingSurvey.css';
 
 interface SurveyState {
@@ -191,17 +192,12 @@ const ScalingSurvey = ({ webhookUrl }: { webhookUrl?: string }) => {
       existingLeads.push(submissionData);
       localStorage.setItem('jumpstart_leads', JSON.stringify(existingLeads));
 
-      // 2. Postgres Internal API (Unified)
-      await fetch('/api/submit-lead', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(submissionData)
-      }).catch(err => console.warn('Postgres save fail:', err));
+      // 2. FastAPI via API client
+      await submitLead(submissionData).catch(err => console.warn('Postgres save fail:', err));
 
-      // 3. Webhook (Optional Fallback) - from env or prop
+      // 3. Webhook (optional) - only when env or prop set; no hardcoded fallback
       const webhook = webhookUrl
-        || (typeof import.meta !== 'undefined' && (import.meta as any).env?.PUBLIC_N8N_WEBHOOK)
-        || 'https://n8n.jumpstartscaling.com/webhook/d282e622-9c83-4936-9d93-05c37eaa7b68';
+        || (typeof import.meta !== 'undefined' && (import.meta as any).env?.PUBLIC_N8N_WEBHOOK);
 
       if (webhook) {
         await fetch(webhook, {

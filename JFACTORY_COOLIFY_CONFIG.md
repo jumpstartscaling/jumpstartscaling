@@ -42,22 +42,28 @@ node scripts/configure-coolify-via-api.mjs --deploy # Configure + trigger deploy
 | **Description** | God-mode router + jumpstartscaling + chrisamaya sites |
 | **Build Pack** | Dockerfile |
 
-**Routing:** `factory.jumpstartscaling.com/` redirects to `/admin/` (God Mode admin). Marketing site: `jumpstartscaling.com`.
+**Routing (path-based preview):**
+- `factory.jumpstartscaling.com/` → redirects to `/jumpstart/admin`
+- `factory.jumpstartscaling.com/jumpstart` → main site (Jumpstart Scaling)
+- `factory.jumpstartscaling.com/chrisamaya` → tenant site (Chris Amaya)
+- `factory.jumpstartscaling.com/jumpstart/admin` → God Mode admin
 
 ---
 
 ## Domains
 
-Replace `https://coolify.io` with your actual domains:
+**Preview (path-based):** `factory.jumpstartscaling.com` only — sites at `/jumpstart` and `/chrisamaya`.
+
+**Production (when ready):** Add tenant domains:
 
 | Domain |
 |--------|
 | `factory.jumpstartscaling.com` |
 | `www.factory.jumpstartscaling.com` |
-| `chrisamaya.work` |
+| `chrisamaya.work` (when tenant goes live) |
 | `www.chrisamaya.work` |
 
-**Direction:** Allow www & non-www.
+**Note:** Sites use preview paths until ready for production; then point domain to tenant.
 
 ---
 

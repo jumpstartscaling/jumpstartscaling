@@ -184,10 +184,9 @@ const ScalingSurvey = ({ webhookUrl }: { webhookUrl?: string }) => {
         body: JSON.stringify(submissionData)
       }).catch(err => console.warn('Postgres save fail:', err));
 
-      // 3. Webhook (Optional Fallback) - from env or prop
+      // 3. Webhook (optional) - only when env or prop set; no hardcoded fallback
       const webhook = webhookUrl
-        || (typeof import.meta !== 'undefined' && (import.meta as any).env?.PUBLIC_N8N_WEBHOOK)
-        || 'https://n8n.jumpstartscaling.com/webhook/d282e622-9c83-4936-9d93-05c37eaa7b68';
+        || (typeof import.meta !== 'undefined' && (import.meta as any).env?.PUBLIC_N8N_WEBHOOK);
 
       if (webhook) {
         await fetch(webhook, {

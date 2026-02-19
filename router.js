@@ -123,6 +123,12 @@ const DOMAIN_MAP = {
     'localhost': path.join(SITES_BASE, 'sites/jumpstartscaling/dist')
 };
 
+// Path-based preview routing on factory: /jumpstart = main site, /chrisamaya = tenant
+const PATH_SITE_MAP = {
+    '/jumpstart': path.join(SITES_BASE, 'sites/jumpstartscaling/dist'),
+    '/chrisamaya': path.join(SITES_BASE, 'sites/chrisamaya/dist')
+};
+
 const MIME_TYPES = {
     '.html': 'text/html',
     '.css': 'text/css',
@@ -140,9 +146,17 @@ const MIME_TYPES = {
 
 const COMPRESSIBLE = new Set(['text/html', 'text/css', 'text/javascript', 'application/json', 'image/svg+xml']);
 
-function getSiteRoot(hostname) {
+function getSiteRoot(hostname, urlPath) {
     const domain = hostname.split(':')[0];
-    return DOMAIN_MAP[domain] || DOMAIN_MAP['localhost'];
+    const usePathBased = domain === 'factory.jumpstartscaling.com' || domain === 'www.factory.jumpstartscaling.com' || domain === 'localhost';
+    if (usePathBased && urlPath) {
+        for (const [prefix, root] of Object.entries(PATH_SITE_MAP)) {
+            if (urlPath === prefix || urlPath === prefix + '/' || urlPath.startsWith(prefix + '/')) {
+                return { root, stripPrefix: prefix };
+            }
+        }
+    }
+    return { root: DOMAIN_MAP[domain] || DOMAIN_MAP['localhost'], stripPrefix: null };
 }
 
 /* --- PROXY TO GOD MODE API (FastAPI) --- */
@@ -396,21 +410,32 @@ const server = http.createServer((req, res) => {
         return;
     }
 
+    // /api/health fallback when GOD_MODE_API_URL not set — admin pages fetch this
+    if (urlPath === '/api/health' && !GOD_MODE_API_URL) {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ status: 'router-ok', api: 'not-configured', service: 'jfactory-router' }));
+        return;
+    }
+
     // Capture API Routes
     const host = req.headers.host || 'localhost';
     const hostname = host.split(':')[0];
 
-    // factory.jumpstartscaling.com/ → redirect to /admin/ (God Mode admin, not marketing site)
-    const isFactoryRoot = (hostname === 'factory.jumpstartscaling.com' || hostname === 'www.factory.jumpstartscaling.com')
-        && (urlPath === '/' || urlPath === '');
-    if (isFactoryRoot) {
-        const qs = req.url?.includes('?') ? req.url.slice(req.url.indexOf('?')) : '';
-        res.writeHead(302, { Location: '/admin/' + qs });
-        res.end();
-        return;
-    }
-
     const isFactory = hostname === 'factory.jumpstartscaling.com' || hostname === 'www.factory.jumpstartscaling.com';
+
+    // factory.jumpstartscaling.com/ → redirect to /jumpstart/admin (path-based preview)
+    if (isFactory && (urlPath === '/' || urlPath === '')) {
+        const qs = req.url?.includes('?') ? req.url.slice(req.url.indexOf('?')) : '';
+        res.writeHead(302, { Location: '/jumpstart/admin/' + qs });
+        return res.end();
+    }
+    // factory /admin → redirect to /jumpstart/admin (legacy bookmark support)
+    if (isFactory && (urlPath === '/admin' || urlPath.startsWith('/admin/'))) {
+        const rest = urlPath === '/admin' ? '' : urlPath.slice(6);
+        const qs = req.url?.includes('?') ? req.url.slice(req.url.indexOf('?')) : '';
+        res.writeHead(302, { Location: '/jumpstart/admin' + rest + (qs ? '?' + qs.slice(1) : '') });
+        return res.end();
+    }
 
     if (urlPath.startsWith('/api/') && GOD_MODE_API_URL) {
         if (proxyToGodMode(req, res, req.url || '/')) return;
@@ -439,9 +464,12 @@ const server = http.createServer((req, res) => {
     }
 
     // --- STATIC FILE SERVING ---
-    const siteRoot = getSiteRoot(hostname);
+    const { root: siteRoot, stripPrefix } = getSiteRoot(hostname, urlPath);
 
     let pathForFile = urlPath;
+    if (stripPrefix) {
+        pathForFile = urlPath.slice(stripPrefix.length) || '/';
+    }
     if (pathForFile !== '/' && pathForFile.endsWith('/')) pathForFile = pathForFile.slice(0, -1);
 
     let filePath;

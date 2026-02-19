@@ -30,7 +30,7 @@ const {
   fluid = false
 } = Astro.props;
 
-const siteUrl = 'https://jumpstartscaling.com';
+const siteUrl = Astro.site ? new URL(Astro.site).origin : 'https://chrisamaya.work';
 const fullTitle = title === 'Jumpstart Scaling' ? title : `${title} | Jumpstart Scaling`;
 const canonicalUrl = canonical ? new URL(canonical, siteUrl).href : new URL(Astro.url.pathname, siteUrl).href;
 const ogImageUrl = ogImage.startsWith('http') ? ogImage : new URL(ogImage, siteUrl).href;
@@ -56,10 +56,7 @@ graph.push(mainEntity);
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="theme-color" content="#050505" />
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:wght@100..800&display=swap" rel="stylesheet">
+    <!-- Fonts: system stack only (no CDN) -->
 
     <title>{fullTitle}</title>
     <meta name="description" content={description} />

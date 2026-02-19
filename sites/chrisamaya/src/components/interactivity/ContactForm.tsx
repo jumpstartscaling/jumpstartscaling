@@ -67,9 +67,8 @@ const ContactForm = () => {
                 body: JSON.stringify(submissionData)
             }).catch(err => console.warn('Postgres save fail:', err));
 
-            // 2. Webhook (Optional Fallback) - from env
-            const webhook = (typeof import.meta !== 'undefined' && (import.meta as any).env?.PUBLIC_N8N_WEBHOOK)
-                || 'https://n8n.jumpstartscaling.com/webhook/d282e622-9c83-4936-9d93-05c37eaa7b68';
+            // 2. Webhook (optional) - only when env set; no hardcoded fallback
+            const webhook = typeof import.meta !== 'undefined' && (import.meta as any).env?.PUBLIC_N8N_WEBHOOK;
 
             if (webhook) {
                 await fetch(webhook, {

@@ -2,7 +2,7 @@ import { useRive, Layout, Fit, Alignment } from '@rive-app/react-canvas';
 
 export default function RiveMascot() {
     const { RiveComponent } = useRive({
-        src: 'https://cdn.rive.app/animations/vehicles.riv',
+        src: '/animations/vehicles.riv',
         layout: new Layout({ fit: Fit.Cover, alignment: Alignment.Center }),
         autoplay: true,
     });

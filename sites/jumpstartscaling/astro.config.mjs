@@ -5,6 +5,7 @@ import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   site: 'https://factory.jumpstartscaling.com',
+  base: '/jumpstart',
   compressHTML: true,
   output: 'static',
   build: { inlineStylesheets: 'auto' },

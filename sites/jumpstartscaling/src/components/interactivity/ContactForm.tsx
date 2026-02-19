@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { submitLead } from '../../lib/api';
 
 interface ContactFormState {
     name: string;
@@ -60,16 +61,11 @@ const ContactForm = () => {
                 formType: 'contact_form'
             };
 
-            // 1. Postgres Internal API
-            await fetch('/api/submit-lead', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(submissionData)
-            }).catch(err => console.warn('Postgres save fail:', err));
+            // 1. FastAPI via API client
+            await submitLead(submissionData);
 
-            // 2. Webhook (Optional Fallback) - from env or prop
-            const webhook = (typeof import.meta !== 'undefined' && (import.meta as any).env?.PUBLIC_N8N_WEBHOOK)
-                || 'https://n8n.jumpstartscaling.com/webhook/d282e622-9c83-4936-9d93-05c37eaa7b68';
+            // 2. Webhook (optional) - only when env set; no hardcoded fallback
+            const webhook = typeof import.meta !== 'undefined' && (import.meta as any).env?.PUBLIC_N8N_WEBHOOK;
 
             if (webhook) {
                 await fetch(webhook, {

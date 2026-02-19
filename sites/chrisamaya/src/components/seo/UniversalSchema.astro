@@ -25,7 +25,7 @@ const {
   serviceArea = 'Global'
 } = Astro.props;
 
-const baseUrl = 'https://jumpstartscaling.com';
+const baseUrl = Astro.site ? new URL(Astro.site).origin : 'https://chrisamaya.work';
 const fullUrl = `${baseUrl}${url}`;
 const fullImage = image.startsWith('http') ? image : `${baseUrl}${image}`;
 
