@@ -27,8 +27,8 @@ class Config:
     # Admin (for /admin/leads style access)
     ADMIN_KEY: str = os.getenv("ADMIN_KEY", "spark")
 
-    # Optional: disable request logging to DB (e.g. in dev)
-    LOG_REQUESTS: bool = os.getenv("LOG_REQUESTS", "true").lower() in ("1", "true", "yes")
+    # Optional: disable request logging to DB (reduces crashes when DATABASE_URL missing)
+    LOG_REQUESTS: bool = os.getenv("LOG_REQUESTS", "false").lower() in ("1", "true", "yes")
 
 
 config = Config()

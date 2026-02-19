@@ -27,8 +27,9 @@ async def init_db() -> None:
         _pool = await asyncpg.create_pool(
             config.DATABASE_URL,
             min_size=1,
-            max_size=10,
+            max_size=5,
             command_timeout=10,
+            timeout=8,
         )
         schema_sql = _load_schema()
         async with _pool.acquire() as conn:

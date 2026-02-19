@@ -55,7 +55,7 @@ async def log_requests(request: Request, call_next):
 
     response = await call_next(request)
 
-    if config.LOG_REQUESTS and request.url.path.startswith("/api/"):
+    if config.LOG_REQUESTS and config.DATABASE_URL and request.url.path.startswith("/api/"):
         try:
             async with get_db() as conn:
                 payload = json.loads(body_bytes) if body_bytes else {}

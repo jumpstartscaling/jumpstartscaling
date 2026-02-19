@@ -130,14 +130,13 @@ Traefik can't find healthy containers. This affects both **JFactory** (factory.j
 3. **Restart proxy** — Coolify → Servers → [Your Server] → Proxy → Restart Proxy (often fixes 503 after a fresh deploy)
 4. **Verify locally** — `docker run -p 8100:8100 <image>` then `curl http://localhost:8100/health` should return `{"status":"ok","service":"jfactory-router"}`
 
-### For god-mode-api:
+### For god-mode-api (api.jumpstartscaling.com returns 503):
 
-**Common cause:** god-mode-api crash-looping (container status "restarting") usually due to `DATABASE_URL` pointing to unreachable Postgres.
-
-**Fix (applied in code):** god-mode-api now starts even when DB connection fails; `/` and `/admin/` work, DB-dependent routes return 503 until `DATABASE_URL` is corrected.
+**Root cause:** god-mode-api container is **restarting** (crash-loop). Verify via Coolify API or `docker ps` on server.
 
 **Steps:**
-1. **Push and redeploy** — Push the `connection.py` change, then Coolify → god-mode-api → Deploy
-2. **Fix DATABASE_URL** — Create a PostgreSQL database in Coolify (Add Resource → Database → PostgreSQL). Name it `god-mode-db`. Copy the internal connection string (host = container name in same project). Use DB name `god_mode`. Format: `postgresql://USER:PASSWORD@COOLIFY_DB_CONTAINER:5432/god_mode`. Set `DATABASE_URL` in god-mode-api env
-3. **Restart proxy** — Coolify → Servers → [Your Server] → Proxy → Restart Proxy (if still 503 after deploy)
-4. **Port match** — JFactory: 8100, god-mode-api: 8200
+1. **Get container logs** — SSH: `ssh root@86.48.23.38` then `docker ps -a | grep -E "d8ws|god-mode-api"` and `docker logs <container-name> --tail 50` to see crash reason.
+2. **Fix DATABASE_URL** — Create PostgreSQL in Coolify (Add Resource → Database). Copy internal connection string. Format: `postgresql://USER:PASSWORD@COOLIFY_DB_CONTAINER:5432/god_mode`. Set in god-mode-api env vars.
+3. **Or run without DB** — Ensure `python-api` has latest changes (connection timeout, LOG_REQUESTS=false). App starts without DB; DB routes return 503.
+4. **Disable health check** — Coolify → god-mode-api → Configuration → Health Check → Off (if health check causes 503).
+5. **Restart proxy** — Servers → [Your Server] → Proxy → Restart Proxy.
