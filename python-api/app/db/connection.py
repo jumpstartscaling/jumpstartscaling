@@ -6,7 +6,6 @@ from typing import AsyncGenerator
 
 from app.config import config
 
-
 _pool: asyncpg.Pool | None = None
 
 _SCHEMA_PATH = Path(__file__).parent / "schema.sql"
@@ -40,11 +39,15 @@ async def init_db() -> None:
         _pool = None
 
 
+class DatabaseUnavailableError(Exception):
+    """Raised when DB pool is not initialized (DATABASE_URL missing or init failed)."""
+
+
 @asynccontextmanager
 async def get_db() -> AsyncGenerator[asyncpg.Connection, None]:
     """Get a database connection from the pool."""
     if _pool is None:
-        raise RuntimeError("Database not initialized. Call init_db() first.")
+        raise DatabaseUnavailableError("Database not initialized. Set DATABASE_URL in environment.")
     async with _pool.acquire() as conn:
         yield conn
 

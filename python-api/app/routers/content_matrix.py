@@ -1,7 +1,7 @@
 """CRUD and matrix permutation routes for content_matrix. No auth."""
 import json
 import html
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Query
 from fastapi.responses import HTMLResponse
 from app.db.connection import get_db
 from app.schemas.matrix import (
@@ -102,7 +102,7 @@ article ul,article ol{{margin:0 0 1rem;padding-left:1.5rem}}
 
 
 @router.get("/content-matrix", response_model=list[ContentMatrixRead])
-async def list_content_matrix(skip: int = 0, limit: int = 100):
+async def list_content_matrix(skip: int = 0, limit: int = Query(default=100, le=5000)):
     async with get_db() as conn:
         rows = await conn.fetch(
             """

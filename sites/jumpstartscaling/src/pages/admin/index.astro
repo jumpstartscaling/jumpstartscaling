@@ -29,12 +29,13 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
   <script>
     async function loadStats() {
       try {
+        const ok = (r) => r.ok ? r.json() : Promise.reject(new Error(r.status));
         const [leads, surveys, locs, svcs, matrix] = await Promise.all([
-          fetch('/api/leads').then(r => r.json()),
-          fetch('/api/scaling-surveys').then(r => r.json()),
-          fetch('/api/locations').then(r => r.json()),
-          fetch('/api/pseo-services').then(r => r.json()),
-          fetch('/api/content-matrix?limit=1000').then(r => r.json())
+          fetch('/api/leads').then(ok),
+          fetch('/api/scaling-surveys').then(ok),
+          fetch('/api/locations').then(ok),
+          fetch('/api/pseo-services').then(ok),
+          fetch('/api/content-matrix?limit=1000').then(ok)
         ]);
         document.getElementById('leads-count').textContent = leads?.leads?.length ?? 0;
         document.getElementById('surveys-count').textContent = surveys?.surveys?.length ?? 0;

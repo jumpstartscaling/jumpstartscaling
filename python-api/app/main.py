@@ -2,17 +2,16 @@
 God Mode API - FastAPI backend for Spark Platform.
 Replaces Django. Handles leads, scaling surveys, and future pSEO endpoints.
 """
-import sys
+import json
 from contextlib import asynccontextmanager
 
 print("God Mode API loading...", flush=True)
 from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
-import json
-import time
 
 from app.config import config
-from app.db.connection import init_db, close_db, get_db
+from app.db.connection import init_db, close_db, get_db, DatabaseUnavailableError
 from app.routers import auth, health, leads, admin, locations, pseo_services, content_matrix
 
 
@@ -54,6 +53,12 @@ app.include_router(admin.api_router)
 app.include_router(locations.router)
 app.include_router(pseo_services.router)
 app.include_router(content_matrix.router)
+
+
+@app.exception_handler(DatabaseUnavailableError)
+async def db_unavailable_handler(request: Request, exc: DatabaseUnavailableError):
+    """Return 503 when DATABASE_URL is not set or DB init failed."""
+    return JSONResponse(status_code=503, content={"detail": "Database unavailable. Set DATABASE_URL."})
 
 
 @app.middleware("http")
