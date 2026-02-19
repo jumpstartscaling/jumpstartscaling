@@ -70,7 +70,7 @@ Add these (replace placeholders with real values):
 ## Prerequisites
 
 1. **God-mode API** must be deployed first at `api.jumpstartscaling.com` (separate Coolify app).
-2. **DNS:** A records for the domains above → your Coolify server IP (e.g. `86.48.23.38`).
+2. **DNS (manual):** jumpstartscaling.com uses Namecheap DNS. In Namecheap → Domain List → Manage → Advanced DNS, add A records: `factory` and `www.factory` (or `*.factory`) → your Coolify server IP (e.g. `86.48.23.38`). For chrisamaya.work, add records in its DNS provider.
 
 ---
 
@@ -121,7 +121,18 @@ If `https://factory.jumpstartscaling.com/admin/` returns 404:
 
 ## Troubleshooting: "No Available Server" (503)
 
-Traefik can't find healthy containers. Common cause: **god-mode-api crash-looping** (container status "restarting") usually due to `DATABASE_URL` pointing to unreachable Postgres.
+Traefik can't find healthy containers. This affects both **JFactory** (factory.jumpstartscaling.com) and **god-mode-api** (api.jumpstartscaling.com).
+
+### For JFactory (factory pages):
+
+1. **Port must be 8100** — Coolify → JFactory → Configuration → Advanced → Port: `8100`
+2. **Disable health check** — Coolify → JFactory → Configuration → Health Check → turn **Off**. Traefik excludes "unhealthy" containers; health checks often fail and cause "No available server" even when the app works.
+3. **Restart proxy** — Coolify → Servers → [Your Server] → Proxy → Restart Proxy (often fixes 503 after a fresh deploy)
+4. **Verify locally** — `docker run -p 8100:8100 <image>` then `curl http://localhost:8100/health` should return `{"status":"ok","service":"jfactory-router"}`
+
+### For god-mode-api:
+
+**Common cause:** god-mode-api crash-looping (container status "restarting") usually due to `DATABASE_URL` pointing to unreachable Postgres.
 
 **Fix (applied in code):** god-mode-api now starts even when DB connection fails; `/` and `/admin/` work, DB-dependent routes return 503 until `DATABASE_URL` is corrected.
 

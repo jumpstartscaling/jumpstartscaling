@@ -40,9 +40,7 @@ COPY router.js ./
 COPY --from=builder-js /app/sites/jumpstartscaling/dist ./sites/jumpstartscaling/dist
 COPY --from=builder-js /app/sites/chrisamaya/dist ./sites/chrisamaya/dist
 
-# Health check uses Node (no apk packages - avoids DNS/network issues in isolated build envs)
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD node -e "require('http').get('http://localhost:8100/',r=>process.exit(r.statusCode===200?0:1)).on('error',()=>process.exit(1))"
-
+# No HEALTHCHECK - Coolify/Traefik often mark containers unhealthy and cause "No available server".
+# Disable health checks in Coolify: JFactory → Configuration → Health Check → Off
 EXPOSE 8100
 CMD ["node", "router.js"]

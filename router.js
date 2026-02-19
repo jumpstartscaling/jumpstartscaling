@@ -393,8 +393,15 @@ const server = http.createServer((req, res) => {
         return;
     }
 
-    // Capture API Routes
+    // Health check for Docker/Coolify/Traefik - must return 200 when server is up
     const urlPath = (req.url || '/').split('?')[0];
+    if (urlPath === '/health') {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ status: 'ok', service: 'jfactory-router' }));
+        return;
+    }
+
+    // Capture API Routes
     const host = req.headers.host || 'localhost';
     const hostname = host.split(':')[0];
 
