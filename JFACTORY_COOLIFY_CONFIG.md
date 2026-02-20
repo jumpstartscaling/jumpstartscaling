@@ -28,6 +28,9 @@ On Oracle (150.136.117.198), the **frontend pages worked**; the backend did not.
 # Requires COOLIFY_TOKEN in .env.local (Coolify → Keys & Tokens)
 node scripts/configure-coolify-via-api.mjs          # Configure only
 node scripts/configure-coolify-via-api.mjs --deploy # Configure + trigger deploy
+
+# Deploy JFactory fix (router port 8100 + chrisamaya React SSR)
+JFACTORY_BRANCH=fix/jfactory-deploy node scripts/configure-coolify-via-api.mjs --deploy
 ```
 
 **Legacy (JFactory only):** `COOLIFY_TOKEN=xxx ./configure-jfactory-coolify.sh`

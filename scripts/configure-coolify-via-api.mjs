@@ -72,6 +72,7 @@ async function main() {
 
   // --- JFactory ---
   console.log('JFactory:');
+  const jfactoryBranch = process.env.JFACTORY_BRANCH || 'main';
   try {
     await api('PATCH', `/applications/${APPS.JFactory}`, {
       ports_exposes: '8100',
@@ -79,8 +80,9 @@ async function main() {
       base_directory: '',
       build_pack: 'dockerfile',
       dockerfile_location: 'Dockerfile',
+      git_branch: jfactoryBranch,
     });
-    console.log('  ✅ Port 8100, docker options cleared');
+    console.log(`  ✅ Port 8100, branch ${jfactoryBranch}`);
 
     await api('PATCH', `/applications/${APPS.JFactory}`, {
       domains: 'https://factory.jumpstartscaling.com,https://www.factory.jumpstartscaling.com,https://chrisamaya.work,https://www.chrisamaya.work',
