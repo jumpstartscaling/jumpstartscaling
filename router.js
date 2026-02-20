@@ -118,15 +118,14 @@ const DOMAIN_MAP = {
     'www.factory.jumpstartscaling.com': path.join(SITES_BASE, 'sites/jumpstartscaling/dist'),
     'jumpstartscaling.com': path.join(SITES_BASE, 'sites/jumpstartscaling/dist'),
     'www.jumpstartscaling.com': path.join(SITES_BASE, 'sites/jumpstartscaling/dist'),
-    'chrisamaya.work': path.join(SITES_BASE, 'sites/chrisamaya/dist'),
-    'www.chrisamaya.work': path.join(SITES_BASE, 'sites/chrisamaya/dist'),
+    // chrisamaya.work: resolved via API and proxied to SSR (8101)
     'localhost': path.join(SITES_BASE, 'sites/jumpstartscaling/dist')
 };
 
-// Path-based preview routing on factory: /jumpstart = main site, /chrisamaya = tenant
+// Path-based preview routing on factory: /jumpstart = main site, /chrisamaya = proxy to SSR (8101)
 const PATH_SITE_MAP = {
     '/jumpstart': path.join(SITES_BASE, 'sites/jumpstartscaling/dist'),
-    '/chrisamaya': path.join(SITES_BASE, 'sites/chrisamaya/dist')
+    '/chrisamaya': null, // proxy to SSR 8101
 };
 
 const MIME_TYPES = {
@@ -146,6 +145,11 @@ const MIME_TYPES = {
 
 const COMPRESSIBLE = new Set(['text/html', 'text/css', 'text/javascript', 'application/json', 'image/svg+xml']);
 
+// Resolve cache for unknown domains (TTL 60s)
+const RESOLVE_CACHE = new Map();
+const RESOLVE_TTL_MS = 60_000;
+const SSR_TENANT_PORT = process.env.SSR_TENANT_PORT || 8101;
+
 function getSiteRoot(hostname, urlPath) {
     const domain = hostname.split(':')[0];
     const usePathBased = domain === 'factory.jumpstartscaling.com' || domain === 'www.factory.jumpstartscaling.com' || domain === 'localhost';
@@ -156,7 +160,81 @@ function getSiteRoot(hostname, urlPath) {
             }
         }
     }
-    return { root: DOMAIN_MAP[domain] || DOMAIN_MAP['localhost'], stripPrefix: null };
+    const root = DOMAIN_MAP[domain] || DOMAIN_MAP['localhost'];
+    // chrisamaya.work uses Astro base: '/chrisamaya' — assets live at dist/_astro/, URLs at /chrisamaya/_astro/
+    const isChrisamayaDomain = domain === 'chrisamaya.work' || domain === 'www.chrisamaya.work';
+    const stripPrefix = isChrisamayaDomain && root.includes('chrisamaya') ? '/chrisamaya' : null;
+    return { root, stripPrefix };
+}
+
+function isKnownDomain(hostname) {
+    const domain = hostname.split(':')[0];
+    if (DOMAIN_MAP[domain]) return true;
+    if (domain === 'factory.jumpstartscaling.com' || domain === 'www.factory.jumpstartscaling.com' || domain === 'localhost') return true;
+    return false;
+}
+
+async function resolveDomain(domain) {
+    const base = GOD_MODE_API_URL.replace(/\/$/, '');
+    const url = `${base}/api/sites/resolve?domain=${encodeURIComponent(domain)}`;
+    const resp = await fetch(url);
+    if (!resp.ok) return null;
+    const data = await resp.json();
+    return data.found ? { site_id: data.site_id, theme_config: data.theme_config || null } : null;
+}
+
+function proxyToSSR(req, res, tenant, hostname, pathOverride = null) {
+    const reqPath = pathOverride !== null ? pathOverride : ((req.url || '/').split('?')[0] + (req.url?.includes('?') ? req.url.slice(req.url.indexOf('?')) : ''));
+    const opts = {
+        hostname: '127.0.0.1',
+        port: SSR_TENANT_PORT,
+        path: reqPath,
+        method: req.method,
+        headers: {
+            ...req.headers,
+            host: req.headers.host || hostname,
+            'x-tenant-site-id': tenant.site_id,
+            'x-tenant-domain': hostname,
+            'x-tenant-theme-config': tenant.theme_config ? Buffer.from(JSON.stringify(tenant.theme_config)).toString('base64') : '',
+        },
+    };
+    delete opts.headers['host'];
+    opts.headers['host'] = req.headers.host || hostname;
+
+    const proxyReq = http.request(opts, (proxyRes) => {
+        res.writeHead(proxyRes.statusCode || 200, proxyRes.headers);
+        proxyRes.pipe(res);
+    });
+    proxyReq.on('error', (err) => {
+        console.error('SSR proxy error:', err.message);
+        res.writeHead(502, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Tenant server unavailable', detail: err.message }));
+    });
+    req.pipe(proxyReq);
+}
+
+async function resolveAndProxy(domain, req, res, urlPath, hostname) {
+    try {
+        let tenant = RESOLVE_CACHE.get(domain);
+        if (!tenant || Date.now() > (tenant.expiry || 0)) {
+            tenant = await resolveDomain(domain);
+            if (tenant) {
+                RESOLVE_CACHE.set(domain, { ...tenant, expiry: Date.now() + RESOLVE_TTL_MS });
+            }
+        } else {
+            tenant = { site_id: tenant.site_id, theme_config: tenant.theme_config };
+        }
+        if (!tenant) {
+            res.writeHead(404, { 'Content-Type': 'text/html' });
+            res.end('<!DOCTYPE html><html><head><title>Not Found</title></head><body><h1>404</h1><p>Site not found.</p></body></html>');
+            return;
+        }
+        proxyToSSR(req, res, tenant, hostname);
+    } catch (err) {
+        console.error('Resolve error:', err.message);
+        res.writeHead(502, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Could not resolve tenant', detail: err.message }));
+    }
 }
 
 /* --- PROXY TO GOD MODE API (FastAPI) --- */
@@ -461,6 +539,49 @@ const server = http.createServer((req, res) => {
 
     if (req.url === '/api/submit-scaling-survey' && req.method === 'POST') {
         return handleScalingSurveySubmit(req, res);
+    }
+
+    // --- PATH-BASED /chrisamaya: proxy to SSR 8101 ---
+    const domain = hostname.split(':')[0];
+    const usePathBased = domain === 'factory.jumpstartscaling.com' || domain === 'www.factory.jumpstartscaling.com' || domain === 'localhost';
+    if (usePathBased && (urlPath === '/chrisamaya' || urlPath === '/chrisamaya/' || urlPath.startsWith('/chrisamaya/'))) {
+        const innerPath = (urlPath.slice(10) || '/') + (req.url?.includes('?') ? req.url.slice(req.url.indexOf('?')) : '');
+        (async () => {
+            let tenant = null;
+            if (GOD_MODE_API_URL) {
+                let t = RESOLVE_CACHE.get('chrisamaya.work');
+                if (!t || Date.now() > (t.expiry || 0)) {
+                    tenant = await resolveDomain('chrisamaya.work');
+                    if (tenant) RESOLVE_CACHE.set('chrisamaya.work', { ...tenant, expiry: Date.now() + RESOLVE_TTL_MS });
+                } else {
+                    tenant = { site_id: t.site_id, theme_config: t.theme_config };
+                }
+            }
+            if (tenant) {
+                proxyToSSR(req, res, tenant, 'chrisamaya.work', innerPath);
+            } else {
+                res.writeHead(404, { 'Content-Type': 'text/html' });
+                res.end('<!DOCTYPE html><html><head><title>Not Found</title></head><body><h1>404</h1><p>Chrisamaya tenant not resolved.</p></body></html>');
+            }
+        })().catch((err) => {
+            res.writeHead(500, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: 'Proxy failed', detail: String(err) }));
+        });
+        return;
+    }
+
+    // --- UNKNOWN DOMAIN: resolve via API and proxy to SSR tenant ---
+    if (!isKnownDomain(hostname) && GOD_MODE_API_URL) {
+        resolveAndProxy(domain, req, res, urlPath, hostname).catch((err) => {
+            res.writeHead(500, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: 'Resolve failed', detail: String(err) }));
+        });
+        return;
+    }
+    if (!isKnownDomain(hostname)) {
+        res.writeHead(404, { 'Content-Type': 'text/html' });
+        res.end('<!DOCTYPE html><html><head><title>Not Found</title></head><body><h1>404</h1><p>Site not found.</p></body></html>');
+        return;
     }
 
     // --- STATIC FILE SERVING ---

@@ -16,8 +16,14 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
   <script>
     async function load() {
       try {
-        const r = await fetch('/api/locations');
-        const rows = await r.json();
+        const r = await fetch((window.__ADMIN_API_BASE__ || '') + '/api/locations');
+        const data = await r.json();
+        const rows = Array.isArray(data) ? data : [];
+        if (!r.ok) {
+          const msg = (typeof data?.detail === 'string' ? data.detail : JSON.stringify(data?.detail || data)) || r.statusText || `HTTP ${r.status}`;
+          document.getElementById('locations-table').innerHTML = `<p class="text-red-400">API error: ${msg}</p>`;
+          return;
+        }
         const html = `
           <table>
             <thead><tr><th>ID</th><th>City</th><th>State</th><th>Zip</th><th>Neighborhood</th><th>Slug</th><th></th></tr></thead>
@@ -36,11 +42,11 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
     function showAddForm() { document.getElementById('add-form').classList.remove('hidden'); }
     async function addLocation() {
       const body = { city: document.getElementById('city').value, state: document.getElementById('state').value, zip: document.getElementById('zip').value || null, neighborhood: document.getElementById('neighborhood').value || null };
-      await fetch('/api/locations', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+      await fetch((window.__ADMIN_API_BASE__ || '') + '/api/locations', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
       load();
       document.getElementById('add-form').classList.add('hidden');
     }
-    async function del(id) { if (confirm('Delete?')) { await fetch(`/api/locations/${id}`, { method: 'DELETE' }); load(); } }
+    async function del(id) { if (confirm('Delete?')) { await fetch((window.__ADMIN_API_BASE__ || '') + `/api/locations/${id}`, { method: 'DELETE' }); load(); } }
     load();
   </script>
 </AdminLayout>

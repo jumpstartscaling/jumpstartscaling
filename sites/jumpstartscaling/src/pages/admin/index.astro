@@ -29,19 +29,15 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
   <script>
     async function loadStats() {
       try {
-        const ok = (r) => r.ok ? r.json() : Promise.reject(new Error(r.status));
-        const [leads, surveys, locs, svcs, matrix] = await Promise.all([
-          fetch('/api/leads').then(ok),
-          fetch('/api/scaling-surveys').then(ok),
-          fetch('/api/locations').then(ok),
-          fetch('/api/pseo-services').then(ok),
-          fetch('/api/content-matrix?limit=1000').then(ok)
-        ]);
-        document.getElementById('leads-count').textContent = leads?.leads?.length ?? 0;
-        document.getElementById('surveys-count').textContent = surveys?.surveys?.length ?? 0;
-        document.getElementById('locations-count').textContent = Array.isArray(locs) ? locs.length : 0;
-        document.getElementById('services-count').textContent = Array.isArray(svcs) ? svcs.length : 0;
-        document.getElementById('matrix-count').textContent = Array.isArray(matrix) ? matrix.length : 0;
+        const base = window.__ADMIN_API_BASE__ || '';
+        const urls = ['/api/leads', '/api/scaling-surveys', '/api/locations', '/api/pseo-services', '/api/content-matrix?limit=1000'];
+        const results = await Promise.allSettled(urls.map(u => fetch(base + u).then(r => r.ok ? r.json() : Promise.reject(new Error(r.status)))));
+        const [leads, surveys, locs, svcs, matrix] = results.map(r => r.status === 'fulfilled' ? r.value : null);
+        document.getElementById('leads-count').textContent = leads?.leads?.length ?? '?';
+        document.getElementById('surveys-count').textContent = surveys?.surveys?.length ?? '?';
+        document.getElementById('locations-count').textContent = Array.isArray(locs) ? locs.length : '?';
+        document.getElementById('services-count').textContent = Array.isArray(svcs) ? svcs.length : '?';
+        document.getElementById('matrix-count').textContent = Array.isArray(matrix) ? matrix.length : '?';
       } catch (e) {
         ['leads-count','surveys-count','locations-count','services-count','matrix-count'].forEach(id => {
           const el = document.getElementById(id);

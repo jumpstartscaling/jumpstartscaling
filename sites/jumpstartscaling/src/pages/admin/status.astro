@@ -7,7 +7,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
   <script>
     async function load() {
       try {
-        const r = await fetch('/api/health');
+        const r = await fetch((window.__ADMIN_API_BASE__ || '') + '/api/health');
         const d = await r.json();
         document.getElementById('status').innerHTML = `
           <p class="text-green-400">API is active.</p>

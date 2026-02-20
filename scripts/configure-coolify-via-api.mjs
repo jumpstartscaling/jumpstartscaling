@@ -77,12 +77,12 @@ async function main() {
     await api('PATCH', `/applications/${APPS.JFactory}`, {
       ports_exposes: '8100',
       custom_docker_run_options: '',
-      base_directory: '',
+      base_directory: 'god-mode',
       build_pack: 'dockerfile',
       dockerfile_location: 'Dockerfile',
       git_branch: jfactoryBranch,
     });
-    console.log(`  ✅ Port 8100, branch ${jfactoryBranch}`);
+    console.log(`  ✅ Port 8100, base_directory=god-mode, branch ${jfactoryBranch}`);
 
     await api('PATCH', `/applications/${APPS.JFactory}`, {
       domains: 'https://factory.jumpstartscaling.com,https://www.factory.jumpstartscaling.com,https://chrisamaya.work,https://www.chrisamaya.work',
@@ -110,21 +110,21 @@ async function main() {
   try {
     await api('PATCH', `/applications/${APPS.godModeApi}`, {
       ports_exposes: '8200',
-      base_directory: 'python-api',
+      base_directory: 'god-mode/python-api',
       build_pack: 'dockerfile',
       dockerfile_location: 'Dockerfile',
     });
-    console.log('  ✅ Port 8200, Base directory: python-api');
+    console.log('  ✅ Port 8200, Base directory: god-mode/python-api');
 
     await api('PATCH', `/applications/${APPS.godModeApi}/envs/bulk`, {
       data: [
         { key: 'ADMIN_KEY', value: adminKey },
-        { key: 'LOG_REQUESTS', value: 'false' },
+        { key: 'LOG_REQUESTS', value: 'true' },
         { key: 'PORT', value: '8200' },
         // DATABASE_URL left unset - app starts without it; add in Coolify if you have Postgres
       ],
     });
-    console.log('  ✅ Env vars: ADMIN_KEY (synced), LOG_REQUESTS=false, PORT=8200');
+    console.log('  ✅ Env vars: ADMIN_KEY (synced), LOG_REQUESTS=true, PORT=8200');
     console.log('     DATABASE_URL not set (add in Coolify if you have Postgres)');
   } catch (e) {
     console.error('  ❌', e.message);

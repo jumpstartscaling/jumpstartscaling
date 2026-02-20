@@ -9,7 +9,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
   <script>
     async function load() {
       try {
-        const r = await fetch('/api/leads?limit=500');
+        const r = await fetch((window.__ADMIN_API_BASE__ || '') + '/api/leads?limit=500');
         const d = await r.json();
         const leads = d?.leads ?? [];
         const html = `

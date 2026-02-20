@@ -1,13 +1,15 @@
 import react from '@astrojs/react';
+import node from '@astrojs/node';
 import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
-  site: 'https://factory.jumpstartscaling.com',
-  base: '/chrisamaya',
+  site: 'https://chrisamaya.work',
+  base: '/',
   compressHTML: true,
-  output: 'static',
+  output: 'server',
+  adapter: node({ mode: 'standalone' }),
   build: { inlineStylesheets: 'auto' },
   integrations: [react(), mdx(), sitemap({ changefreq: 'weekly', priority: 0.7, lastmod: new Date() })],
   vite: {

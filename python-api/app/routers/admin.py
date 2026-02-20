@@ -1,9 +1,10 @@
 """Admin routes - lead list, Harris matrix CRUD, etc. No auth."""
 import json
 import os
+import time
+import uuid
 from urllib.parse import urlparse
-
-from fastapi import APIRouter, Request, Query
+from fastapi import APIRouter, Request, Query, Body
 from fastapi.responses import HTMLResponse, JSONResponse
 
 from fastapi import Header, HTTPException
@@ -260,6 +261,413 @@ async def admin_content_matrix():
 async def api_debug():
     """JSON debug endpoint: config, health, api_logs. Used by Astro admin Debug page."""
     return await _get_debug_data()
+
+
+@api_router.get("/counts")
+async def api_counts():
+    """Counts for intelligence and collections dashboards."""
+    async with get_db() as conn:
+        out = {}
+        for table in [
+            "avatar_intelligence", "avatar_variants", "geo_intelligence",
+            "spintax_dictionaries", "cartesian_patterns",
+            "page_blocks", "offer_blocks", "headline_inventory", "content_fragments",
+        ]:
+            n = await conn.fetchval(f"SELECT COUNT(*) FROM {table}")
+            out[table] = n or 0
+    return out
+
+
+@api_router.get("/generation-jobs")
+async def api_generation_jobs(limit: int = 200):
+    """List generation jobs for factory kanban."""
+    async with get_db() as conn:
+        rows = await conn.fetch(
+            "SELECT id, status, target_quantity, progress, site_id, campaign_id FROM generation_jobs ORDER BY id DESC LIMIT $1",
+            min(limit, 500),
+        )
+        return [dict(r) for r in rows]
+
+
+@api_router.get("/analytics/summary")
+async def api_analytics_summary():
+    """Analytics summary from events, pageviews, conversions tables."""
+    async with get_db() as conn:
+        events_n = await conn.fetchval("SELECT COUNT(*) FROM events")
+        pageviews_n = await conn.fetchval("SELECT COUNT(*) FROM pageviews")
+        conversions_n = await conn.fetchval("SELECT COUNT(*) FROM conversions")
+    return {"events": events_n or 0, "pageviews": pageviews_n or 0, "conversions": conversions_n or 0}
+
+
+async def _list_table(table: str, limit: int = 200):
+    """List rows from table."""
+    async with get_db() as conn:
+        rows = await conn.fetch(f"SELECT * FROM {table} LIMIT $1", min(limit, 500))
+        return [dict(r) for r in rows]
+
+
+@api_router.get("/avatar-intelligence")
+async def api_avatar_intelligence(limit: int = 200):
+    return await _list_table("avatar_intelligence", limit)
+
+
+@api_router.get("/avatar-variants")
+async def api_avatar_variants(limit: int = 200):
+    return await _list_table("avatar_variants", limit)
+
+
+@api_router.get("/campaign-masters")
+async def api_campaign_masters(limit: int = 200):
+    return await _list_table("campaign_masters", limit)
+
+
+@api_router.get("/cartesian-patterns")
+async def api_cartesian_patterns(limit: int = 200):
+    return await _list_table("cartesian_patterns", limit)
+
+
+@api_router.get("/content-fragments")
+async def api_content_fragments(limit: int = 200):
+    return await _list_table("content_fragments", limit)
+
+
+@api_router.get("/conversions")
+async def api_conversions(limit: int = 200):
+    return await _list_table("conversions", limit)
+
+
+@api_router.get("/events")
+async def api_events(limit: int = 200):
+    return await _list_table("events", limit)
+
+
+@api_router.get("/generated-articles")
+async def api_generated_articles(limit: int = 200):
+    return await _list_table("generated_articles", limit)
+
+
+@api_router.get("/geo-intelligence")
+async def api_geo_intelligence(limit: int = 200):
+    return await _list_table("geo_intelligence", limit)
+
+
+@api_router.get("/headline-inventory")
+async def api_headline_inventory(limit: int = 200):
+    return await _list_table("headline_inventory", limit)
+
+
+@api_router.get("/offer-blocks")
+async def api_offer_blocks(limit: int = 200):
+    return await _list_table("offer_blocks", limit)
+
+
+@api_router.get("/page-blocks")
+async def api_page_blocks(limit: int = 200):
+    return await _list_table("page_blocks", limit)
+
+
+@api_router.get("/pages")
+async def api_pages(limit: int = 200):
+    return await _list_table("pages", limit)
+
+
+@api_router.get("/pageviews")
+async def api_pageviews(limit: int = 200):
+    return await _list_table("pageviews", limit)
+
+
+@api_router.get("/public/posts")
+async def api_public_posts(site_url: str = Query(..., alias="site_url")):
+    """Resolve site by URL and return published posts."""
+    domain = (site_url or "").strip()
+    if not domain:
+        return {"posts": [], "site_id": None}
+    try:
+        p = urlparse(domain if "://" in domain else f"https://{domain}")
+        domain = p.hostname or domain
+    except Exception:
+        domain = domain
+    async with get_db() as conn:
+        row = await conn.fetchrow(
+            "SELECT id FROM sites WHERE status = 'active' AND url ILIKE $1 LIMIT 1",
+            f"%{domain}%",
+        )
+        if not row:
+            return {"posts": [], "site_id": None}
+        site_id = row["id"]
+        rows = await conn.fetch(
+            """
+            SELECT id, title, slug, content, excerpt, published_at, created_at
+            FROM posts
+            WHERE site_id = $1 AND status = 'published'
+            ORDER BY published_at DESC NULLS LAST, created_at DESC
+            LIMIT 100
+            """,
+            site_id,
+        )
+    return {"posts": [dict(r) for r in rows], "site_id": str(site_id)}
+
+
+@api_router.get("/posts")
+async def api_posts(limit: int = 200, site_id: str | None = Query(None, alias="site_id")):
+    """List posts. Optional site_id filter."""
+    limit = min(limit, 500)
+    if not site_id:
+        return await _list_table("posts", limit)
+    async with get_db() as conn:
+        rows = await conn.fetch(
+            "SELECT * FROM posts WHERE site_id = $1::uuid ORDER BY published_at DESC NULLS LAST LIMIT $2",
+            uuid.UUID(site_id),
+            limit,
+        )
+        return [dict(r) for r in rows]
+
+
+@api_router.get("/scheduled-tasks")
+async def api_scheduled_tasks(limit: int = 200):
+    return await _list_table("scheduled_tasks", limit)
+
+
+# --- Sites resolve (TTL 60s) ---
+_resolve_cache: dict[str, tuple[dict, float]] = {}
+RESOLVE_TTL = 60
+
+
+@api_router.get("/sites/resolve")
+async def api_sites_resolve(domain: str = Query(..., alias="domain")):
+    """Resolve domain to site. Returns site_id, status, theme_config. TTL 60s."""
+    domain = (domain or "").strip().lower()
+    if not domain:
+        return {"found": False, "site_id": None, "status": None, "theme_config": None}
+    now = time.time()
+    if domain in _resolve_cache:
+        cached, expiry = _resolve_cache[domain]
+        if now < expiry:
+            return cached
+    async with get_db() as conn:
+        row = await conn.fetchrow(
+            """
+            SELECT id, status, theme_config FROM sites
+            WHERE status = 'active' AND url ILIKE $1
+            LIMIT 1
+            """,
+            f"%{domain}%",
+        )
+    if not row:
+        out = {"found": False, "site_id": None, "status": None, "theme_config": None}
+    else:
+        theme = row.get("theme_config")
+        if isinstance(theme, dict):
+            pass
+        elif isinstance(theme, str):
+            try:
+                theme = json.loads(theme) if theme else None
+            except Exception:
+                theme = None
+        out = {
+            "found": True,
+            "site_id": str(row["id"]),
+            "status": row.get("status"),
+            "theme_config": theme,
+        }
+    _resolve_cache[domain] = (out, now + RESOLVE_TTL)
+    return out
+
+
+@api_router.get("/sites")
+async def api_sites(limit: int = 200):
+    return await _list_table("sites", limit)
+
+
+@api_router.get("/spintax-dictionaries")
+async def api_spintax_dictionaries(limit: int = 200):
+    return await _list_table("spintax_dictionaries", limit)
+
+
+@api_router.get("/work-log")
+async def api_work_log(limit: int = 200):
+    return await _list_table("work_log", limit)
+
+
+# --- CRUD: content-fragments ---
+@api_router.post("/content-fragments")
+async def api_content_fragments_create(body: dict = Body(...)):
+    cid = body.get("campaign_id")
+    async with get_db() as conn:
+        row = await conn.fetchrow(
+            """
+            INSERT INTO content_fragments (campaign_id, fragment_type, content_body, fragment_text, status)
+            VALUES ($1, $2, $3, $4, $5)
+            RETURNING *
+            """,
+            uuid.UUID(cid) if cid else None,
+            body.get("fragment_type", "block"),
+            body.get("content_body") or body.get("fragment_text") or "",
+            body.get("fragment_text") or body.get("content_body") or "",
+            body.get("status", "active"),
+        )
+        return dict(row)
+
+
+@api_router.delete("/content-fragments/{pk}")
+async def api_content_fragments_delete(pk: str):
+    async with get_db() as conn:
+        await conn.execute("DELETE FROM content_fragments WHERE id = $1", uuid.UUID(pk))
+    return {"deleted": pk}
+
+
+# --- CRUD: avatar-variants ---
+@api_router.post("/avatar-variants")
+async def api_avatar_variants_create(body: dict = Body(...)):
+    async with get_db() as conn:
+        row = await conn.fetchrow(
+            """
+            INSERT INTO avatar_variants (avatar_key, variant_type, data)
+            VALUES ($1, $2, $3)
+            RETURNING *
+            """,
+            body.get("avatar_key"),
+            body.get("variant_type", "default"),
+            json.dumps(body.get("data", {})),
+        )
+        return dict(row)
+
+
+@api_router.delete("/avatar-variants/{pk}")
+async def api_avatar_variants_delete(pk: str):
+    async with get_db() as conn:
+        await conn.execute("DELETE FROM avatar_variants WHERE id = $1", uuid.UUID(pk))
+    return {"deleted": pk}
+
+
+# --- CRUD: cartesian-patterns ---
+@api_router.post("/cartesian-patterns")
+async def api_cartesian_patterns_create(body: dict = Body(...)):
+    async with get_db() as conn:
+        row = await conn.fetchrow(
+            """
+            INSERT INTO cartesian_patterns (pattern_key, pattern_type, data)
+            VALUES ($1, $2, $3)
+            RETURNING *
+            """,
+            body.get("pattern_key"),
+            body.get("pattern_type", "default"),
+            json.dumps(body.get("data", {})),
+        )
+        return dict(row)
+
+
+@api_router.delete("/cartesian-patterns/{pk}")
+async def api_cartesian_patterns_delete(pk: str):
+    async with get_db() as conn:
+        await conn.execute("DELETE FROM cartesian_patterns WHERE id = $1", uuid.UUID(pk))
+    return {"deleted": pk}
+
+
+# --- CRUD: campaign-masters ---
+@api_router.post("/campaign-masters")
+async def api_campaign_masters_create(body: dict = Body(...)):
+    async with get_db() as conn:
+        row = await conn.fetchrow(
+            """
+            INSERT INTO campaign_masters (site_id, name, status, headline_spintax_root, target_word_count)
+            VALUES ($1, $2, $3, $4, $5)
+            RETURNING *
+            """,
+            uuid.UUID(body["site_id"]) if body.get("site_id") else None,
+            body.get("name", "New Campaign"),
+            body.get("status", "active"),
+            body.get("headline_spintax_root"),
+            body.get("target_word_count", 1500),
+        )
+        return dict(row)
+
+
+@api_router.delete("/campaign-masters/{pk}")
+async def api_campaign_masters_delete(pk: str):
+    async with get_db() as conn:
+        await conn.execute("DELETE FROM campaign_masters WHERE id = $1", uuid.UUID(pk))
+    return {"deleted": pk}
+
+
+# --- CRUD: scheduled-tasks ---
+@api_router.post("/scheduled-tasks")
+async def api_scheduled_tasks_create(body: dict = Body(...)):
+    async with get_db() as conn:
+        row = await conn.fetchrow(
+            """
+            INSERT INTO scheduled_tasks (site_id, campaign_id, task_type, scheduled_at, status, payload)
+            VALUES ($1, $2, $3, $4, $5, $6)
+            RETURNING *
+            """,
+            uuid.UUID(body["site_id"]) if body.get("site_id") else None,
+            uuid.UUID(body["campaign_id"]) if body.get("campaign_id") else None,
+            body.get("task_type", "generation"),
+            body.get("scheduled_at"),
+            body.get("status", "pending"),
+            json.dumps(body.get("payload", {})),
+        )
+        return dict(row)
+
+
+@api_router.delete("/scheduled-tasks/{pk}")
+async def api_scheduled_tasks_delete(pk: str):
+    async with get_db() as conn:
+        await conn.execute("DELETE FROM scheduled_tasks WHERE id = $1", uuid.UUID(pk))
+    return {"deleted": pk}
+
+
+# --- PATCH: generated-articles (station transitions) ---
+@api_router.patch("/generated-articles/{pk}")
+async def api_generated_articles_patch(pk: str, body: dict = Body(...)):
+    updates = {k: v for k, v in body.items() if k in ("status", "title", "slug", "meta_title", "meta_description", "is_published")}
+    if not updates:
+        raise HTTPException(400, "No valid fields to update")
+    async with get_db() as conn:
+        cols = list(updates.keys())
+        set_clause = ", ".join(f'"{c}" = ${i+1}' for i, c in enumerate(cols)) + ", date_updated = NOW()"
+        values = [updates[c] for c in cols] + [uuid.UUID(pk)]
+        await conn.execute(
+            f'UPDATE generated_articles SET {set_clause} WHERE id = ${len(values)}',
+            *values,
+        )
+        row = await conn.fetchrow("SELECT * FROM generated_articles WHERE id = $1", uuid.UUID(pk))
+        if not row:
+            raise HTTPException(404, "Article not found")
+        return dict(row)
+
+
+# --- POST: generation-jobs ---
+@api_router.post("/generation-jobs")
+async def api_generation_jobs_create(body: dict = Body(...)):
+    async with get_db() as conn:
+        row = await conn.fetchrow(
+            """
+            INSERT INTO generation_jobs (site_id, campaign_id, target_quantity, status, source_type, source_article_ids)
+            VALUES ($1, $2, $3, $4, $5, $6)
+            RETURNING *
+            """,
+            uuid.UUID(body["site_id"]) if body.get("site_id") else None,
+            uuid.UUID(body["campaign_id"]) if body.get("campaign_id") else None,
+            body.get("target_quantity", 10),
+            body.get("status", "pending"),
+            body.get("source_type", "new"),
+            json.dumps(body.get("source_article_ids") or []),
+        )
+        return dict(row)
+
+
+# --- Bulk delete ---
+@api_router.post("/generated-articles/bulk-delete")
+async def api_generated_articles_bulk_delete(body: dict = Body(...)):
+    ids = body.get("ids", [])
+    if not ids:
+        raise HTTPException(400, "ids required")
+    uuids = [uuid.UUID(str(i)) for i in ids]
+    async with get_db() as conn:
+        for pk in uuids:
+            await conn.execute("DELETE FROM generated_articles WHERE id = $1", pk)
+    return {"deleted": len(uuids)}
 
 
 @api_router.post("/run-schema")

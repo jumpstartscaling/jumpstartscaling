@@ -9,8 +9,18 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
   <script>
     async function load() {
       try {
-        const r = await fetch('/api/content-matrix?limit=500');
-        const rows = await r.json();
+        const url = (window.__ADMIN_API_BASE__ || '') + '/api/content-matrix?limit=500';
+        const r = await fetch(url);
+        const data = await r.json();
+        // #region agent log
+        try { fetch('http://127.0.0.1:7936/ingest/028db4d9-03ec-4715-b28a-4eaf4c7709bd', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Debug-Session-Id': '5a0433' }, body: JSON.stringify({ sessionId: '5a0433', hypothesisId: 'D', location: 'content-matrix.astro', message: 'content-matrix fetch result', data: { url, status: r.status, ok: r.ok, hasDetail: !!data?.detail }, timestamp: Date.now() }) }).catch(() => {}); } catch (_) {}
+        // #endregion
+        const rows = Array.isArray(data) ? data : [];
+        if (!r.ok) {
+          const msg = (typeof data?.detail === 'string' ? data.detail : JSON.stringify(data?.detail || data)) || r.statusText || `HTTP ${r.status}`;
+          document.getElementById('matrix-table').innerHTML = `<p class="text-red-400">API error: ${msg}</p>`;
+          return;
+        }
         const html = `
           <table>
             <thead><tr><th>ID</th><th>Slug</th><th>Title</th><th>Loc</th><th>Svc</th><th>Preview</th></tr></thead>
