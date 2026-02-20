@@ -16,6 +16,15 @@ def _load_schema() -> str:
     return _SCHEMA_PATH.read_text(encoding="utf-8")
 
 
+async def run_schema() -> None:
+    """Apply schema.sql to DB. Use for on-demand migration via API."""
+    if _pool is None:
+        raise DatabaseUnavailableError("Database not initialized.")
+    schema_sql = _load_schema()
+    async with _pool.acquire() as conn:
+        await conn.execute(schema_sql)
+
+
 async def init_db() -> None:
     """Create connection pool and run migrations. Non-fatal on failure so app can start."""
     global _pool

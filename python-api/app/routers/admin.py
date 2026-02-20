@@ -6,8 +6,10 @@ from urllib.parse import urlparse
 from fastapi import APIRouter, Request, Query
 from fastapi.responses import HTMLResponse, JSONResponse
 
+from fastapi import Header, HTTPException
+
 from app.config import config
-from app.db.connection import get_db
+from app.db.connection import get_db, run_schema, DatabaseUnavailableError
 
 router = APIRouter(prefix="/admin", tags=["admin"])
 api_router = APIRouter(prefix="/api", tags=["admin"])
@@ -258,6 +260,21 @@ async def admin_content_matrix():
 async def api_debug():
     """JSON debug endpoint: config, health, api_logs. Used by Astro admin Debug page."""
     return await _get_debug_data()
+
+
+@api_router.post("/run-schema")
+async def api_run_schema(x_admin_key: str = Header(alias="X-Admin-Key", default=""), key: str = Query(default="")):
+    """Apply schema.sql to the DB. Requires ADMIN_KEY in X-Admin-Key header or key query param."""
+    admin_key = x_admin_key or key or ""
+    if not admin_key or admin_key != config.ADMIN_KEY:
+        raise HTTPException(status_code=401, detail="Admin key required")
+    try:
+        await run_schema()
+        return {"success": True, "message": "Schema applied"}
+    except DatabaseUnavailableError as e:
+        raise HTTPException(status_code=503, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.get("/debug", response_class=HTMLResponse)
