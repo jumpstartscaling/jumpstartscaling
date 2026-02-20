@@ -71,7 +71,7 @@ node scripts/configure-coolify-via-api.mjs --deploy # Configure + trigger deploy
 
 | Field | Value |
 |-------|-------|
-| **Base Directory** | (leave empty or `/`) |
+| **Base Directory** | `god-mode` (JFactory lives in god-mode/ in Spark repo) |
 | **Dockerfile Location** | `Dockerfile` |
 | **Docker Build Stage Target** | (leave empty) |
 | **Custom Docker Options** | (leave empty — remove the long SYS_ADMIN/fuse string; our app doesn't need it) |
@@ -80,8 +80,27 @@ node scripts/configure-coolify-via-api.mjs --deploy # Configure + trigger deploy
 
 ## Git Source
 
-- **Repository:** `jumpstartscaling/jumpstartscaling` (or your GitHub org/repo)
+- **Repository:** `https://github.com/caw-jump/spark`
 - **Branch:** `main`
+
+| App | Base Directory |
+|-----|----------------|
+| JFactory | `god-mode` |
+| god-mode-api | `god-mode/python-api` |
+
+---
+
+## jumpstartscaling-site (production, separate app)
+
+**jumpstartscaling.com** runs on a separate Coolify app container. It has no Node router, so form submissions cannot use same-origin `/api`. The API client posts directly to the godmode API when `PUBLIC_GOD_MODE_API_URL` is set.
+
+**Required env var (build-time):**
+
+| Variable | Value |
+|----------|-------|
+| `PUBLIC_GOD_MODE_API_URL` | `https://api.jumpstartscaling.com` |
+
+Add this in Coolify → jumpstartscaling-site → Environment Variables, then redeploy. This bakes the API URL into the static build so ContactForm and ScalingSurvey POST to `api.jumpstartscaling.com/api/submit-lead` and save to the database.
 
 ---
 
@@ -109,7 +128,9 @@ Add these (replace placeholders with real values):
 
 1. **Configuration → General**
    - Build Pack: `Dockerfile`
-   - Base Directory: leave **empty** or `/`
+   - **Git Repository:** `https://github.com/caw-jump/spark`
+   - **Branch:** `main`
+   - **Base Directory:** `god-mode`
    - Dockerfile Location: `Dockerfile`
    - Custom Docker Options: **clear completely** (delete the SYS_ADMIN/fuse string)
 

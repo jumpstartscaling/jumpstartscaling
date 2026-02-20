@@ -1,6 +1,8 @@
 /**
  * God Mode API client.
- * Use with GOD_MODE_API_URL or relative /api for same-origin.
+ * When PUBLIC_GOD_MODE_API_URL is set, posts directly to godmode API.
+ * Use for jumpstartscaling.com (separate Coolify app with no router).
+ * When not set, uses same-origin /api (factory router proxies to FastAPI).
  */
 
 import type {
@@ -12,14 +14,12 @@ import type {
 } from "./types";
 
 const getBaseUrl = (): string => {
-  if (typeof window !== "undefined") {
-    return ""; // Browser: same-origin, router proxies /api to FastAPI
-  }
-  return (
-    (typeof import.meta !== "undefined" &&
-      (import.meta as any).env?.PUBLIC_GOD_MODE_API_URL) ||
-    ""
-  );
+  const apiUrl =
+    typeof import.meta !== "undefined" &&
+    (import.meta as any).env?.PUBLIC_GOD_MODE_API_URL;
+  if (apiUrl) return String(apiUrl).replace(/\/$/, "");
+  if (typeof window !== "undefined") return "";
+  return "";
 };
 
 export async function submitLead(payload: LeadPayload): Promise<LeadResponse> {

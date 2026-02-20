@@ -21,7 +21,7 @@ interface SurveyState {
   [key: string]: string | undefined;
 }
 
-const ScalingSurvey = ({ webhookUrl }: { webhookUrl?: string }) => {
+const ScalingSurvey = () => {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<SurveyState>({
     industry: '',
@@ -131,10 +131,10 @@ const ScalingSurvey = ({ webhookUrl }: { webhookUrl?: string }) => {
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setAnswers({ ...answers, [name]: value });
-    // Clear error when user types
-    if (errors[name]) {
-      setErrors({ ...errors, [name]: null });
-    }
+    // Clear field error and submit error when user types
+    const next = { ...errors, [name]: null };
+    if (errors._submit) next._submit = null;
+    setErrors(next);
   };
 
   const validateStep = () => {
@@ -177,6 +177,7 @@ const ScalingSurvey = ({ webhookUrl }: { webhookUrl?: string }) => {
 
   const submitForm = async () => {
     setIsSubmitting(true);
+    setErrors(prev => ({ ...prev, _submit: null }));
     try {
       const submissionData = {
         ...answers,
@@ -185,27 +186,15 @@ const ScalingSurvey = ({ webhookUrl }: { webhookUrl?: string }) => {
         formType: 'audit_survey'
       };
 
-      console.log('⚡ LEAD CAPTURED:', submissionData);
+      // 1. Save to leads via godmode API (primary — must succeed)
+      await submitLead(submissionData);
 
-      // 1. Local Backup
-      const existingLeads = JSON.parse(localStorage.getItem('jumpstart_leads') || '[]');
-      existingLeads.push(submissionData);
-      localStorage.setItem('jumpstart_leads', JSON.stringify(existingLeads));
-
-      // 2. FastAPI via API client
-      await submitLead(submissionData).catch(err => console.warn('Postgres save fail:', err));
-
-      // 3. Webhook (optional) - only when env or prop set; no hardcoded fallback
-      const webhook = webhookUrl
-        || (typeof import.meta !== 'undefined' && (import.meta as any).env?.PUBLIC_N8N_WEBHOOK);
-
-      if (webhook) {
-        await fetch(webhook, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(submissionData)
-        }).catch(err => console.warn('Webhook silent fail:', err));
-      }
+      // 2. Local backup (optional, for resilience)
+      try {
+        const existingLeads = JSON.parse(localStorage.getItem('jumpstart_leads') || '[]');
+        existingLeads.push(submissionData);
+        localStorage.setItem('jumpstart_leads', JSON.stringify(existingLeads));
+      } catch (_) {}
 
       setTimeout(() => {
         setIsSubmitting(false);
@@ -213,10 +202,9 @@ const ScalingSurvey = ({ webhookUrl }: { webhookUrl?: string }) => {
       }, 1000);
 
     } catch (e) {
-      console.error('Submission Logic Error:', e);
-      // Fallback to success to preserve UX if local save worked
+      console.error('Submission failed:', e);
       setIsSubmitting(false);
-      setIsSuccess(true);
+      setErrors({ _submit: 'Something went wrong. Please try again or email us directly.' });
     }
   };
 
@@ -351,6 +339,12 @@ const ScalingSurvey = ({ webhookUrl }: { webhookUrl?: string }) => {
                     </div>
                   )}
                 </div>
+
+                {errors._submit && (
+                  <div className="error-msg" role="alert">
+                    {errors._submit}
+                  </div>
+                )}
 
                 <button
                   type="submit"
