@@ -241,7 +241,7 @@ async function resolveAndProxy(domain, req, res, urlPath, hostname) {
 function proxyToGodMode(req, res, urlPath) {
     if (!GOD_MODE_API_URL) return false;
     const base = GOD_MODE_API_URL.replace(/\/$/, '');
-    const targetUrl = new URL(urlPath + (req.url?.includes('?') ? req.url.slice(req.url.indexOf('?')) : ''), base);
+    const targetUrl = new URL(urlPath || '/', base);
     const isHttps = targetUrl.protocol === 'https:';
     const client = isHttps ? https : http;
 
