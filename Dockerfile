@@ -12,12 +12,15 @@ RUN npm ci --legacy-peer-deps
 COPY sites/jumpstartscaling/ .
 RUN npm run build
 
-# Build chrisamaya
+# Build chrisamaya (SSR - output: server)
 WORKDIR /app
 COPY sites/chrisamaya/package*.json sites/chrisamaya/
 WORKDIR /app/sites/chrisamaya
 RUN npm ci --legacy-peer-deps
 COPY sites/chrisamaya/ .
+# PUBLIC_GOD_MODE_API_URL for SSR fetch; pass at build if different from runtime GOD_MODE_API_URL
+ARG PUBLIC_GOD_MODE_API_URL=
+ENV PUBLIC_GOD_MODE_API_URL=${PUBLIC_GOD_MODE_API_URL}
 RUN npm run build
 
 # Copy root deps for router
@@ -39,10 +42,17 @@ COPY --from=builder-js /app/package.json ./
 COPY router.js ./
 COPY --from=builder-js /app/sites/jumpstartscaling/dist ./sites/jumpstartscaling/dist
 COPY --from=builder-js /app/sites/chrisamaya/dist ./sites/chrisamaya/dist
+# chrisamaya SSR needs react/etc at runtime (renderers.mjs imports them)
+COPY --from=builder-js /app/sites/chrisamaya/node_modules ./sites/chrisamaya/node_modules
+
+# Copy start script (runs chrisamaya Astro SSR on 8101, then router on 8100)
+COPY start.sh ./
+RUN chmod +x start.sh
 
 # HEALTHCHECK required - Coolify rolling update fails without it (checks .State.Health.Status).
 # If you get "No available server", disable Health Check in Coolify: JFactory → Configuration → Health Check → Off
-HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=5 \
+HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=5 \
   CMD node -e "require('http').get('http://127.0.0.1:8100/health',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
 EXPOSE 8100
-CMD ["node", "router.js"]
+# chrisamaya SSR needs GOD_MODE_API_URL (or PUBLIC_GOD_MODE_API_URL at build) for tenant API fetch
+CMD ["./start.sh"]
