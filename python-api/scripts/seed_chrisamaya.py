@@ -167,6 +167,10 @@ async def main() -> None:
     try:
         from dotenv import load_dotenv
         load_dotenv()
+        # Load god-mode/.env.local (script lives in python-api/scripts/)
+        env_local = Path(__file__).resolve().parent.parent.parent / ".env.local"
+        if env_local.exists():
+            load_dotenv(env_local)
     except ImportError:
         pass
 
@@ -179,6 +183,8 @@ async def main() -> None:
     conn = await asyncpg.connect(db_url)
 
     try:
+        # Ensure sites.theme_config exists (DBs created before schema had it)
+        await conn.execute("ALTER TABLE sites ADD COLUMN IF NOT EXISTS theme_config JSONB")
         # 1. Site chrisamaya (idempotent: reuse if exists)
         row = await conn.fetchrow(
             "SELECT id FROM sites WHERE url ILIKE '%chrisamaya.work%' LIMIT 1"
@@ -218,6 +224,94 @@ async def main() -> None:
             )
         campaign_id = str(row["id"]) if row else None
         print(f"Campaign: Unicorn Developer id={campaign_id}")
+
+        # 2b. Homepage page + page_blocks + navigation (DB-driven chrisamaya)
+        page_row = await conn.fetchrow(
+            "SELECT id FROM pages WHERE site_id = $1::uuid AND (slug = '' OR slug IS NULL) LIMIT 1",
+            site_id,
+        )
+        if not page_row:
+            page_row = await conn.fetchrow(
+                """
+                INSERT INTO pages (site_id, title, slug, status)
+                VALUES ($1::uuid, 'The One-Stop Architect | Chris Amaya', '', 'published')
+                RETURNING id
+                """,
+                site_id,
+            )
+        page_id = str(page_row["id"])
+        n_blocks = await conn.fetchval("SELECT COUNT(*) FROM page_blocks WHERE page_id = $1::uuid", page_id)
+        if n_blocks == 0:
+            HOMEPAGE_BLOCKS = [
+                {"block_type": "hero", "sort_order": 0, "data": {
+                    "badge": "THE ONE-STOP ARCHITECT",
+                    "headline": "STOP GLUING YOUR BUSINESS TOGETHER WITH <span class=\"bg-clip-text text-transparent bg-gradient-to-r from-[#00FF94] to-[#00B8FF]\">ZAPIER AND HOPE.</span>",
+                    "subhead": "I am the \"Unicorn\" Developer you've been looking for. I build full-stack applications, engineer private AI systems, and automate your entire backend—so you can stop playing CTO and start being the CEO.",
+                    "cta_label": "Book Consultation",
+                    "cta_href": "#contact",
+                    "warning_text": "WARNING: THIS IS A TECHNICAL STRATEGY SESSION. NOT A SALES CALL.",
+                }},
+                {"block_type": "diagnosis", "sort_order": 1, "data": {
+                    "eyebrow": "THE DIAGNOSIS",
+                    "title": "The \"Frankenstein\" Problem",
+                    "body": "You have product-market fit. You have revenue. But your backend is a tangled mess of disconnected tools that break every time an API updates.",
+                    "warning_box": {"title": "⚠ SYSTEM CRITICAL", "text": "Your business is fragile. You are one \"Zapier Error\" away from losing leads."},
+                    "video_src": "/assets/videos/zombiebabyzaiper.mp4",
+                    "video_poster": "/assets/videos/zombiebabyzaiper-poster.jpg",
+                    "fig_label": "FIG 1.0: FRAGMENTATION VISUALIZED",
+                }},
+                {"block_type": "calculator", "sort_order": 2, "data": {"section_title": "Engineering Resources"}},
+                {"block_type": "survey", "sort_order": 3, "data": {"section_title": "Let's Build It Right."}},
+            ]
+            for b in HOMEPAGE_BLOCKS:
+                await conn.execute(
+                    """
+                    INSERT INTO page_blocks (block_type, name, page_id, sort_order, data)
+                    VALUES ($1, $2, $3::uuid, $4, $5::jsonb)
+                    """,
+                    b["block_type"],
+                    b["block_type"],
+                    page_id,
+                    b["sort_order"],
+                    json.dumps(b["data"]),
+                )
+        print("Homepage page + blocks: ok")
+
+        n_nav = await conn.fetchval("SELECT COUNT(*) FROM navigation WHERE site_id = $1::uuid", site_id)
+        if n_nav == 0:
+            JUMPSTART_URL = "https://jumpstartscaling.com"
+            NAV_ITEMS = [
+                {"label": "About Me", "href": "/#about", "nav_group": "portfolio", "sort_order": 0},
+                {"label": "Projects", "href": "/#projects", "nav_group": "portfolio", "sort_order": 1},
+                {"label": "Blog", "href": "/blog", "nav_group": "portfolio", "sort_order": 2},
+                {"label": "Articles", "href": "/articles", "nav_group": "portfolio", "sort_order": 3},
+                {"label": "Search", "href": "/search", "nav_group": "portfolio", "sort_order": 4},
+                {"label": "How I Build", "href": "/guide/how-i-build", "nav_group": "portfolio", "sort_order": 5},
+                {"label": "Contact", "href": "/#contact", "nav_group": "portfolio", "sort_order": 6},
+                {"label": "CAC Calculator", "href": f"{JUMPSTART_URL}/resources/calculators#cac-calculator", "nav_group": "calculator", "sort_order": 0},
+                {"label": "Churn Calculator", "href": f"{JUMPSTART_URL}/resources/calculators#churn-calculator", "nav_group": "calculator", "sort_order": 1},
+                {"label": "LTV Calculator", "href": f"{JUMPSTART_URL}/resources/calculators#ltv-calculator", "nav_group": "calculator", "sort_order": 2},
+                {"label": "ROAS / Break-Even", "href": f"{JUMPSTART_URL}/resources/calculators#break-even-calculator", "nav_group": "calculator", "sort_order": 3},
+                {"label": "MRR Forecast", "href": f"{JUMPSTART_URL}/resources/calculators#mrr-forecast", "nav_group": "calculator", "sort_order": 4},
+                {"label": "Cohort Analysis", "href": f"{JUMPSTART_URL}/resources/calculators#cohort-analysis", "nav_group": "calculator", "sort_order": 5},
+                {"label": "Paid Acquisition", "href": f"{JUMPSTART_URL}/services/paid-acquisition", "nav_group": "jumpstart", "sort_order": 0},
+                {"label": "Funnel Architecture", "href": f"{JUMPSTART_URL}/services/funnel-architecture", "nav_group": "jumpstart", "sort_order": 1},
+                {"label": "CRM Transformation", "href": f"{JUMPSTART_URL}/services/crm-transformation", "nav_group": "jumpstart", "sort_order": 2},
+                {"label": "Voice of Customer", "href": f"{JUMPSTART_URL}/services/authority-engine", "nav_group": "jumpstart", "sort_order": 3},
+            ]
+            for item in NAV_ITEMS:
+                await conn.execute(
+                    """
+                    INSERT INTO navigation (site_id, label, href, nav_group, sort_order)
+                    VALUES ($1::uuid, $2, $3, $4, $5)
+                    """,
+                    site_id,
+                    item["label"],
+                    item["href"],
+                    item["nav_group"],
+                    item["sort_order"],
+                )
+        print("Navigation: ok")
 
         # 3. Content fragments (skip if already seeded)
         if campaign_id:
