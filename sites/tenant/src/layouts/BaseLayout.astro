@@ -81,7 +81,7 @@ graph.push(mainEntity);
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href={`${(import.meta.env.BASE_URL || '/').replace(/\/$/, '')}/favicon.svg`} />
     <meta name="theme-color" content="#050505" />
 
     <!-- Fonts: system stack only (no CDN) -->

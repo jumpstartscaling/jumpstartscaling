@@ -121,11 +121,12 @@ async function main() {
         { key: 'ADMIN_KEY', value: adminKey },
         { key: 'LOG_REQUESTS', value: 'true' },
         { key: 'PORT', value: '8200' },
-        // DATABASE_URL left unset - app starts without it; add in Coolify if you have Postgres
+        { key: 'AUTO_SEED_CHRISAMAYA', value: 'true' },
+        // DATABASE_URL - add in Coolify if you have Postgres; seed runs on startup when DB available
       ],
     });
-    console.log('  ✅ Env vars: ADMIN_KEY (synced), LOG_REQUESTS=true, PORT=8200');
-    console.log('     DATABASE_URL not set (add in Coolify if you have Postgres)');
+    console.log('  ✅ Env vars: ADMIN_KEY, LOG_REQUESTS, PORT, AUTO_SEED_CHRISAMAYA=true');
+    console.log('     DATABASE_URL: add in Coolify (seed runs on startup when set)');
   } catch (e) {
     console.error('  ❌', e.message);
   }

@@ -80,8 +80,9 @@ const { blocks } = Astro.props;
       const title = (d.title as string) || '';
       const body = (d.body as string) || '';
       const warningBox = d.warning_box as { title?: string; text?: string } | undefined;
-      const videoSrc = (d.video_src as string) || '/assets/videos/zombiebabyzaiper.mp4';
-      const videoPoster = (d.video_poster as string) || '/assets/videos/zombiebabyzaiper-poster.jpg';
+      const base = import.meta.env.BASE_URL || '/';
+      const videoSrc = (d.video_src as string) || `${base}assets/videos/zombiebabyzaiper.mp4`;
+      const videoPoster = (d.video_poster as string) || `${base}assets/videos/zombiebabyzaiper-poster.jpg`;
       const figLabel = (d.fig_label as string) || '';
       return (
         <section id="about" class="py-24 bg-[#08080A]">

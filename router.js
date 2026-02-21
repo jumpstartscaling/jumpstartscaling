@@ -118,11 +118,11 @@ const DOMAIN_MAP = {
     'www.factory.jumpstartscaling.com': path.join(SITES_BASE, 'sites/jumpstartscaling/dist'),
     'jumpstartscaling.com': path.join(SITES_BASE, 'sites/jumpstartscaling/dist'),
     'www.jumpstartscaling.com': path.join(SITES_BASE, 'sites/jumpstartscaling/dist'),
-    // chrisamaya.work: resolved via API and proxied to SSR (8101)
+    // API-resolved tenants (chrisamaya.work, etc.): proxied to tenant SSR (8101)
     'localhost': path.join(SITES_BASE, 'sites/jumpstartscaling/dist')
 };
 
-// Path-based preview routing on factory: /jumpstart = main site, /chrisamaya = proxy to SSR (8101)
+// Path-based preview: /jumpstart = jumpstart dist, /chrisamaya = tenant SSR (8101)
 const PATH_SITE_MAP = {
     '/jumpstart': path.join(SITES_BASE, 'sites/jumpstartscaling/dist'),
     '/chrisamaya': null, // proxy to SSR 8101
@@ -161,9 +161,9 @@ function getSiteRoot(hostname, urlPath) {
         }
     }
     const root = DOMAIN_MAP[domain] || DOMAIN_MAP['localhost'];
-    // chrisamaya.work uses Astro base: '/chrisamaya' — assets live at dist/_astro/, URLs at /chrisamaya/_astro/
+    // Tenant template uses Astro base '/chrisamaya' — assets at /chrisamaya/_astro/
     const isChrisamayaDomain = domain === 'chrisamaya.work' || domain === 'www.chrisamaya.work';
-    const stripPrefix = isChrisamayaDomain && root.includes('chrisamaya') ? '/chrisamaya' : null;
+    const stripPrefix = isChrisamayaDomain && root.includes('tenant') ? '/chrisamaya' : null;
     return { root, stripPrefix };
 }
 
@@ -545,7 +545,9 @@ const server = http.createServer((req, res) => {
     const domain = hostname.split(':')[0];
     const usePathBased = domain === 'factory.jumpstartscaling.com' || domain === 'www.factory.jumpstartscaling.com' || domain === 'localhost';
     if (usePathBased && (urlPath === '/chrisamaya' || urlPath === '/chrisamaya/' || urlPath.startsWith('/chrisamaya/'))) {
-        const innerPath = (urlPath.slice(10) || '/') + (req.url?.includes('?') ? req.url.slice(req.url.indexOf('?')) : '');
+        // Pass full path so SSR receives /chrisamaya/_astro/* etc (Astro base is /chrisamaya)
+        const fullPath = (urlPath.slice(10) || '/') + (req.url?.includes('?') ? req.url.slice(req.url.indexOf('?')) : '');
+        const pathForSSR = '/chrisamaya' + (fullPath === '/' ? '' : fullPath);
         (async () => {
             let tenant = null;
             if (GOD_MODE_API_URL) {
@@ -558,7 +560,7 @@ const server = http.createServer((req, res) => {
                 }
             }
             if (tenant) {
-                proxyToSSR(req, res, tenant, 'chrisamaya.work', innerPath);
+                proxyToSSR(req, res, tenant, 'chrisamaya.work', pathForSSR);
             } else {
                 res.writeHead(404, { 'Content-Type': 'text/html' });
                 res.end('<!DOCTYPE html><html><head><title>Not Found</title></head><body><h1>404</h1><p>Chrisamaya tenant not resolved.</p></body></html>');

@@ -38,5 +38,8 @@ class Config:
     # Optional: disable request logging to DB (reduces crashes when DATABASE_URL missing)
     LOG_REQUESTS: bool = os.getenv("LOG_REQUESTS", "false").lower() in ("1", "true", "yes")
 
+    # Auto-seed chrisamaya.work on startup (default true; runs when DATABASE_URL set)
+    AUTO_SEED_CHRISAMAYA: bool = os.getenv("AUTO_SEED_CHRISAMAYA", "true").lower() in ("1", "true", "yes")
+
 
 config = Config()

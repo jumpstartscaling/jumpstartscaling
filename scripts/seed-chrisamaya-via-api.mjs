@@ -15,7 +15,8 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
 
 const API_URL = process.env.API_URL || 'https://api.jumpstartscaling.com';
-const ADMIN_KEY = process.env.ADMIN_KEY;
+const adminKeyArg = process.argv.find((a) => a.startsWith('--admin-key='));
+const ADMIN_KEY = process.env.ADMIN_KEY || (adminKeyArg ? adminKeyArg.split('=')[1] : null);
 
 function getAdminKey() {
   if (ADMIN_KEY) return ADMIN_KEY;

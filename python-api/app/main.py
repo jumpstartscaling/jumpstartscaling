@@ -17,9 +17,17 @@ from app.routers import auth, health, leads, admin, locations, pseo_services, co
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Startup: init DB (non-fatal). Shutdown: close pool."""
+    """Startup: init DB, auto-seed chrisamaya (non-fatal). Shutdown: close pool."""
     try:
         await init_db()
+        if config.AUTO_SEED_CHRISAMAYA and config.DATABASE_URL:
+            try:
+                from app.routers.seed import _run_chrisamaya_seed
+                async with get_db() as conn:
+                    result = await _run_chrisamaya_seed(conn)
+                    print(f"✅ Auto-seed chrisamaya: site_id={result.get('site_id')}", flush=True)
+            except Exception as e:
+                print(f"⚠️ Auto-seed chrisamaya failed (app continues): {e}", flush=True)
     except Exception as e:
         print(f"⚠️ Startup init_db failed (app continues): {e}")
     yield

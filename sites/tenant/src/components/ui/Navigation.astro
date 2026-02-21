@@ -1,13 +1,13 @@
 ---
 // src/components/ui/Navigation.astro
-// ChrisAmaya.work Navigation - DB-driven when nav prop provided
+// Tenant Navigation - DB-driven when nav prop provided (from theme_config)
 interface Props {
   currentPath?: string;
   nav?: { portfolio?: { name: string; href: string }[]; custom_apps?: { name: string; href: string }[]; cta?: { label: string; href: string } };
   siteName?: string;
 }
 
-const { currentPath = '', nav, siteName = 'Chris Amaya' } = Astro.props;
+const { currentPath = '', nav, siteName = 'Site' } = Astro.props;
 
 const customAppsLinks = nav?.custom_apps ?? [];
 

@@ -21,16 +21,21 @@ Requires `COOLIFY_TOKEN` in god-mode/.env.local.
 ## Seed & Campaign
 
 ```bash
-# Seed chrisamaya.work v4 (50 locs × 35 svcs = 1,750 matrix)
-cd god-mode/python-api && python3 scripts/seed_chrisamaya_v4.py
+# Seed via Coolify (recommended - fetches ADMIN_KEY from Coolify, then seeds production)
+cd god-mode && node scripts/seed-via-coolify.mjs
+# Requires COOLIFY_TOKEN in .env.local (Coolify → Keys & Tokens → API tokens)
 
-# Launch first campaign (target_quantity=2000)
-cd god-mode/python-api && python3 scripts/launch_chrisamaya_campaign.py --quantity=2000
+# Seed with campaign launch
+cd god-mode && node scripts/seed-via-coolify.mjs --launch --quantity=2000
 
-# Or via API (uses ADMIN_KEY from .env.local)
-cd god-mode && node scripts/launch-chrisamaya-campaign.mjs --quantity=2000
+# Seed via API (when you already have ADMIN_KEY)
+cd god-mode && ADMIN_KEY=xxx node scripts/seed-chrisamaya-via-api.mjs
+
+# Seed via direct DB (when SSH tunnel is up: localhost:5433 -> production Postgres)
+cd god-mode && node scripts/seed-via-db.mjs
+# Start tunnel: ssh -f -N -L 5433:localhost:5432 -i ~/.ssh/coolify_key root@spark.jumpstartscaling.com
+# (SSH key must be authorized on the server)
 ```
-Requires `DATABASE_URL` and `ADMIN_KEY` in god-mode/.env.local.
 
 ---
 

@@ -1,5 +1,5 @@
 # God-Mode Router + Sites - Production Build
-# Builds both jumpstartscaling and chrisamaya, then serves via router.js
+# Builds jumpstartscaling + tenant template (SSR for all API-resolved tenants)
 # Coolify: Build from this Dockerfile, SITES_BASE_PATH=/app
 
 FROM node:20-alpine AS builder-js
@@ -12,12 +12,12 @@ RUN npm ci --legacy-peer-deps
 COPY sites/jumpstartscaling/ .
 RUN npm run build
 
-# Build chrisamaya (SSR - output: server)
+# Build tenant template (SSR - output: server) - primary template for all API-resolved tenants
 WORKDIR /app
-COPY sites/chrisamaya/package*.json sites/chrisamaya/
-WORKDIR /app/sites/chrisamaya
+COPY sites/tenant/package*.json sites/tenant/
+WORKDIR /app/sites/tenant
 RUN npm ci --legacy-peer-deps
-COPY sites/chrisamaya/ .
+COPY sites/tenant/ .
 # PUBLIC_GOD_MODE_API_URL for SSR fetch; pass at build if different from runtime GOD_MODE_API_URL
 ARG PUBLIC_GOD_MODE_API_URL=
 ENV PUBLIC_GOD_MODE_API_URL=${PUBLIC_GOD_MODE_API_URL}
@@ -41,11 +41,11 @@ COPY --from=builder-js /app/node_modules ./node_modules
 COPY --from=builder-js /app/package.json ./
 COPY router.js ./
 COPY --from=builder-js /app/sites/jumpstartscaling/dist ./sites/jumpstartscaling/dist
-COPY --from=builder-js /app/sites/chrisamaya/dist ./sites/chrisamaya/dist
-# chrisamaya SSR needs react/etc at runtime (renderers.mjs imports them)
-COPY --from=builder-js /app/sites/chrisamaya/node_modules ./sites/chrisamaya/node_modules
+COPY --from=builder-js /app/sites/tenant/dist ./sites/tenant/dist
+# Tenant SSR needs react/etc at runtime
+COPY --from=builder-js /app/sites/tenant/node_modules ./sites/tenant/node_modules
 
-# Copy start script (runs chrisamaya Astro SSR on 8101, then router on 8100)
+# Copy start script (runs tenant SSR on 8101, then router on 8100)
 COPY start.sh ./
 RUN chmod +x start.sh
 
@@ -54,5 +54,5 @@ RUN chmod +x start.sh
 HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=5 \
   CMD node -e "require('http').get('http://127.0.0.1:8100/health',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
 EXPOSE 8100
-# chrisamaya SSR needs GOD_MODE_API_URL (or PUBLIC_GOD_MODE_API_URL at build) for tenant API fetch
+# Tenant SSR needs GOD_MODE_API_URL (or PUBLIC_GOD_MODE_API_URL) for API fetch
 CMD ["./start.sh"]
