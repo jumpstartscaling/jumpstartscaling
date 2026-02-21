@@ -356,3 +356,12 @@ CREATE TABLE IF NOT EXISTS content_refresh_schedule (
     is_active BOOLEAN DEFAULT true,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+-- =============================================================================
+-- MIGRATIONS: Add columns for DB-driven template (chrisamaya)
+-- =============================================================================
+
+ALTER TABLE page_blocks ADD COLUMN IF NOT EXISTS page_id UUID REFERENCES pages(id) ON DELETE CASCADE;
+ALTER TABLE page_blocks ADD COLUMN IF NOT EXISTS sort_order INTEGER DEFAULT 0;
+ALTER TABLE generated_articles ADD COLUMN IF NOT EXISTS category TEXT;
+ALTER TABLE generated_articles ADD COLUMN IF NOT EXISTS tags JSONB DEFAULT '[]';

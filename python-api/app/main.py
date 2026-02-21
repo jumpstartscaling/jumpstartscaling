@@ -12,7 +12,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import config
 from app.db.connection import init_db, close_db, get_db, DatabaseUnavailableError
-from app.routers import auth, health, leads, admin, locations, pseo_services, content_matrix, seed
+from app.routers import auth, health, leads, admin, locations, pseo_services, content_matrix, seed, tenant
 
 
 @asynccontextmanager
@@ -54,6 +54,8 @@ app.include_router(locations.router)
 app.include_router(pseo_services.router)
 app.include_router(content_matrix.router)
 app.include_router(seed.router)
+app.include_router(tenant.router)
+app.include_router(tenant.sites_router)
 
 
 @app.exception_handler(DatabaseUnavailableError)

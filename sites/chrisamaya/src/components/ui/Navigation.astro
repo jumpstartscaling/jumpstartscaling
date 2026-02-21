@@ -1,20 +1,29 @@
 ---
 // src/components/ui/Navigation.astro
-// ChrisAmaya.work Navigation (2026-02-15)
-// - Hotlink Optimization: Direct links to sections (Local & External)
-// - Mobile Drawer: Simple, bug-free implementation
-// - Branding: Emerald/Dark theme
+// ChrisAmaya.work Navigation - DB-driven when nav prop provided
+interface Props {
+  currentPath?: string;
+  nav?: { portfolio?: { name: string; href: string }[]; custom_apps?: { name: string; href: string }[]; cta?: { label: string; href: string } };
+  siteName?: string;
+}
+
+const { currentPath = '', nav, siteName = 'Chris Amaya' } = Astro.props;
+
+const customAppsLinks = nav?.custom_apps ?? [];
 
 const JUMPSTART_URL = "https://jumpstartscaling.com";
 
-// Local Hotlinks (Anchors on index.astro)
-const portfolioLinks = [
+// Use nav from API when provided, else defaults
+const portfolioLinks = nav?.portfolio ?? [
   { name: "About Me", href: "/#about" },
   { name: "Projects", href: "/#projects" },
   { name: "Blog", href: "/blog" },
   { name: "How I Build", href: "/guide/how-i-build" },
+  { name: "Knowledge Base", href: "/knowledge-base" },
   { name: "Contact", href: "/#contact" },
 ];
+const ctaLabel = nav?.cta?.label ?? "Work With Me";
+const ctaHref = nav?.cta?.href ?? "#contact";
 
 // External Hotlinks (Specific Calculators on Jumpstart)
 const calculatorLinks = [
@@ -37,14 +46,18 @@ const jumpstartServices = [
 <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-4 bg-[#0B0B0F] border-b border-white/5">
   <div class="max-w-[1600px] mx-auto px-6 flex items-center justify-between">
     <!-- Logo -->
-    <a href="/" aria-label="Chris Amaya homepage" class="flex items-center gap-3 group">
+    <a href="/" aria-label={`${siteName} homepage`} class="flex items-center gap-3 group">
       <div class="w-10 h-10 bg-gradient-to-br from-[#00FF94] to-[#00BC6D] rounded-lg flex items-center justify-center shadow-[0_0_15px_rgba(0,255,148,0.3)] group-hover:shadow-[0_0_25px_rgba(0,255,148,0.5)] transition-all">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#050505" stroke-width="3">
           <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
         </svg>
       </div>
       <span class="font-bold text-xl tracking-tight text-white hidden sm:block">
-        Chris<span class="text-[#00FF94]">Amaya</span>
+        {siteName.includes(' ') ? (
+          <>
+            {siteName.split(' ')[0]}<span class="text-[#00FF94]">{siteName.split(' ').slice(1).join(' ')}</span>
+          </>
+        ) : siteName}
       </span>
     </a>
 
@@ -71,6 +84,27 @@ const jumpstartServices = [
           </ul>
         </div>
       </li>
+
+      <!-- Custom Apps (DB-driven when nav.custom_apps provided) -->
+      {customAppsLinks.length > 0 && (
+        <li class="relative group">
+          <button class="hover:text-[#00FF94] transition flex items-center gap-1 py-4">
+            Custom Apps <span class="text-[10px] opacity-70 group-hover:rotate-180 transition-transform">▼</span>
+          </button>
+          <div class="absolute top-full left-0 w-full h-4 bg-transparent"></div>
+          <div class="absolute top-[calc(100%+0.5rem)] left-0 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 w-56 pointer-events-none group-hover:pointer-events-auto">
+            <ul class="bg-[#0A0A0A] border border-white/10 rounded-xl p-2 shadow-2xl overflow-hidden">
+              {customAppsLinks.map((item) => (
+                <li>
+                  <a href={item.href} class="block py-2.5 px-4 rounded-lg hover:bg-[#00FF94]/10 hover:text-[#00FF94] transition text-white/80">
+                    {item.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </li>
+      )}
 
       <!-- Growth Tools (External Hotlinks) -->
       <li class="relative group">
@@ -119,8 +153,8 @@ const jumpstartServices = [
 
       <!-- CTA -->
       <li>
-        <a href="#contact" class="px-6 py-2.5 bg-[#00FF94] text-black font-bold text-sm uppercase tracking-wider rounded-lg hover:bg-white transition shadow-[0_0_20px_rgba(0,255,148,0.4)] hover:shadow-white/50">
-          Work With Me
+        <a href={ctaHref} class="px-6 py-2.5 bg-[#00FF94] text-black font-bold text-sm uppercase tracking-wider rounded-lg hover:bg-white transition shadow-[0_0_20px_rgba(0,255,148,0.4)] hover:shadow-white/50">
+          {ctaLabel}
         </a>
       </li>
     </ul>
@@ -156,6 +190,18 @@ const jumpstartServices = [
           </ul>
         </li>
 
+        <!-- Custom Apps -->
+        {customAppsLinks.length > 0 && (
+          <li class="space-y-4">
+            <span class="text-[#00FF94] text-sm font-mono uppercase tracking-widest border-b border-[#00FF94]/30 pb-2 block">Custom Apps</span>
+            <ul class="space-y-2">
+              {customAppsLinks.map((item) => (
+                <li><a href={item.href} class="block text-lg text-white/70 hover:text-[#00FF94] transition mobile-link py-1">{item.name}</a></li>
+              ))}
+            </ul>
+          </li>
+        )}
+
         <!-- Growth Tools -->
         <li class="space-y-4">
            <span class="text-[#E8C677] text-sm font-mono uppercase tracking-widest border-b border-[#E8C677]/30 pb-2 block">Growth Tools</span>
@@ -177,8 +223,8 @@ const jumpstartServices = [
         </li>
 
         <li class="mt-8 pt-8 border-t border-white/10">
-          <a href="#contact" class="block w-full text-center py-4 bg-[#00FF94] text-black font-bold text-xl rounded-xl shadow-[0_0_30px_rgba(0,255,148,0.3)] hover:scale-105 transition mobile-link">
-            Book Consultation
+          <a href={ctaHref} class="block w-full text-center py-4 bg-[#00FF94] text-black font-bold text-xl rounded-xl shadow-[0_0_30px_rgba(0,255,148,0.3)] hover:scale-105 transition mobile-link">
+            {ctaLabel}
           </a>
         </li>
       </ul>

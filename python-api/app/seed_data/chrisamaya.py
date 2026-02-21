@@ -2,6 +2,9 @@
 
 DEFAULT_THEME = {
     "palette": "emerald",
+    "cdn_provider": "cloudflare",
+    "cdn_config": {},  # Optional: { "zone_id": "...", "api_token": "..." } or use CLOUDFLARE_* env vars
+    "site_name": "Chris Amaya",
     "content_structure": {
         "section_ids": {
             "hero": "hero",
@@ -14,6 +17,33 @@ DEFAULT_THEME = {
         }
     },
     "scripts": ["scroll-progress", "particles", "animation-observer"],
+    "nav": {
+        "portfolio": [
+            {"name": "About Me", "href": "/#about"},
+            {"name": "Projects", "href": "/#projects"},
+            {"name": "Blog", "href": "/blog"},
+            {"name": "How I Build", "href": "/guide/how-i-build"},
+            {"name": "Knowledge Base", "href": "/knowledge-base"},
+            {"name": "Search", "href": "/search"},
+            {"name": "Contact", "href": "/#contact"},
+        ],
+        "custom_apps": [
+            {"name": "Python & FastAPI", "href": "/services/custom-apps/python-api"},
+            {"name": "Astro & React", "href": "/services/custom-apps/frontend"},
+            {"name": "Full-Stack", "href": "/services/custom-apps/full-stack"},
+            {"name": "PostgreSQL", "href": "/services/custom-apps/database"},
+            {"name": "Google APIs", "href": "/services/custom-apps/google-apis"},
+            {"name": "WordPress", "href": "/services/custom-apps/wordpress"},
+            {"name": "Calculators", "href": "/services/custom-apps/calculators"},
+            {"name": "3D & Visual", "href": "/services/custom-apps/3d-visual"},
+        ],
+        "growth_tools": [],
+        "cta": {"label": "Work With Me", "href": "#contact"},
+    },
+    "footer": {
+        "tagline": "The Unicorn Developer.",
+        "copyright": "Chris Amaya",
+    },
 }
 
 LOCATIONS = [

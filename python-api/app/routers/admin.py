@@ -720,8 +720,10 @@ def _resolve_site_id_from_url(site_url: str):
 async def api_public_generated_articles(
     site_url: str = Query("", alias="site_url"),
     limit: int = Query(100, ge=1, le=500),
+    category: str | None = Query(None),
+    tag: str | None = Query(None),
 ):
-    """Resolve site by URL and return published generated_articles."""
+    """Resolve site by URL and return published generated_articles. Optional category/tag filter."""
     domain = _resolve_site_id_from_url(site_url)
     if not domain:
         return {"articles": [], "site_id": None}
@@ -733,17 +735,26 @@ async def api_public_generated_articles(
         if not row:
             return {"articles": [], "site_id": None}
         site_id = row["id"]
-        rows = await conn.fetch(
-            """
-            SELECT id, title, slug, meta_title, meta_description, date_created
+        conditions = ["site_id = $1", "is_published = true"]
+        params = [site_id]
+        n = 2
+        if category:
+            conditions.append(f"category = ${n}")
+            params.append(category)
+            n += 1
+        if tag:
+            conditions.append(f"tags ? ${n}")
+            params.append(tag)
+            n += 1
+        params.append(limit)
+        sql = f"""
+            SELECT id, title, slug, meta_title, meta_description, date_created, category, tags
             FROM generated_articles
-            WHERE site_id = $1 AND is_published = true
+            WHERE {" AND ".join(conditions)}
             ORDER BY date_created DESC NULLS LAST
-            LIMIT $2
-            """,
-            site_id,
-            limit,
-        )
+            LIMIT ${n}
+            """
+        rows = await conn.fetch(sql, *params)
     return {"articles": [dict(r) for r in rows], "site_id": str(site_id)}
 
 
@@ -760,7 +771,7 @@ async def api_public_generated_article_by_slug(
         row = await conn.fetchrow(
             """
             SELECT id, title, slug, content, html_content, meta_title, meta_description,
-                   og_title, og_description, og_image, canonical_url, schema_json, date_created
+                   og_title, og_description, og_image, canonical_url, schema_json, date_created, category, tags
             FROM generated_articles
             WHERE site_id = (SELECT id FROM sites WHERE status = 'active' AND url ILIKE $1 LIMIT 1)
               AND slug = $2 AND is_published = true
@@ -810,6 +821,106 @@ async def api_public_search(
         for r in rows
     ]
     return {"results": results, "site_id": str(site_id)}
+
+
+@api_router.get("/public/kb-categories")
+async def api_public_kb_categories(
+    site_url: str = Query(..., alias="site_url"),
+):
+    """Return distinct categories from published generated_articles for KB filtering."""
+    domain = _resolve_site_id_from_url(site_url)
+    if not domain:
+        return {"categories": []}
+    async with get_db() as conn:
+        row = await conn.fetchrow(
+            "SELECT id FROM sites WHERE status = 'active' AND url ILIKE $1 LIMIT 1",
+            f"%{domain}%",
+        )
+        if not row:
+            return {"categories": []}
+        site_id = row["id"]
+        rows = await conn.fetch(
+            """
+            SELECT DISTINCT category FROM generated_articles
+            WHERE site_id = $1 AND is_published = true AND category IS NOT NULL AND category != ''
+            ORDER BY category
+            """,
+            site_id,
+        )
+    return {"categories": [r["category"] for r in rows]}
+
+
+@api_router.get("/public/kb-tags")
+async def api_public_kb_tags(
+    site_url: str = Query(..., alias="site_url"),
+):
+    """Return distinct tags from published generated_articles (tags JSONB array)."""
+    domain = _resolve_site_id_from_url(site_url)
+    if not domain:
+        return {"tags": []}
+    async with get_db() as conn:
+        row = await conn.fetchrow(
+            "SELECT id FROM sites WHERE status = 'active' AND url ILIKE $1 LIMIT 1",
+            f"%{domain}%",
+        )
+        if not row:
+            return {"tags": []}
+        site_id = row["id"]
+        rows = await conn.fetch(
+            """
+            SELECT tags FROM generated_articles
+            WHERE site_id = $1 AND is_published = true AND tags IS NOT NULL AND jsonb_array_length(tags) > 0
+            """,
+            site_id,
+        )
+    seen = set()
+    for r in rows:
+        tags = r["tags"]
+        if isinstance(tags, list):
+            for t in tags:
+                if t and isinstance(t, str):
+                    seen.add(t)
+        elif isinstance(tags, str):
+            seen.add(tags)
+    return {"tags": sorted(seen)}
+
+
+@api_router.post("/admin/cdn-purge")
+async def api_cdn_purge(
+    body: dict = Body(...),
+    x_admin_key: str = Header(alias="X-Admin-Key", default=""),
+):
+    """Purge CDN cache for given URLs. Requires X-Admin-Key. Body: { domain, urls } or { domain, page_id }."""
+    if not x_admin_key or x_admin_key != config.ADMIN_KEY:
+        raise HTTPException(401, "Admin key required")
+    domain = (body.get("domain") or "").strip()
+    urls = body.get("urls") or []
+    base_url = f"https://{domain}" if domain and "://" not in domain else (domain or "https://chrisamaya.work")
+    if not urls:
+        raise HTTPException(400, "urls required")
+    try:
+        async with get_db() as conn:
+            row = await conn.fetchrow(
+                "SELECT id, url, theme_config FROM sites WHERE status = 'active' AND url ILIKE $1 LIMIT 1",
+                f"%{domain}%" if domain else "%chrisamaya%",
+            )
+            if not row:
+                raise HTTPException(404, "Site not found")
+            tc = row.get("theme_config") or {}
+            if isinstance(tc, str):
+                tc = json.loads(tc) if tc else {}
+            provider = tc.get("cdn_provider", "none")
+            cdn_config = tc.get("cdn_config") or {}
+        if provider == "none":
+            return {"purged": False, "message": "cdn_provider is none"}
+        from app.cdn_purge import get_purge_provider
+        purge_fn = get_purge_provider(provider)
+        ok, msg = purge_fn(urls, base_url, cdn_config)
+        return {"purged": ok, "message": msg}
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(500, str(e))
 
 
 @api_router.get("/posts")

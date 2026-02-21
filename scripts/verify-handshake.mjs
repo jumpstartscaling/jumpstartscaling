@@ -26,7 +26,11 @@ async function main() {
     ...(skipRouter ? [] : [['Router /health', `${ROUTER_URL}/health`]]),
     ['API /health', `${API_URL}/health`],
     ['API /api/sites/resolve?domain=chrisamaya.work', `${API_URL}/api/sites/resolve?domain=chrisamaya.work`],
-    ['API /api/public/posts?site_url=https://chrisamaya.work', `${API_URL}/api/public/posts?site_url=https://chrisamaya.work`],
+    ['API /api/tenant/page?domain=chrisamaya.work&slug=', `${API_URL}/api/tenant/page?domain=chrisamaya.work&slug=`],
+    ['API /api/tenant/page?domain=chrisamaya.work&slug=services/custom-apps/python-api', `${API_URL}/api/tenant/page?domain=chrisamaya.work&slug=services/custom-apps/python-api`],
+    ['API /api/public/generated-articles?site_url=chrisamaya.work', `${API_URL}/api/public/generated-articles?site_url=chrisamaya.work`],
+    ['API /api/public/kb-categories?site_url=chrisamaya.work', `${API_URL}/api/public/kb-categories?site_url=chrisamaya.work`],
+    ['API /api/public/search?site_url=chrisamaya.work&q=test', `${API_URL}/api/public/search?site_url=chrisamaya.work&q=test`],
   ];
 
   let failed = 0;
